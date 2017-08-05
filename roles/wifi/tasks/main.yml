@@ -1,0 +1,23 @@
+---
+- name: copy wifi files
+  copy:
+    src: "{{ item }}"
+    dest: /lib/firmware/brcm/
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+  - files/brcmfmac4356-pcie.bin
+  - files/brcmfmac4356-pcie.txt
+  tags:
+  - common
+  - wifi
+
+- name: prevent suspend from breaking wifi
+  lineinfile:
+    path: /etc/pm/config.d/config
+    line: SUSPEND_MODULES="brcmfmac"
+    create: yes
+  tags:
+  - common
+  - wifi

@@ -1,0 +1,69 @@
+---
+- name: set USE flags for packages
+  lineinfile:
+    path: /etc/portage/package.use
+    regexp: "^{{ item.package }}"
+    line: "{{ item.package }} {{ item.flags }}"
+  with_items:
+  - { package: 'app-laptop/tlp', flags: 'tlp_suggests'}
+  - { package: 'app-portage/layman', flags: 'git' }
+  - { package: 'dev-vcs/git', flags: 'blksha1 curl webdav' }
+  - { package: 'media-libs/mesa', flags: 'vaapi' }
+  - { package: 'media-plugins/gst-plugins-meta', flags: 'aac alsa cdda flac mp3 mpeg ogg pulseaudio vaapi' }
+  - { package: 'media-sound/pulseaudio', flags: 'alsa alsa-plugin bluetooth dbus systemd udev' }
+  - { package: 'sys-firmware/intel-microcode', flags: 'initramfs' }
+  tags:
+  - packages
+
+- name: set make.conf values
+  lineinfile:
+    path: /etc/portage/make.conf
+    regexp: "^{{ item.key }}"
+    line: "{{ item.key }}=\"{{ item.value }}\""
+  with_items:
+  - { key: 'VIDEO_CARDS', value: 'i965 intel' }
+  tags:
+  - packages
+
+- name: install essential packages (this may take a while)
+  portage: package="{{ item }}"
+  with_items:
+  - app-portage/layman
+  - dev-libs/libelf
+  - dev-libs/openssl
+  - dev-vcs/git
+  - media-libs/mesa
+  - media-plugins/gst-plugins-meta
+  - media-sound/pulseaudio
+  - sys-apps/lm_sensors
+  - sys-firmware/intel-microcode
+  - sys-kernel/dracut
+  - sys-libs/ncurses
+  - sys-power/thermald
+  - x11-apps/xrandr
+  - x11-apps/xinput
+  notify:
+  - enable thermal services
+  tags:
+  - packages
+  
+- name: setup portage for layman
+  lineinfile:
+    path: /etc/portage/make.conf
+    line: 'source /var/lib/layman/make.conf'
+  tags:
+  - packages
+  
+- name: install tlp repository
+  layman:
+    name: tlp
+    list_url: 'https://raw.github.com/dywisor/tlp-portage/maint/layman.xml'
+  notify:
+  - enable thermal services
+  tags:
+  - packages
+
+- name: install tlp
+  portage: package=app-laptop/tlp
+  tags:
+  - packages

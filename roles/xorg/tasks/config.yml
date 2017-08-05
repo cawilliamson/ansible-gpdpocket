@@ -1,0 +1,25 @@
+---
+- name: create xorg directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - /etc/X11/xorg.conf.d
+  - /etc/X11/Xsession.d
+  tags:
+  - xorg
+
+- name: copy xorg configs
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  register: xorg_configs
+  with_items:
+  - { src: 'files/config/20-intel.conf', dest: '/etc/X11/xorg.conf.d/' }
+  - { src: 'files/config/30-monitor.conf', dest: '/etc/X11/xorg.conf.d/' }
+  - { src: 'files/config/80-screen.conf', dest: '/etc/X11/xorg.conf.d/' }
+  tags:
+  - xorg

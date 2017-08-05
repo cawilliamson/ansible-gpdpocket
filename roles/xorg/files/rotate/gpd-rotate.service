@@ -1,0 +1,11 @@
+[Unit]
+Description=GPD Display Rotation Service
+After=display-manager.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/gpd/rotate.conf
+ExecStart=-/usr/local/sbin/gpd-rotate --screen=${SCREEN} --touchscreen=${TOUCHSCREEN}
+
+[Install]
+WantedBy=multi-user.target

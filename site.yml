@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  connection: local
+  roles:
+  - audio
+  - boot
+  - common
+  - packages
+  - power
+  - wifi
+  - xorg

@@ -1,0 +1,8 @@
+---
+- name: create gpd config directory
+  file:
+    path: /etc/gpd
+    state: directory
+  tags:
+  - common
+  - gpd

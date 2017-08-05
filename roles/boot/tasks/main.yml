@@ -1,0 +1,81 @@
+---
+- name: install bootstrap kernel
+  unarchive:
+    src: files/bootstrap-kernel.tar.bz2
+    dest: /
+  when: bootstrap is defined
+  notify:
+  - update boot
+  tags:
+  - boot
+
+- name: fetch latest jwrdegoede kernel sources (this may take a while)
+  git:
+    repo: https://github.com/jwrdegoede/linux-sunxi.git
+    dest: /usr/src/linux-jwrdegoede
+    force: yes
+  when: bootstrap is not defined
+  register: kernel_sources
+  tags:
+  - boot
+
+- name: build new kernel (this may take a while)
+  make:
+    chdir: /usr/src/linux-jwrdegoede
+    target: -j5
+    params:
+      LOCALVERSION: -jwrdegoede
+  when: kernel_sources.changed and bootstrap is not defined
+  tags:
+  - boot
+
+- name: install kernel modules (this may take a while)
+  make:
+    chdir: /usr/src/linux-jwrdegoede
+    target: modules_install
+    params:
+      LOCALVERSION: -jwrdegoede
+  when: kernel_sources.changed and bootstrap is not defined
+  tags:
+  - boot
+
+- name: install new kernel
+  shell: cp -f /usr/src/linux-jwrdegoede/arch/x86/boot/bzImage /boot/vmlinuz-$(ls -t /lib/modules/ |head -n 1)
+  args:
+    warn: false
+  notify:
+  - update boot
+  when: kernel_sources.changed and bootstrap is not defined
+  tags:
+  - boot
+
+- name: clean up kernel build directory
+  make:
+    chdir: /usr/src/linux-jwrdegoede
+    target: clean
+  when: kernel_sources.changed and bootstrap is not defined
+  tags:
+  - boot
+
+- include: arch.yml
+  when: ansible_distribution == 'Archlinux'
+
+- include: debian.yml
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- include: gentoo.yml
+  when: ansible_distribution == 'Gentoo'
+
+- name: set grub boot options
+  lineinfile:
+    path: /etc/default/grub
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+  with_items:
+  - { key: 'GRUB_CMDLINE_LINUX_DEFAULT', value: '""' }
+  - { key: 'GRUB_DEFAULT', value: 'saved' }
+  - { key: 'GRUB_TIMEOUT', value: '2' }
+  notify:
+  - update boot
+  tags:
+  - boot

@@ -1,0 +1,37 @@
+---
+- name: install essential packages (this may take a while)
+  pacman: name="{{ item }}"
+  with_items:
+  - base-devel
+  - btrfs-progs
+  - bc
+  - efibootmgr
+  - git
+  - grub
+  - gstreamer-vaapi
+  - i2c-tools
+  - ibus
+  - inetutils
+  - intel-ucode
+  - kmod
+  - libelf
+  - mesa
+  - openssl-1.0
+  - os-prober
+  - pulseaudio
+  - thermald
+  - tlp
+  - xf86-video-intel
+  - xorg-xinput
+  - xorg-xrandr
+  notify:
+  - enable thermal services
+  tags:
+  - packages
+
+- name: remove unused kernel
+  pacman:
+    name: linux
+    state: absent
+  tags:
+  - packages

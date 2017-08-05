@@ -1,0 +1,51 @@
+---
+- name: create chtrt5645 directory
+  file:
+    path: /usr/share/alsa/ucm/chtrt5645
+    state: directory
+  tags:
+  - audio
+  - common
+
+- name: copy audio config files to device
+  copy:
+    src: "{{ item }}"
+    dest: /usr/share/alsa/ucm/chtrt5645/
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+  - files/chtrt5645.conf
+  - files/HiFi.conf
+  tags:
+  - audio
+  - common
+
+- name: set default sink and source in pulseaudio
+  lineinfile:
+    path: /etc/pulse/default.pa
+    regexp: "^{{ item.key }} "
+    line: "{{ item.key }} {{ item.value}}"
+  with_items:
+  - { key: 'set-default-sink', value: '1' }
+  - { key: 'set-default-source', value: '2' }
+  tags:
+  - audio
+  - common
+
+- name: disable pulse realtime scheduling
+  lineinfile:
+    path: /etc/pulse/daemon.conf
+    line: 'realtime-scheduling = no'
+  tags:
+  - audio
+  - common
+  
+- name: remove old realtime scheduling line (if present)
+  lineinfile:
+    path: /etc/pulse/daemon.conf
+    regexp: '^realtime-scheduling = yes'
+    state: absent
+  tags:
+  - audio
+  - common

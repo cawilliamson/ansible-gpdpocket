@@ -1,0 +1,12 @@
+---
+- name: enable gpd-rotate
+  systemd:
+    name: gpd-rotate
+    daemon_reload: yes
+    enabled: yes
+  listen: enable gpd-rotate
+
+- name: update dconf
+  shell: dconf update
+  ignore_errors: yes
+  listen: update dconf

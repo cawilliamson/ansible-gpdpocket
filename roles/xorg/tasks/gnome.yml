@@ -1,0 +1,64 @@
+---
+- name: create dconf directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - /etc/dconf/db/local.d
+  - /etc/dconf/profile
+  tags:
+  - gnome
+  - xorg
+
+- name: set gnome interface scaling
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+  - { src: 'files/gnome/01scale', dest: '/etc/dconf/db/local.d/' }
+  - { src: 'files/gnome/profile', dest: '/etc/dconf/profile/gdm' }
+  - { src: 'files/gnome/profile', dest: '/etc/dconf/profile/user' }
+  notify:
+  - update dconf
+  tags:
+  - gnome
+  - xorg
+
+- name: check for gdm directory
+  stat: path=/etc/gdm/custom.conf
+  register: gdm
+  tags:
+  - gnome
+  - xorg
+
+- name: check for gdm3 directory
+  stat: path=/etc/gdm3/custom.conf
+  register: gdm3
+  tags:
+  - gnome
+  - xorg
+
+- name: disable wayland on gdm
+  lineinfile:
+    path: /etc/gdm/custom.conf
+    regexp: '^#WaylandEnable=false'
+    line: 'WaylandEnable=false'
+    backrefs: yes
+  when: gdm.stat.islnk is defined
+  tags:
+  - gnome
+  - xorg
+
+- name: disable wayland on gdm3
+  lineinfile:
+    path: /etc/gdm3/custom.conf
+    regexp: '^#WaylandEnable=false'
+    line: 'WaylandEnable=false'
+    backrefs: yes
+  when: gdm3.stat.islnk is defined
+  tags:
+  - gnome
+  - xorg

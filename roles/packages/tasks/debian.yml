@@ -1,0 +1,24 @@
+---
+- name: install essential packages (this may take a while)
+  apt: name="{{ item }}"
+  with_items:
+  - build-essential
+  - git
+  - gstreamer1.0-vaapi
+  - i965-va-driver
+  - intel-microcode
+  - libelf-dev
+  - libncurses5-dev
+  - libssl-dev
+  - lm-sensors
+  - mesa-utils
+  - pulseaudio
+  - thermald
+  - tlp
+  - va-driver-all
+  - vainfo
+  - x11-xserver-utils
+  notify:
+  - enable thermal services
+  tags:
+  - packages

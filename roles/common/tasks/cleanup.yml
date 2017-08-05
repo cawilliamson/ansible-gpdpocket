@@ -1,0 +1,81 @@
+---
+- name: remove obsolete files
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - /boot/config-4.12.0-custom
+  - /boot/config-4.12.0-gpdpocket
+  - /boot/initrd.img-4.12.0-custom
+  - /boot/initrd.img-4.12.0-gpdpocket
+  - /boot/system.map-4.12.0-custom
+  - /boot/system.map-4.12.0-gpdpocket
+  - /boot/vmlinuz-4.12.0-custom
+  - /boot/vmlinuz-4.12.0-gpdpocket
+  - /etc/dconf/db/gdm.d
+  - /etc/dconf/db/local.d/03-scaling
+  - /etc/dconf/db/local.d/03scaling
+  - /etc/gpdfand.conf
+  - /etc/systemd/system/gpdfand.service
+  - /etc/systemd/system/gpdrotate.service
+  - /etc/udev/rules.d/99-local-bluetooth.rules
+  - /etc/X11/xorg.conf.d/89-screen.conf
+  - /etc/X11/xorg.conf.d/90-screen.conf
+  - /etc/X11/Xsession.d/01gpdrotate
+  - /etc/X11/Xsession.d/01touchscreen
+  - /etc/X11/Xsession.d/02gpdrotate
+  - /etc/X11/Xsession.d/02scale
+  - /etc/X11/Xsession.d/03scaling
+  - /etc/X11/Xsession.d/03scrolling
+  - /etc/X11/Xsession.d/04gpdrotate
+  - /etc/X11/Xsession.d/98gpdrotate
+  - /etc/X11/Xsession.d/98touchscreen
+  - /etc/X11/Xsession.d/99touchscreen
+  - /lib/modules/4.12.0-custom
+  - /lib/modules/4.12.0-gpdpocket
+  - /lib/systemd/system-sleep/gpdfand
+  - /root/ansible-gpdpocket
+  - /usr/local/bin/gpdfand
+  - /usr/local/sbin/gpdfand
+  - /usr/local/sbin/gpdrotate
+  - /usr/share/alsa/ucm/chtrt5645.conf
+  - /usr/share/alsa/ucm/HiFi.conf
+  - /usr/src/linux-gpdpocket
+  - /var/lib/gdm3/.config/monitors.xml
+  - /var/lib/lightdm/.config/monitors.xml
+  - /var/log/gpdfand
+  tags:
+  - cleanup
+  - common
+
+- name: remove broken pulse config
+  lineinfile:
+    path: /etc/pulse/daemon.conf
+    regexp: "{{ item }}"
+    state: absent
+  with_items:
+  - 'set-default-sink 1'
+  - 'set-default-source 1'
+  - 'set-default-sink = 1'
+  - 'set-default-source = 1'
+
+- name: remove obsolete rc.local config
+  lineinfile:
+    path: /etc/rc.local
+    regexp: "{{ item }}"
+    state: absent
+  with_items:
+  - '^modprobe btusb'
+  - '^echo "0000 0000"'
+  tags:
+  - cleanup
+  - common
+  
+- name: remove disk line from grub (accidentically placed there)
+  lineinfile:
+    path: /etc/default/grub
+    line: 'DISK_DEVICES="mmcblk0"'
+    state: absent
+  tags:
+  - cleanup
+  - common

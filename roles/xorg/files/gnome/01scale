@@ -1,0 +1,3 @@
+[org/gnome/desktop/interface]
+scaling-factor=uint32 1
+text-scaling-factor=uint32 1

@@ -1,0 +1,1 @@
+Find more info at https://www.reddit.com/r/GPDPocket/comments/6rewuj/ansiblegpdpocket/

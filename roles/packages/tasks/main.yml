@@ -1,0 +1,9 @@
+---
+- include: arch.yml
+  when: ansible_distribution == 'Archlinux'
+
+- include: debian.yml
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- include: gentoo.yml
+  when: ansible_distribution == 'Gentoo'

@@ -1,0 +1,20 @@
+---
+- name: update boot
+  shell: |
+    # determine new kernel version
+    KERNEL_VERSION=$(ls -t /lib/modules/ |head -n 1)
+    
+    # recreate initramfs image
+    if [ -f /usr/sbin/update-initramfs ]; then
+      update-initramfs -u -k ${KERNEL_VERSION}
+    elif [ -f /usr/bin/dracut ]; then
+      dracut initrd.img-${KERNEL_VERSION}
+    elif [ -f /usr/bin/mkinitcpio ]; then
+      mkinitcpio -c /etc/mkinitcpio.conf -g /boot/initrd.img-${KERNEL_VERSION} -k ${KERNEL_VERSION} || true
+    fi
+    
+    # Update grub config
+    if [ -f /usr/bin/grub-mkconfig ]; then
+      grub-mkconfig -o /boot/grub/grub.cfg
+    fi
+  listen: update boot

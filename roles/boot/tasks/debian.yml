@@ -1,0 +1,34 @@
+---
+- name: check if running in chroot (iso creation)
+  shell: |
+    if [ "$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)" ]; then
+      echo "chroot"
+    fi
+  register: chroot
+  tags:
+  - boot
+
+- name: install casper packages (iso creation = yes)
+  apt: name="{{ item }}"
+  with_items:
+  - casper
+  - lupin-casper
+  - unionfs-fuse
+  when: chroot.stdout.find('chroot') != -1
+  tags:
+  - boot
+
+- name: add modules to initramfs
+  lineinfile:
+    path: /etc/initramfs-tools/modules
+    line: "{{ item }}"
+    create: yes
+  with_items:
+  - btusb
+  - fuse
+  - pwm-lpss
+  - pwm-lpss-platform
+  notify:
+  - update boot
+  tags:
+  - boot

@@ -1,0 +1,44 @@
+---
+- name: set initrd modules
+  lineinfile:
+    path: /etc/mkinitcpio.conf
+    regexp: '^MODULES='
+    line: 'MODULES="btusb pwm-lpss pwm-lpss-platform"'
+  notify:
+  - update boot
+  tags:
+  - boot
+
+- name: check if running in chroot (iso creation)
+  shell: |
+    if [ "$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)" ]; then
+      echo "chroot"
+    fi
+  register: chroot
+  tags:
+  - boot
+
+- name: set HOOKS for chrooted system (iso creation = yes)
+  lineinfile:
+    path: /etc/mkinitcpio.conf
+    regexp: '^HOOKS='
+    line: 'HOOKS="base udev memdisk archiso_shutdown archiso archiso_loop_mnt archiso_pxe_common archiso_pxe_nbd archiso_pxe_http archiso_pxe_nfs archiso_kms block modconf filesystems keyboard"'
+    create: yes
+  when: chroot.stdout.find('chroot') != -1
+  notify:
+  - update boot
+  tags:
+  - boot
+
+- name: set HOOKS for running system (iso creation = no)
+  lineinfile:
+    path: /etc/mkinitcpio.conf
+    regexp: '^HOOKS='
+    line: 'HOOKS="base udev block autodetect modconf filesystems fsck"'
+    create: yes
+  when: chroot.stdout.find('chroot') == -1
+  notify:
+  - update boot
+  tags:
+  - boot
+

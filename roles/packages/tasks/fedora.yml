@@ -1,0 +1,27 @@
+---
+- name: install essential packages (this may take a while)
+  yum: name="{{ item }}"
+  with_items:
+  - '@Development Tools'
+  - btrfs-progs
+  - bc
+  - efibootmgr
+  - elfutils-libelf-devel
+  - git
+  - grub2
+  - gstreamer1-vaapi
+  - i2c-tools
+  - ibus
+  - libXrandr
+  - mesa
+  - openssl-libs
+  - os-prober
+  - pulseaudio
+  - thermald
+  - tlp
+  - xorg-x11-drv-intel
+  - xinput_calibrator
+  notify:
+  - enable thermal services
+  tags:
+  - packages

@@ -1,0 +1,13 @@
+[Unit]
+Description=GPD Fan Daemon
+DefaultDependencies=no
+After=sysinit.target local-fs.target
+Before=basic.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/gpd/fan.conf
+ExecStart=/usr/local/sbin/gpd-fan --time=${TIME} --turbo=${TURBO} --min=${MIN} --med=${MED} --max=${MAX}
+
+[Install]
+WantedBy=basic.target

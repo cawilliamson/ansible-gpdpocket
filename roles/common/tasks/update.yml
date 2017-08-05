@@ -1,0 +1,11 @@
+---
+- name: install update script
+  copy:
+    src: files/gpd-update.sh
+    dest: /usr/local/bin/gpd-update
+    owner: root
+    group: root
+    mode: 0777
+  tags:
+  - common
+  - update

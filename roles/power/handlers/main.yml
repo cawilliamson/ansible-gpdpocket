@@ -1,0 +1,16 @@
+---
+- name: enable gpd-fan
+  systemd:
+    name: gpd-fan
+    daemon_reload: yes
+    enabled: yes
+  listen: enable gpd-fan
+
+- name: enable thermal services
+  service:
+    name: "{{ item }}"
+    enabled: yes
+  with_items:
+  - thermald
+  - tlp
+  listen: enable thermal services
