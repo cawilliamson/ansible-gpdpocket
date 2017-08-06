@@ -6,7 +6,7 @@
     
     # recreate initramfs image
     if [ -f /usr/sbin/update-initramfs ]; then
-      update-initramfs -u -k ${KERNEL_VERSION}
+      update-initramfs -c -k ${KERNEL_VERSION} || update-initramfs -u -k ${KERNEL_VERSION}
     elif [ -f /usr/bin/dracut ]; then
       dracut initrd.img-${KERNEL_VERSION}
     elif [ -f /usr/bin/mkinitcpio ]; then
