@@ -22,7 +22,7 @@ mkdir -p ${TMPDIR}
 xorriso -osirrox on -indev ${1} -extract / ${TMPDIR}
 
 # find paths
-BOOT_CONFIGS=$(find ${TMPDIR} -type f -iname 'grub.cfg')
+BOOT_CONFIGS=$(find ${TMPDIR} -type f -regex '.*\(grub/*+.cfg\|isolinux/*+.cfg\)')
 EFI_PATH=$(find ${TMPDIR} -type f -iname 'efi*.img' -print -quit)
 SQUASHFS_PATH=$(find ${TMPDIR} -type f -regex '.*\(sfs\|squashfs\)$' -print -quit)
 KERNEL_PATH=$(find ${TMPDIR} -type f -iname '*vmlinuz*' -print -quit)
