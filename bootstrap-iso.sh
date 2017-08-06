@@ -28,6 +28,12 @@ SQUASHFS_PATH=$(find ${TMPDIR} -type f -regex '.*\(sfs\|squashfs\)$' -print -qui
 KERNEL_PATH=$(find ${TMPDIR} -type f -iname '*vmlinuz*' -print -quit)
 INITRD_PATH=$(find $(dirname ${KERNEL_PATH}) -type f -regex '.*\(img\|lz\|gz\)$' -print -quit)
 
+# patch kernel boot options
+while read -r BOOT_CONFIG; do
+  sed -i 's, splash,,g' ${BOOT_CONFIG}
+  sed -i 's, quiet, boot=live,g' ${BOOT_CONFIG}
+done <<< "${BOOT_CONFIGS}"
+
 # extract squashfs
 unsquashfs -d ${TMPDIR}/squashfs/ -f ${SQUASHFS_PATH}
 rm -f ${SQUASHFS_PATH}
@@ -64,12 +70,6 @@ if [ -f ${TMPDIR}/arch/x86_64/airootfs.md5 ]; then
 elif [ -f ${TMPDIR}/md5sum.txt ]; then
   find ${TMPDIR} -type f -print0 | xargs -0 md5sum | grep -v "\./md5sum.txt" > ${TMPDIR}/md5sum.txt
 fi
-
-# modify kernel boot options
-while read -r BOOT_CONFIG; do
-  sed -i 's, splash,,g' ${BOOT_CONFIG}
-  sed -i 's, quiet, boot=live,g' ${BOOT_CONFIG}
-done <<< "${BOOT_CONFIGS}"
 
 # re-assemble iso
 dd if=${1} bs=512 count=1 of=${TMPDIR}/isolinux/isohdpfx.bin
