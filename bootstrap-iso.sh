@@ -25,8 +25,7 @@ xorriso -osirrox on -indev ${1} -extract / ${TMPDIR}
 BOOT_CONFIGS=$(find ${TMPDIR} -type f -regex '.*\(grub/.+.cfg\|isolinux/.+.cfg\)')
 EFI_PATH=$(find ${TMPDIR} -type f -iname 'efi*.img' -print -quit)
 SQUASHFS_PATH=$(find ${TMPDIR} -type f -regex '.*\(sfs\|squashfs\)$' -print -quit)
-KERNEL_PATH=$(find ${TMPDIR} -type f -iname '*vmlinuz*' -print -quit)
-INITRD_PATH=$(find $(dirname ${KERNEL_PATH}) -type f -regex '.*\(img\|lz\|gz\)$' -print -quit)
+KERNEL_PATHS=$(find ${TMPDIR} -type f -iname '*vmlinuz*')
 
 # patch kernel boot options
 while read -r BOOT_CONFIG; do
@@ -56,9 +55,12 @@ rm -rf \
     ${TMPDIR}/squashfs/usr/src/ansible-gpdpocket \
     ${TMPDIR}/squashfs/tmp/bootstrap-system.sh
 
-# copy kernel in to place
-cp -L ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap ${INITRD_PATH}
-cp -L ${TMPDIR}/squashfs/boot/vmlinuz-*-bootstrap ${KERNEL_PATH}
+# copy kernels in to place
+while read -r KERNEL_PATH; do
+  INITRD_PATH=$(find $(dirname ${KERNEL_PATH}) -type f -regex '.*\(img\|lz\|gz\)$' -print -quit)
+  cp -L ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap ${INITRD_PATH}
+  cp -L ${TMPDIR}/squashfs/boot/vmlinuz-*-bootstrap ${KERNEL_PATH}
+done <<< "${KERNEL_PATHS}"
 
 # re-compress squashfs
 umount -lf ${TMPDIR}/squashfs
