@@ -64,7 +64,7 @@ elif [ -f ${TMPDIR}/md5sum.txt ]; then
   find ${TMPDIR} -type f -print0 | xargs -0 md5sum | grep -v "\./md5sum.txt" > ${TMPDIR}/md5sum.txt
 fi
 
-# modify boot options
+# modify kernel boot options
 if [ -f ${TMPDIR}/boot/grub/grub.cfg ]; then
   sed -i 's, quiet, boot=live,g' ${TMPDIR}/boot/grub/grub.cfg
   sed -i 's, splash,,g' ${TMPDIR}/boot/grub/grub.cfg
