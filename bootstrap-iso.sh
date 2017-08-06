@@ -24,7 +24,7 @@ xorriso -osirrox on -indev ${1} -extract / ${TMPDIR}
 # find paths
 BOOT_CONFIGS=$(find ${TMPDIR} -type f -regex '.*\(grub/.+.cfg\|isolinux/.+.cfg\)')
 EFI_PATH=$(find ${TMPDIR} -type f -iname 'efi*.img' -print -quit)
-SQUASHFS_PATH=$(find ${TMPDIR} -type f -regex '.*\(sfs\|squashfs\)$' -print -quit)
+SQUASHFS_PATH=$(find ${TMPDIR} -type f -regex '.*\.\(sfs\|squashfs\)$' -print -quit)
 KERNEL_PATHS=$(find ${TMPDIR} -type f -iname '*vmlinuz*')
 
 # patch kernel boot options
