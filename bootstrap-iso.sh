@@ -22,6 +22,7 @@ mkdir -p ${TMPDIR}
 xorriso -osirrox on -indev ${1} -extract / ${TMPDIR}
 
 # find paths
+BOOT_CONFIGS=$(find ${TMPDIR} -type f -iname 'grub.cfg')
 EFI_PATH=$(find ${TMPDIR} -type f -iname 'efi*.img' -print -quit)
 SQUASHFS_PATH=$(find ${TMPDIR} -type f -regex '.*\(sfs\|squashfs\)$' -print -quit)
 KERNEL_PATH=$(find ${TMPDIR} -type f -iname '*vmlinuz*' -print -quit)
@@ -65,10 +66,10 @@ elif [ -f ${TMPDIR}/md5sum.txt ]; then
 fi
 
 # modify kernel boot options
-if [ -f ${TMPDIR}/boot/grub/grub.cfg ]; then
-  sed -i 's, quiet, boot=live,g' ${TMPDIR}/boot/grub/grub.cfg
-  sed -i 's, splash,,g' ${TMPDIR}/boot/grub/grub.cfg
-fi
+while read -r BOOT_CONFIG; do
+  sed -i 's, splash,,g' ${BOOT_CONFIG}
+  sed -i 's, quiet, boot=live,g' ${BOOT_CONFIG}
+done <<< "${BOOT_CONFIGS}"
 
 # re-assemble iso
 dd if=${1} bs=512 count=1 of=${TMPDIR}/isolinux/isohdpfx.bin
