@@ -37,9 +37,8 @@ elif [ -f /usr/bin/apt-get ]; then
   done
   DEBIAN_FRONTEND=noninteractive
   sed -i 's,main restricted,main restricted universe multiverse,g' /etc/apt/sources.list
-  apt-get update
-  apt-get -y install software-properties-common
-  add-apt-repository -y ppa:ansible/ansible
+  echo 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main' > /etc/apt/sources.list.d/ansible.list
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
   apt-get update
   apt-get -y install ansible git
 elif [ -f /usr/sbin/emerge ]; then
