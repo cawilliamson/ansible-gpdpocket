@@ -57,7 +57,9 @@ rm -rf \
 # copy kernels in to place
 while read -r KERNEL_PATH; do
   INITRD_PATH=$(find $(dirname ${KERNEL_PATH}) -maxdepth 1 -type f -regex '.*\(img\|lz\|gz\)$' -print -quit)
-  cp -L ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap ${INITRD_PATH}
+  if [ ! -z ${INITRD_PATH} ]; then
+    cp -L ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap ${INITRD_PATH}
+  fi
   cp -L ${TMPDIR}/squashfs/boot/vmlinuz-*-bootstrap ${KERNEL_PATH}
 done <<< "${KERNEL_PATHS}"
 
