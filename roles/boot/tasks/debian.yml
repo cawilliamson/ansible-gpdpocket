@@ -25,9 +25,11 @@
     create: yes
   with_items:
   - fuse
+  - loop
   - overlay
   - pwm-lpss
   - pwm-lpss-platform
+  - squashfs
   notify:
   - update boot
   tags:
