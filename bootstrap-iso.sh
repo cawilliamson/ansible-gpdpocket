@@ -45,7 +45,7 @@ mount --bind /dev ${TMPDIR}/squashfs/dev
 mount -t proc none ${TMPDIR}/squashfs/proc
 
 # run ansible playbook against system files
-cp -R . ${TMPDIR}/squashfs/usr/src/ansible-gpdpocket/
+cp -R $(pwd)/. ${TMPDIR}/squashfs/usr/src/ansible-gpdpocket/
 chroot ${TMPDIR}/squashfs /bin/bash -c "/bin/bash /usr/src/ansible-gpdpocket/bootstrap-system.sh"
 
 # fix squashfs system files after chroot
