@@ -18,15 +18,26 @@
   tags:
   - boot
 
+- name: create loop module config (iso creation = yes)
+  lineinfile:
+    path: /etc/modprobe.d/loop.conf
+    line: "options loop max_loop=8"
+    create: yes
+  when: chroot.stdout.find('chroot') != -1
+  tags:
+  - boot
+
 - name: add modules to initramfs
   lineinfile:
     path: /etc/initramfs-tools/modules
     line: "{{ item }}"
     create: yes
   with_items:
+  - loop
   - overlay
   - pwm-lpss
   - pwm-lpss-platform
+  - squashfs
   notify:
   - update boot
   tags:

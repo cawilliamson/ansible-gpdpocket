@@ -29,9 +29,8 @@ KERNEL_PATHS=$(find ${TMPDIR} -type f -iname '*vmlinuz*')
 
 # patch kernel boot options
 while read -r BOOT_CONFIG; do
-  echo ${BOOT_CONFIG}
   sed -i 's, splash,,g' ${BOOT_CONFIG}
-  sed -i 's, quiet, BOOT=live,g' ${BOOT_CONFIG}
+  sed -i 's, quiet, boot=live,g' ${BOOT_CONFIG}
 done <<< "${BOOT_CONFIGS}"
 
 # extract squashfs
@@ -64,7 +63,12 @@ done <<< "${KERNEL_PATHS}"
 
 # re-compress squashfs
 umount -lf ${TMPDIR}/squashfs
-mksquashfs ${TMPDIR}/squashfs ${SQUASHFS_PATH} -e boot
+if [ -f ${TMPDIR}/casper/filesystem.size ]; then
+  printf $(du -sx --block-size=1 ${TMPDIR}/squashfs | cut -f1) > ${TMPDIR}/casper/filesystem.size
+elif [ -f ${TMPDIR}/live/filesystem.size ]; then
+  printf $(du -sx --block-size=1 ${TMPDIR}/squashfs | cut -f1) > ${TMPDIR}/live/filesystem.size
+fi
+mksquashfs ${TMPDIR}/squashfs ${SQUASHFS_PATH}
 rm -rf ${TMPDIR}/squashfs
 
 # add distro-specific checksums
