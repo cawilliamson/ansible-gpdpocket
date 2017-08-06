@@ -25,7 +25,7 @@ xorriso -osirrox on -indev ${1} -extract / ${TMPDIR}
 EFI_PATH=$(find ${TMPDIR} -type f -iname 'efi*.img' -print -quit)
 SQUASHFS_PATH=$(find ${TMPDIR} -type f -regex '.*\(sfs\|squashfs\)$' -print -quit)
 KERNEL_PATH=$(find ${TMPDIR} -type f -iname '*vmlinuz*' -print -quit)
-INITRD_PATH=$(find $(dirname ${KERNEL_PATH}) -type f -regex '.*\(img\|lz\)$' -print -quit)
+INITRD_PATH=$(find $(dirname ${KERNEL_PATH}) -type f -regex '.*\(img\|lz\|gz\)$' -print -quit)
 
 # extract squashfs
 unsquashfs -d ${TMPDIR}/squashfs/ -f ${SQUASHFS_PATH}
