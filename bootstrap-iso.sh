@@ -31,7 +31,7 @@ KERNEL_PATHS=$(find ${TMPDIR} -type f -iname '*vmlinuz*')
 while read -r BOOT_CONFIG; do
   echo ${BOOT_CONFIG}
   sed -i 's, splash,,g' ${BOOT_CONFIG}
-  sed -i 's, quiet, boot=live,g' ${BOOT_CONFIG}
+  sed -i 's, quiet, BOOT=live,g' ${BOOT_CONFIG}
 done <<< "${BOOT_CONFIGS}"
 
 # extract squashfs
@@ -64,7 +64,7 @@ done <<< "${KERNEL_PATHS}"
 
 # re-compress squashfs
 umount -lf ${TMPDIR}/squashfs
-mksquashfs ${TMPDIR}/squashfs ${SQUASHFS_PATH}
+mksquashfs ${TMPDIR}/squashfs ${SQUASHFS_PATH} -e boot
 rm -rf ${TMPDIR}/squashfs
 
 # add distro-specific checksums
