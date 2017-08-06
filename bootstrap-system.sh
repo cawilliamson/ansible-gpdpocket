@@ -38,8 +38,10 @@ elif [ -f /usr/bin/apt-get ]; then
   DEBIAN_FRONTEND=noninteractive
   sed -i 's,main restricted,main restricted universe multiverse,g' /etc/apt/sources.list
   mkdir -p /etc/apt/sources.list.d
+  apt-get update
+  apt-get -y install dirmngr
   echo 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main' > /etc/apt/sources.list.d/ansible.list
-  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
+  apt-key --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
   apt-get update
   apt-get -y install ansible git
 elif [ -f /usr/sbin/emerge ]; then
