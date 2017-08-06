@@ -16,6 +16,7 @@
   - pulseaudio
   - thermald
   - tlp
+  - unionfs-fuse
   - va-driver-all
   - vainfo
   - x11-xserver-utils

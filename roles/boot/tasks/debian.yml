@@ -5,16 +5,16 @@
       echo "chroot"
     fi
   register: chroot
+  changed_when: False
   tags:
   - boot
 
-- name: install casper packages (iso creation = yes)
+- name: install ubuntu casper packages (iso creation = yes)
   apt: name="{{ item }}"
   with_items:
   - casper
   - lupin-casper
-  - unionfs-fuse
-  when: chroot.stdout.find('chroot') != -1
+  when: chroot.stdout.find('chroot') != -1 and ansible_distribution == 'Ubuntu'
   tags:
   - boot
 

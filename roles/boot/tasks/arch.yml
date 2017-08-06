@@ -15,6 +15,7 @@
       echo "chroot"
     fi
   register: chroot
+  changed_when: False
   tags:
   - boot
 
