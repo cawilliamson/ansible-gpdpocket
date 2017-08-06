@@ -24,8 +24,8 @@
     line: "{{ item }}"
     create: yes
   with_items:
-  - btusb
   - fuse
+  - overlay
   - pwm-lpss
   - pwm-lpss-platform
   notify:
