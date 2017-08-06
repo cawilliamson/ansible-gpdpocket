@@ -71,6 +71,7 @@
     path: /etc/default/grub
     regexp: "^{{ item.key }}="
     line: "{{ item.key }}={{ item.value }}"
+    create: yes
   with_items:
   - { key: 'GRUB_CMDLINE_LINUX_DEFAULT', value: '""' }
   - { key: 'GRUB_DEFAULT', value: 'saved' }
