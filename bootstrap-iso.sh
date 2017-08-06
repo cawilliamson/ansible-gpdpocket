@@ -64,6 +64,12 @@ elif [ -f ${TMPDIR}/md5sum.txt ]; then
   find ${TMPDIR} -type f -print0 | xargs -0 md5sum | grep -v "\./md5sum.txt" > ${TMPDIR}/md5sum.txt
 fi
 
+# modify boot options
+if [ -f ${TMPDIR}/boot/grub/grub.cfg ]; then
+  sed -i 's, quiet, boot=live,g' ${TMPDIR}/boot/grub/grub.cfg
+  sed -i 's, splash,,g' ${TMPDIR}/boot/grub/grub.cfg
+fi
+
 # re-assemble iso
 dd if=${1} bs=512 count=1 of=${TMPDIR}/isolinux/isohdpfx.bin
 ISO_LABEL=$(blkid -o value -s LABEL ${1})
