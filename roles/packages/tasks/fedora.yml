@@ -1,10 +1,18 @@
 ---
+- name: install development packages (workaround until ansible 2.3.2 arrives)
+  shell: dnf install -y '@C Development Tools and Libraries'
+  args:
+    warn: false
+  changed_when: False
+  tags:
+  - packages
+
 - name: install essential packages (this may take a while)
   package: name="{{ item }}"
   with_items:
-  - '@C Development Tools and Libraries'
   - btrfs-progs
   - bc
+  - dracut
   - efibootmgr
   - elfutils-libelf-devel
   - git
@@ -18,8 +26,8 @@
   - pulseaudio
   - thermald
   - tlp
-  - xorg-x11-drv-intel
   - xinput_calibrator
+  - xorg-x11-drv-intel  
   notify:
   - enable thermal services
   tags:
