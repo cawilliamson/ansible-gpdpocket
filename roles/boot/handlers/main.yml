@@ -8,7 +8,7 @@
     if [ -f /usr/sbin/update-initramfs ]; then
       update-initramfs -c -k ${KERNEL_VERSION} || update-initramfs -u -k ${KERNEL_VERSION}
     elif [ -f /usr/bin/dracut ]; then
-      dracut initrd.img-${KERNEL_VERSION}
+      dracut -f /boot/initrd.img-${KERNEL_VERSION} ${KERNEL_VERSION}
     elif [ -f /usr/bin/mkinitcpio ]; then
       mkinitcpio -c /etc/mkinitcpio.conf -g /boot/initrd.img-${KERNEL_VERSION} -k ${KERNEL_VERSION} || true
     fi
