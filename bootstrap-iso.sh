@@ -26,7 +26,7 @@ fi
 
 # extract iso
 mkdir -p ${TMPDIR}
-xorriso -osirrox on -indev ${1} -extract / ${TMPDIR}
+xorriso -osirrox on -indev "${1}" -extract / ${TMPDIR}
 
 # find paths
 BOOT_CONFIGS=$(find ${TMPDIR} -type f -regex '.*\(grub/.+.cfg\|isolinux/.+.cfg\)')
@@ -95,8 +95,8 @@ elif [ -f ${TMPDIR}/md5sum.txt ]; then
 fi
 
 # re-assemble iso
-dd if=${1} bs=512 count=1 of=${TMPDIR}/isolinux/isohdpfx.bin
-ISO_LABEL=$(blkid -o value -s LABEL ${1})
+dd if="${1}" bs=512 count=1 of=${TMPDIR}/isolinux/isohdpfx.bin
+ISO_LABEL=$(blkid -o value -s LABEL "${1}")
 xorriso \
     -as mkisofs \
     -iso-level 3 \
