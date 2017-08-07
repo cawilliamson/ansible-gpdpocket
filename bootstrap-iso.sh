@@ -12,6 +12,9 @@ if [ -f /usr/bin/pacman ]; then
 elif [ -f /usr/bin/apt-get ]; then
   apt-get update
   apt-get -y install squashfs-tools xorriso
+elif [ -f /usr/bin/yum ]; then
+  apt-get update
+  yum install -y squashfs-tools xorriso
 elif [ -f /usr/sbin/emerge ]; then
   emerge --sync
   USE="lz4 lzma lzo xz" emerge dev-libs/libisoburn sys-fs/squashfs-tools
