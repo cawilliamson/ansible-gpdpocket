@@ -1,4 +1,9 @@
 ---
+- name: install python-yum module
+  pip: name=pyum
+  tags:
+  - packages
+
 - name: install essential packages (this may take a while)
   yum: name="{{ item }}"
   with_items:
