@@ -27,8 +27,9 @@
     regexp: "^{{ item.key }} "
     line: "{{ item.key }} {{ item.value}}"
   with_items:
-  - { key: 'set-default-sink', value: '1' }
-  - { key: 'set-default-source', value: '2' }
+  - { key: 'set-card-profile', value: 'alsa_card.platform-cht-bsw-rt5645 HiFi' }
+  - { key: 'set-default-sink', value: 'alsa_output.platform-cht-bsw-rt5645.HiFi__hw_chtrt5645__sink' }
+  - { key: 'set-sink-port', value: 'alsa_output.platform-cht-bsw-rt5645.HiFi__hw_chtrt5645__sink [Out] Speaker' }
   tags:
   - audio
   - common
