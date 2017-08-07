@@ -1,13 +1,8 @@
 ---
-- name: install python-yum module
-  pip: name=pyum
-  tags:
-  - packages
-
 - name: install essential packages (this may take a while)
   package: name="{{ item }}"
   with_items:
-  - '@Development Tools'
+  - '@C Development Tools and Libraries'
   - btrfs-progs
   - bc
   - efibootmgr
@@ -18,7 +13,6 @@
   - i2c-tools
   - ibus
   - libXrandr
-  - mesa
   - openssl-libs
   - os-prober
   - pulseaudio

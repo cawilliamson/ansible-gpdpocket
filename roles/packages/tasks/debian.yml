@@ -1,6 +1,6 @@
 ---
 - name: install essential packages (this may take a while)
-  apt: name="{{ item }}"
+  package: name="{{ item }}"
   with_items:
   - build-essential
   - git
