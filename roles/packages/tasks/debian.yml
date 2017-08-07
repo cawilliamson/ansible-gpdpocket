@@ -3,6 +3,7 @@
   package: name="{{ item }}"
   with_items:
   - build-essential
+  - debian-installer-launcher
   - git
   - grub2
   - gstreamer1.0-vaapi
