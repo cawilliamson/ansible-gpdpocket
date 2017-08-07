@@ -78,7 +78,7 @@ while read -r KERNEL_PATH; do
 done <<< "${KERNEL_PATHS}"
 
 # calculate filesizes
-umount -rf ${TMPDIR}/squashfs
+umount -Rf ${TMPDIR}/squashfs
 if [ -f ${TMPDIR}/casper/filesystem.size ]; then
   printf $(du -sx --block-size=1 ${TMPDIR}/squashfs | cut -f1) > ${TMPDIR}/casper/filesystem.size
 elif [ -f ${TMPDIR}/live/filesystem.size ]; then
