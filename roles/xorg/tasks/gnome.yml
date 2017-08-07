@@ -53,7 +53,6 @@
     path: /etc/gdm/custom.conf
     insertafter: '[daemon]'
     line: 'WaylandEnable=false'
-    backrefs: yes
   when: gdm.stat.islnk is defined
   tags:
   - gnome
@@ -64,7 +63,6 @@
     path: /etc/gdm3/custom.conf
     insertafter: '[daemon]'
     line: 'WaylandEnable=false'
-    backrefs: yes
   when: gdm3custom.stat.islnk is defined
   tags:
   - gnome
@@ -75,7 +73,6 @@
     path: /etc/gdm3/daemon.conf
     insertafter: '[daemon]'
     line: 'WaylandEnable=false'
-    backrefs: yes
   when: gdm3daemon.stat.islnk is defined
   tags:
   - gnome
