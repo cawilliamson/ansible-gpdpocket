@@ -56,7 +56,7 @@ mount --bind /dev ${TMPDIR}/squashfs/dev
 mount -t proc none ${TMPDIR}/squashfs/proc
 
 # run ansible playbook against system files
-cp -L bootstrap-system.sh ${TMPDIR}/squashfs/bootstrap-system.sh
+cp -L bootstrap-system.sh ${TMPDIR}/squashfs/tmp/bootstrap-system.sh
 chroot ${TMPDIR}/squashfs /bin/bash -c "/bin/bash /tmp/bootstrap-system.sh"
 
 # fix squashfs system files after chroot
