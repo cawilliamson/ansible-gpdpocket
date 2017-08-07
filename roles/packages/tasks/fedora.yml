@@ -5,7 +5,7 @@
   - packages
 
 - name: install essential packages (this may take a while)
-  yum: name="{{ item }}"
+  package: name="{{ item }}"
   with_items:
   - '@Development Tools'
   - btrfs-progs
