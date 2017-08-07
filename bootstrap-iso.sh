@@ -7,7 +7,7 @@ set -e -x
 TMPDIR=/var/tmp/bootstrap-iso
 
 # clean up from previous run
-umount -rf ${TMPDIR}/squashfs || true
+umount -Rf ${TMPDIR}/squashfs || true
 rm -rf ${TMPDIR}
 
 # install dependencies
