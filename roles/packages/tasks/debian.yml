@@ -4,7 +4,7 @@
   with_items:
   - build-essential
   - git
-  - grub
+  - grub2
   - gstreamer1.0-vaapi
   - i965-va-driver
   - intel-microcode
