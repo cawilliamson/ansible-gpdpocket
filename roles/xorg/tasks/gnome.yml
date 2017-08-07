@@ -51,7 +51,7 @@
 - name: disable wayland on gdm
   lineinfile:
     path: /etc/gdm/custom.conf
-    insertafter: '^\[daemon\]'
+    insertafter: '^\[daemon\]$'
     line: 'WaylandEnable=false'
   when: gdm.stat.islnk is defined
   tags:
@@ -61,7 +61,7 @@
 - name: disable wayland on gdm3-custom
   lineinfile:
     path: /etc/gdm3/custom.conf
-    insertafter: '^\[daemon\]'
+    insertafter: '^\[daemon\]$'
     line: 'WaylandEnable=false'
   when: gdm3custom.stat.islnk is defined
   tags:
@@ -71,7 +71,7 @@
 - name: disable wayland on gdm3-daemon
   lineinfile:
     path: /etc/gdm3/daemon.conf
-    insertafter: '^\[daemon\]'
+    insertafter: '^\[daemon\]$'
     line: 'WaylandEnable=false'
   when: gdm3daemon.stat.islnk is defined
   tags:
