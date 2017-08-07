@@ -34,9 +34,16 @@
   - gnome
   - xorg
 
-- name: check for gdm3 directory
+- name: check for gdm3-custom
   stat: path=/etc/gdm3/custom.conf
-  register: gdm3
+  register: gdm3custom
+  tags:
+  - gnome
+  - xorg
+
+- name: check for gdm3-daemon
+  stat: path=/etc/gdm3/daemon.conf
+  register: gdm3daemon
   tags:
   - gnome
   - xorg
@@ -44,21 +51,29 @@
 - name: disable wayland on gdm
   lineinfile:
     path: /etc/gdm/custom.conf
-    regexp: '^#WaylandEnable=false'
+    insertafter: '^\[daemon\]$'
     line: 'WaylandEnable=false'
-    backrefs: yes
   when: gdm.stat.islnk is defined
   tags:
   - gnome
   - xorg
 
-- name: disable wayland on gdm3
+- name: disable wayland on gdm3-custom
   lineinfile:
     path: /etc/gdm3/custom.conf
-    regexp: '^#WaylandEnable=false'
+    insertafter: '^\[daemon\]$'
     line: 'WaylandEnable=false'
-    backrefs: yes
-  when: gdm3.stat.islnk is defined
+  when: gdm3custom.stat.islnk is defined
+  tags:
+  - gnome
+  - xorg
+
+- name: disable wayland on gdm3-daemon
+  lineinfile:
+    path: /etc/gdm3/daemon.conf
+    insertafter: '^\[daemon\]$'
+    line: 'WaylandEnable=false'
+  when: gdm3daemon.stat.islnk is defined
   tags:
   - gnome
   - xorg

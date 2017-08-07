@@ -59,6 +59,18 @@
   - 'set-default-sink = 1'
   - 'set-default-source = 1'
 
+- name: remove old default audio config
+  lineinfile:
+    path: /etc/pulse/default.pa
+    line: "{{ item }}"
+    state: absent
+  with_items:
+  - 'set-default-sink 1'
+  - 'set-default-source 2'
+  tags:
+  - cleanup
+  - common
+
 - name: remove obsolete rc.local config
   lineinfile:
     path: /etc/rc.local

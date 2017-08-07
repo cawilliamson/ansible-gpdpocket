@@ -6,6 +6,10 @@ set -e -x
 # set variables
 TMPDIR=/var/tmp/bootstrap-iso
 
+# clean up from previous run
+umount -lf ${TMPDIR}/squashfs || true
+rm -rf ${TMPDIR}
+
 # install dependencies
 if [ -f /usr/bin/pacman ]; then
   pacman -Sy --noconfirm squashfs-tools xorriso
@@ -22,7 +26,7 @@ fi
 
 # extract iso
 mkdir -p ${TMPDIR}
-xorriso -osirrox on -indev ${1} -extract / ${TMPDIR}
+xorriso -osirrox on -indev "${1}" -extract / ${TMPDIR}
 
 # find paths
 BOOT_CONFIGS=$(find ${TMPDIR} -type f -regex '.*\(grub/.+.cfg\|isolinux/.+.cfg\)')
@@ -49,11 +53,13 @@ fi
 rm -f ${TMPDIR}/squashfs/etc/resolv.conf
 cp -L /etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf
 mount --bind /dev ${TMPDIR}/squashfs/dev
+mount -t tmpfs -o nosuid,nodev,noexec shm ${TMPDIR}/squashfs/dev/shm
+chmod 1777 ${TMPDIR}/squashfs/dev/shm
 mount -t proc none ${TMPDIR}/squashfs/proc
 
 # run ansible playbook against system files
-cp -R $(pwd)/. ${TMPDIR}/squashfs/usr/src/ansible-gpdpocket/
-chroot ${TMPDIR}/squashfs /bin/bash -c "/bin/bash /usr/src/ansible-gpdpocket/bootstrap-system.sh"
+cp -L bootstrap-system.sh ${TMPDIR}/squashfs/tmp/bootstrap-system.sh
+chroot ${TMPDIR}/squashfs /bin/bash -c "/bin/bash /tmp/bootstrap-system.sh"
 
 # fix squashfs system files after chroot
 rm -rf \
@@ -90,8 +96,8 @@ elif [ -f ${TMPDIR}/md5sum.txt ]; then
 fi
 
 # re-assemble iso
-dd if=${1} bs=512 count=1 of=${TMPDIR}/isolinux/isohdpfx.bin
-ISO_LABEL=$(blkid -o value -s LABEL ${1})
+dd if="${1}" bs=512 count=1 of=${TMPDIR}/isolinux/isohdpfx.bin
+ISO_LABEL=$(blkid -o value -s LABEL "${1}")
 xorriso \
     -as mkisofs \
     -iso-level 3 \

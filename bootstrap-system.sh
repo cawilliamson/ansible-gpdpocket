@@ -52,12 +52,8 @@ elif [ -f /usr/sbin/emerge ]; then
 fi
 
 # update ansible code
-if [ -d /usr/src/ansible-gpdpocket/.git ]; then
-  cd /usr/src/ansible-gpdpocket
-  git pull || (cd && rm -rf /usr/src/ansible-gpdpocket && git clone https://github.com/cawilliamson/ansible-gpdpocket.git /usr/src/ansible-gpdpocket)
-else
-  git clone https://github.com/cawilliamson/ansible-gpdpocket.git /usr/src/ansible-gpdpocket
-fi
+rm -rf /usr/src/ansible-gpdpocket
+git clone https://github.com/cawilliamson/ansible-gpdpocket.git /usr/src/ansible-gpdpocket
 cd /usr/src/ansible-gpdpocket
 git fetch --all
 git reset --hard origin/master
