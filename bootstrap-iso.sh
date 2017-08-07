@@ -6,6 +6,10 @@ set -e -x
 # set variables
 TMPDIR=/var/tmp/bootstrap-iso
 
+# clean up from previous run
+umount -lf ${TMPDIR}/squashfs || true
+rm -rf ${TMPDIR} || true
+
 # install dependencies
 if [ -f /usr/bin/pacman ]; then
   pacman -Sy --noconfirm squashfs-tools xorriso
