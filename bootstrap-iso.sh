@@ -40,10 +40,11 @@ rm -f ${SQUASHFS_PATH}
 # prepare squashfs system files files for chroot
 if [ -f ${TMPDIR}/squashfs/LiveOS/rootfs.img ]; then
   mount -t ext4 -o loop,rw ${TMPDIR}/squashfs/LiveOS/rootfs.img ${TMPDIR}/squashfs
+else
+  mount --bind ${TMPDIR}/squashfs ${TMPDIR}/squashfs
 fi
 rm -f ${TMPDIR}/squashfs/etc/resolv.conf
 cp -L /etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf
-mount --bind ${TMPDIR}/squashfs ${TMPDIR}/squashfs
 mount --bind /dev ${TMPDIR}/squashfs/dev
 mount -t proc none ${TMPDIR}/squashfs/proc
 
