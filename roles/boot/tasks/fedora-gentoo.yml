@@ -1,0 +1,47 @@
+---
+- name: check if running in chroot (iso creation)
+  shell: |
+    if [ "$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)" ]; then
+      echo "chroot"
+    fi
+  register: chroot
+  changed_when: False
+  tags:
+  - boot
+
+- name: add dmsquash-live to dracut config (iso creation = yes)
+  copy:
+    path: /etc/dracut.conf.d/01-liveos.conf
+    owner: root
+    group: root
+    mode: 0644
+    content: |
+      hostonly="no"
+      add_dracutmodules+=" dmsquash-live "
+  notify:
+  - update boot
+  when: chroot.stdout.find('chroot') != -1 and ansible_distribution == 'Ubuntu'
+  tags:
+  - boot
+
+- name: remove dmsquash-live from dracut config (iso creation = no)
+  file:
+    path: /etc/dracut.conf.d/01-liveos.conf
+    state: absent
+  notify:
+  - update boot
+  tags:
+  - boot
+
+- name: add modules to initramfs
+  lineinfile:
+    path: /etc/dracut.conf
+    line: "add_drivers+=\"{{ item }}\""
+    create: yes
+  with_items:
+  - pwm-lpss
+  - pwm-lpss-platform
+  notify:
+  - update boot
+  tags:
+  - boot
