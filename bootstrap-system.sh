@@ -44,6 +44,8 @@ elif [ -f /usr/bin/apt-get ]; then
   apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 93C4A3FD7BB9C367
   apt-get update
   apt-get -y install ansible git
+elif [ -f /usr/bin/yum ]; then
+  yum -y install ansible git
 elif [ -f /usr/sbin/emerge ]; then
   emerge --sync
   USE="blksha1 curl webdav" emerge app-admin/ansible dev-vcs/git
