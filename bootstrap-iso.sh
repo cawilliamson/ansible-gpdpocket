@@ -7,7 +7,7 @@ set -e -x
 TMPDIR=/var/tmp/bootstrap-iso
 
 # clean up from previous run
-umount -lf ${TMPDIR}/squashfs || true
+umount -rf ${TMPDIR}/squashfs || true
 rm -rf ${TMPDIR}
 
 # install dependencies
@@ -52,7 +52,10 @@ else
 fi
 rm -f ${TMPDIR}/squashfs/etc/resolv.conf
 cp -L /etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf
-mount --bind /dev ${TMPDIR}/squashfs/dev
+mount --rbind /dev ${TMPDIR}/squashfs/dev
+mount --make-rslave ${TMPDIR}/squashfs/dev
+mount --rbind /sys ${TMPDIR}/squashfs/sys
+mount --make-rslave ${TMPDIR}/squashfs/sys
 mount -t proc none ${TMPDIR}/squashfs/proc
 
 # run ansible playbook against system files
@@ -75,7 +78,7 @@ while read -r KERNEL_PATH; do
 done <<< "${KERNEL_PATHS}"
 
 # calculate filesizes
-umount -lf ${TMPDIR}/squashfs
+umount -rf ${TMPDIR}/squashfs
 if [ -f ${TMPDIR}/casper/filesystem.size ]; then
   printf $(du -sx --block-size=1 ${TMPDIR}/squashfs | cut -f1) > ${TMPDIR}/casper/filesystem.size
 elif [ -f ${TMPDIR}/live/filesystem.size ]; then
