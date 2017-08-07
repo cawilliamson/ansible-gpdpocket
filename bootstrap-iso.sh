@@ -24,7 +24,7 @@ xorriso -osirrox on -indev ${1} -extract / ${TMPDIR}
 # find paths
 BOOT_CONFIGS=$(find ${TMPDIR} -type f -regex '.*\(grub/.+.cfg\|isolinux/.+.cfg\)')
 EFI_PATH=$(find ${TMPDIR} -type f -iname 'efi*.img' -print -quit)
-SQUASHFS_PATH=$(find ${TMPDIR} -type f -regex '.*\(squashfs\.img\|\.sfs\|\.squashfs\)$' -print -quit)
+SQUASHFS_PATH=$(find ${TMPDIR} `-type f -regex '.*\(squashfs\.img\|\.sfs\|\.squashfs\)$' -print -quit`)
 KERNEL_PATHS=$(find ${TMPDIR} -type f -iname '*vmlinuz*')
 
 # patch kernel boot options
@@ -37,41 +37,58 @@ done <<< "${BOOT_CONFIGS}"
 unsquashfs -d ${TMPDIR}/squashfs/ -f ${SQUASHFS_PATH}
 rm -f ${SQUASHFS_PATH}
 
+# check for double squashed images (WTF?!)
+if [ -f ${TMPDIR}/squashfs/LiveOS/rootfs.img ]; then
+  unsquashfs -d ${TMPDIR}/squashfs/rootfs/ -f ${TMPDIR}/squashfs/LiveOS/rootfs.img
+  rm -f ${TMPDIR}/squashfs/LiveOS/rootfs.img
+  SQUASH_TMPDIR=${TMPDIR}/squashfs/rootfs
+else
+  SQUASH_TMPDIR=${TMPDIR}/squashfs
+fi
+
 # prepare squashfs system files files for chroot
-rm -f ${TMPDIR}/squashfs/etc/resolv.conf
-cp -L /etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf
-mount --bind ${TMPDIR}/squashfs ${TMPDIR}/squashfs
-mount --bind /dev ${TMPDIR}/squashfs/dev
-mount -t proc none ${TMPDIR}/squashfs/proc
+rm -f ${SQUASH_TMPDIR}/etc/resolv.conf
+cp -L /etc/resolv.conf ${SQUASH_TMPDIR}/etc/resolv.conf
+mount --bind ${SQUASH_TMPDIR} ${SQUASH_TMPDIR}
+mount --bind /dev ${SQUASH_TMPDIR}/dev
+mount -t proc none ${SQUASH_TMPDIR}/proc
 
 # run ansible playbook against system files
-cp -R $(pwd)/. ${TMPDIR}/squashfs/usr/src/ansible-gpdpocket/
-chroot ${TMPDIR}/squashfs /bin/bash -c "/bin/bash /usr/src/ansible-gpdpocket/bootstrap-system.sh"
+cp -R $(pwd)/. ${SQUASH_TMPDIR}/usr/src/ansible-gpdpocket/
+chroot ${SQUASH_TMPDIR} /bin/bash -c "/bin/bash /usr/src/ansible-gpdpocket/bootstrap-system.sh"
 
 # fix squashfs system files after chroot
 rm -rf \
-    ${TMPDIR}/squashfs/etc/resolv.conf \
-    ${TMPDIR}/squashfs/usr/src/ansible-gpdpocket \
-    ${TMPDIR}/squashfs/tmp/bootstrap-system.sh
+    ${SQUASH_TMPDIR}/etc/resolv.conf \
+    ${SQUASH_TMPDIR}/usr/src/ansible-gpdpocket \
+    ${SQUASH_TMPDIR}/tmp/bootstrap-system.sh
 
 # copy kernels in to place
 while read -r KERNEL_PATH; do
   INITRD_PATH=$(find $(dirname ${KERNEL_PATH}) -maxdepth 1 -type f -regex '.*\(img\|lz\|gz\)$' -print -quit)
   if [ ! -z ${INITRD_PATH} ]; then
-    cp -L ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap ${INITRD_PATH}
+    cp -L ${SQUASH_TMPDIR}/boot/initrd.img-*bootstrap ${INITRD_PATH}
   fi
-  cp -L ${TMPDIR}/squashfs/boot/vmlinuz-*-bootstrap ${KERNEL_PATH}
+  cp -L ${SQUASH_TMPDIR}/boot/vmlinuz-*-bootstrap ${KERNEL_PATH}
 done <<< "${KERNEL_PATHS}"
 
-# re-compress squashfs
-umount -lf ${TMPDIR}/squashfs
+# calculate filesizes
+umount -lf ${SQUASH_TMPDIR}
 if [ -f ${TMPDIR}/casper/filesystem.size ]; then
-  printf $(du -sx --block-size=1 ${TMPDIR}/squashfs | cut -f1) > ${TMPDIR}/casper/filesystem.size
+  printf $(du -sx --block-size=1 ${SQUASH_TMPDIR} | cut -f1) > ${TMPDIR}/casper/filesystem.size
 elif [ -f ${TMPDIR}/live/filesystem.size ]; then
-  printf $(du -sx --block-size=1 ${TMPDIR}/squashfs | cut -f1) > ${TMPDIR}/live/filesystem.size
+  printf $(du -sx --block-size=1 ${SQUASH_TMPDIR} | cut -f1) > ${TMPDIR}/live/filesystem.size
 fi
-mksquashfs ${TMPDIR}/squashfs ${SQUASHFS_PATH}
-rm -rf ${TMPDIR}/squashfs
+
+# re-compress squashfs
+if [[ ${SQUASH_TMPDIR} = *"/rootfs"* ]]; then
+  mksquashfs ${SQUASH_TMPDIR} ${TMPDIR}/squashfs/LiveOS/rootfs.img
+  rm -rf ${SQUASH_TMPDIR}
+  mksquashfs ${TMPDIR}/squashfs ${SQUASHFS_PATH}
+else
+  mksquashfs ${SQUASH_TMPDIR} ${SQUASHFS_PATH}
+  rm -rf ${SQUASH_TMPDIR}
+fi
 
 # add distro-specific checksums
 if [ -f ${TMPDIR}/arch/x86_64/airootfs.md5 ]; then
