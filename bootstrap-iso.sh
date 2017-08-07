@@ -71,7 +71,11 @@ rm -rf \
 while read -r KERNEL_PATH; do
   INITRD_PATH=$(find $(dirname ${KERNEL_PATH}) -maxdepth 1 -type f -regex '.*\(img\|lz\|gz\)$' -print -quit)
   if [ ! -z ${INITRD_PATH} ]; then
-    cp -L ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap ${INITRD_PATH}
+    if [[ "${INITRD_PATH}" == *".gz"* ]]; then
+      cat ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap | gzip > ${INITRD_PATH}
+    else
+      cp -L ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap ${INITRD_PATH}
+    fi
   fi
   cp -L ${TMPDIR}/squashfs/boot/vmlinuz-*-bootstrap ${KERNEL_PATH}
 done <<< "${KERNEL_PATHS}"
