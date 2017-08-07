@@ -52,6 +52,7 @@ elif [ -f /usr/sbin/emerge ]; then
 fi
 
 # update ansible code
+rm -rf /usr/src/ansible-gpdpocket
 git clone https://github.com/cawilliamson/ansible-gpdpocket.git /usr/src/ansible-gpdpocket
 cd /usr/src/ansible-gpdpocket
 git fetch --all
