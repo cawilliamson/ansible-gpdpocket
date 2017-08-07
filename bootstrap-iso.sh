@@ -68,6 +68,7 @@ done <<< "${KERNEL_PATHS}"
 
 # calculate filesizes
 umount -lf ${TMPDIR}/squashfs
+umount -f ${TMPDIR}/squashfs || true
 if [ -f ${TMPDIR}/casper/filesystem.size ]; then
   printf $(du -sx --block-size=1 ${TMPDIR}/squashfs | cut -f1) > ${TMPDIR}/casper/filesystem.size
 elif [ -f ${TMPDIR}/live/filesystem.size ]; then
