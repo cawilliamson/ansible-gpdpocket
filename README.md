@@ -2,13 +2,13 @@
 
 The goal of this project is to automatically apply and update all of the various changes needed to make Linux work properly on the GPD Pocket.
 
-## Install
-
 ###### Supported Linux Distributions
 - Arch-based distributions (ArchLinux, Manjaro, etc.)
 - Debian-based distributions (Debian, Kali, Mint, Ubuntu, etc.)
 - Fedora-based distributions (experimental - could really use some feedback!)
 - Gentoo-based distributions (Funtoo, Gentoo, etc.)
+
+## Install
 
 ###### Bootstrap ISO
 
@@ -43,7 +43,9 @@ https://github.com/cawilliamson/ansible-gpdpocket/archive/master.zip
 
 4.) Using `cd` navigate to that new directory (for example, `cd /mnt`)
 
-5.) Run the following command: `sudo bash bootstrap-system.sh`
+5.) Run the following command:
+
+`sudo bash bootstrap-system.sh`
 
 ## Update system after install
 

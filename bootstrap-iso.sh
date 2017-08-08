@@ -84,7 +84,8 @@ while read -r KERNEL_PATH; do
       
       cp -arv ${TMPDIR}/live-initrd/lib/modules/*-bootstrap ${TMPDIR}/install-initrd/lib/modules/
       
-      find ${TMPDIR}/live-initrd/ -depth -print | cpio -oaV | gzip -c > ${INITRD_PATH}
+      cd ${TMPDIR}/install-initrd
+      find . -depth -print | cpio -oaV | gzip -c > ${INITRD_PATH}
       
       rm -rf ${TMPDIR}/install-initrd ${TMPDIR}/live-initrd
     else
