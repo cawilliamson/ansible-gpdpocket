@@ -73,7 +73,7 @@ while read -r KERNEL_PATH; do
   
   # check if initrd is install image
   if [ ! -z ${INITRD_PATH} ]; then
-    if [[ "${KERNEL_PATH}" == *"\/install\/"* ]]; then
+    if [[ "${KERNEL_PATH}" == *"\/install\/"* ]] || [[ "${KERNEL_PATH}" == *"\/d-i\/"* ]]; then
       mkdir -p ${TMPDIR}/install-initrd ${TMPDIR}/live-initrd
       
       cd ${TMPDIR}/install-initrd
