@@ -79,10 +79,7 @@ while read -r KERNEL_PATH; do
       cd ${TMPDIR}/install-initrd
       zcat ${INITRD_PATH} | cpio --extract --make-directories
       
-      cd ${TMPDIR}/live-initrd
-      zcat ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap | cpio --extract --make-directories
-      
-      cp -ar ${TMPDIR}/live-initrd/lib/modules/*-bootstrap ${TMPDIR}/install-initrd/lib/modules/
+      cp -ar ${TMPDIR}/squashfs/lib/modules/*-bootstrap/* ${TMPDIR}/install-initrd/lib/modules/
       
       cd ${TMPDIR}/install-initrd
       find . | cpio --create --format='newc' | gzip -c > ${INITRD_PATH}
