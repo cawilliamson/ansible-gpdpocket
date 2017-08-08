@@ -36,13 +36,12 @@ KERNEL_PATHS=$(find ${TMPDIR} -type f -iname '*vmlinuz*')
 
 # patch kernel boot options
 while read -r BOOT_CONFIG; do
-  sed -i 's, splash,,g' ${BOOT_CONFIG}
-  if rep -q ' boot=' ${BOOT_CONFIG}; then
+  if grep -q ' boot=' ${BOOT_CONFIG}; then
     sed -i 's, quiet,,g' ${BOOT_CONFIG}
   else
     sed -i 's, quiet, boot=live,g' ${BOOT_CONFIG}
-    
   fi
+  sed -i 's, splash,,g' ${BOOT_CONFIG}
 done <<< "${BOOT_CONFIGS}"
 
 # extract squashfs
