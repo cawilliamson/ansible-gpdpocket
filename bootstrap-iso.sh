@@ -101,6 +101,11 @@ elif [ -f ${TMPDIR}/live/filesystem.size ]; then
   printf $(du -sx --block-size=1 ${TMPDIR}/squashfs | cut -f1) > ${TMPDIR}/live/filesystem.size
 fi
 
+# patch in new kernel version
+if [ -f ${TMPDIR}/dists/*/main/debian-installer/binary-amd64/Packages ]; then
+  sed -i "s,$(cat ${TMPDIR}/dists/*/main/debian-installer/binary-amd64/Packages | grep 'Kernel-Version: ' | head -n1 | sed 's,Kernel-Version: ,,'),$(ls -t ${TMPDIR}/squashfs/lib/modules/ |grep 'bootstrap' |head -n 1),g" ${TMPDIR}/dists/*/main/debian-installer/binary-amd64/Packages || true
+fi
+
 # re-compress squashfs
 mksquashfs ${TMPDIR}/squashfs ${SQUASHFS_PATH}
 rm -rf ${TMPDIR}/squashfs
@@ -110,11 +115,6 @@ if [ -f ${TMPDIR}/arch/x86_64/airootfs.md5 ]; then
   md5sum ${SQUASHFS_PATH} > ${TMPDIR}/arch/x86_64/airootfs.md5
 elif [ -f ${TMPDIR}/md5sum.txt ]; then
   find ${TMPDIR} -type f -print0 | xargs -0 md5sum | grep -v "\./md5sum.txt" > ${TMPDIR}/md5sum.txt
-fi
-
-# patch in new kernel version
-if [ -f ${TMPDIR}/dists/*/main/debian-installer/binary-amd64/Packages ]; then
-  sed -i "s,$(cat ${TMPDIR}/dists/*/main/debian-installer/binary-amd64/Packages | grep 'Kernel-Version: ' | head -n1 | sed 's,Kernel-Version: ,,'),$(ls -t ${TMPDIR}/squashfs/lib/modules/ |grep 'bootstrap' |head -n 1),g" ${TMPDIR}/dists/*/main/debian-installer/binary-amd64/Packages || true
 fi
 
 # re-assemble iso
