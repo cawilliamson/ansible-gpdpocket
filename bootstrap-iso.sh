@@ -112,6 +112,11 @@ elif [ -f ${TMPDIR}/md5sum.txt ]; then
   find ${TMPDIR} -type f -print0 | xargs -0 md5sum | grep -v "\./md5sum.txt" > ${TMPDIR}/md5sum.txt
 fi
 
+# patch in new kernel version
+if [ -f ${TMPDIR}/dists/*/main/debian-installer/binary-amd64/Packages ]; then
+  sed -i "s,$(cat ${TMPDIR}/dists/*/main/debian-installer/binary-amd64/Packages | grep 'Kernel-Version: ' | head -n1 | sed 's,Kernel-Version: ,,'),$(ls -t ${TMPDIR}/squashfs/lib/modules/ |grep 'bootstrap' |head -n 1),g" ${TMPDIR}/dists/*/main/debian-installer/binary-amd64/Packages || true
+fi
+
 # re-assemble iso
 dd if="${1}" bs=512 count=1 of=${TMPDIR}/isolinux/isohdpfx.bin
 ISO_LABEL=$(blkid -o value -s LABEL "${1}")
