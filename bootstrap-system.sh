@@ -38,6 +38,8 @@ elif [ -f /usr/bin/apt-get ]; then
   DEBIAN_FRONTEND=noninteractive
   if [ -f /etc/apt/sources.list ]; then
     sed -i 's,main restricted,main restricted universe multiverse,g' /etc/apt/sources.list
+  elif [ -f /etc/apt/sources.list.d/base.list ]; then
+    sed -i 's,main,main contrib non-free,g' /etc/apt/sources.list.d/base.list
   fi
   mkdir -p /etc/apt/sources.list.d
   apt-get update
