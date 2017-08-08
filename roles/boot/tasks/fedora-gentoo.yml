@@ -39,7 +39,6 @@
     line: "add_drivers+=\"{{ item }}\""
     create: yes
   with_items:
-  - brcmfmac
   - pwm-lpss
   - pwm-lpss-platform
   notify:

@@ -33,7 +33,6 @@
     line: "{{ item }}"
     create: yes
   with_items:
-  - brcmfmac
   - loop
   - overlay
   - pwm-lpss
