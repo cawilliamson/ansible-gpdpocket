@@ -67,8 +67,9 @@
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Fedora' or ansible_distribution == 'Gentoo' or ansible_distribution == 'RedHat'
 
 - name: determine path for swap 
-  shell: swapon -s | tail -n1 | cut -f1
+  shell: swapon -s | tail -n1 | cut -f1 | xargs
   register: swap
+  changed_when: False
   tags:
   - boot
 
