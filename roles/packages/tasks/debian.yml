@@ -21,6 +21,8 @@
   - unionfs-fuse
   - va-driver-all
   - vainfo
+  - dconf-editor
+  - dconf-cli
   - x11-xserver-utils
   notify:
   - enable thermal services
