@@ -24,7 +24,6 @@
     path: /etc/pulse/default.pa
     regexp: "^{{ item.key }} "
     line: "{{ item.key }} {{ item.value}}"
-    create: yes
   with_items:
   - { key: 'set-card-profile', value: 'alsa_card.platform-cht-bsw-rt5645 HiFi' }
   - { key: 'set-default-sink', value: 'alsa_output.platform-cht-bsw-rt5645.HiFi__hw_chtrt5645__sink' }
@@ -36,7 +35,6 @@
   lineinfile:
     path: /etc/pulse/daemon.conf
     line: 'realtime-scheduling = no'
-    create: yes
   tags:
   - audio
   
