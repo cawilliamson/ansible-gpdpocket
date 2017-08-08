@@ -8,7 +8,6 @@
   - grub2
   - gstreamer1.0-vaapi
   - i965-va-driver
-  - intel-microcode
   - libelf-dev
   - libncurses5-dev
   - libssl-dev
@@ -28,3 +27,29 @@
   - enable thermal services
   tags:
   - packages
+
+- name: check if running in chroot (iso creation)
+  shell: |
+    if [ "$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)" ]; then
+      echo "chroot"
+    fi
+  register: chroot
+  changed_when: False
+  tags:
+  - packages
+
+- name: install intel-microcode (iso creation = no)
+  package: name=intel-microcode
+  when: chroot.stdout.find('chroot') == -1
+  tags:
+  - packages
+
+- name: remove intel-microcode (iso creation = yes)
+  package:
+    name: intel-microcode
+    state: absent
+  when: chroot.stdout.find('chroot') != -1
+  tags:
+  - packages
+ 
+
