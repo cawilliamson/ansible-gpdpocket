@@ -101,11 +101,6 @@ elif [ -f ${TMPDIR}/live/filesystem.size ]; then
   printf $(du -sx --block-size=1 ${TMPDIR}/squashfs | cut -f1) > ${TMPDIR}/live/filesystem.size
 fi
 
-# patch in new kernel version
-if [ -f ${TMPDIR}/dists/*/main/debian-installer/binary-amd64/Packages ]; then
-  sed -i "s,$(cat ${TMPDIR}/dists/*/main/debian-installer/binary-amd64/Packages | grep 'Kernel-Version: ' | head -n1 | sed 's,Kernel-Version: ,,'),$(ls -t ${TMPDIR}/squashfs/lib/modules/ |grep 'bootstrap' |head -n 1),g" ${TMPDIR}/dists/*/main/debian-installer/binary-amd64/Packages || true
-fi
-
 # re-compress squashfs
 mksquashfs ${TMPDIR}/squashfs ${SQUASHFS_PATH}
 rm -rf ${TMPDIR}/squashfs
