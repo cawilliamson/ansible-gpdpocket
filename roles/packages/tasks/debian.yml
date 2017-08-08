@@ -8,7 +8,7 @@
   - grub2
   - gstreamer1.0-vaapi
   - i965-va-driver
-#  - intel-microcode
+  - intel-microcode
   - libelf-dev
   - libncurses5-dev
   - libssl-dev

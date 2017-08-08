@@ -36,7 +36,9 @@ elif [ -f /usr/bin/apt-get ]; then
     sleep 1
   done
   DEBIAN_FRONTEND=noninteractive
-  sed -i 's,main restricted,main restricted universe multiverse,g' /etc/apt/sources.list
+  if [ -f /etc/apt/sources.list ]; then
+    sed -i 's,main restricted,main restricted universe multiverse,g' /etc/apt/sources.list
+  fi
   mkdir -p /etc/apt/sources.list.d
   apt-get update
   apt-get -y install dirmngr
