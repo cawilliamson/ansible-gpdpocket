@@ -51,14 +51,14 @@ else
   mount --bind ${TMPDIR}/squashfs ${TMPDIR}/squashfs
 fi
 rm -f ${TMPDIR}/squashfs/etc/resolv.conf
-cp -L /etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf
+cp /etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf
 mount --bind /dev ${TMPDIR}/squashfs/dev
 mount -t tmpfs -o nosuid,nodev,noexec shm ${TMPDIR}/squashfs/dev/shm
 chmod 1777 ${TMPDIR}/squashfs/dev/shm
 mount -t proc none ${TMPDIR}/squashfs/proc
 
 # run ansible playbook against system files
-cp -L bootstrap-system.sh ${TMPDIR}/squashfs/tmp/bootstrap-system.sh
+cp bootstrap-system.sh ${TMPDIR}/squashfs/tmp/bootstrap-system.sh
 chroot ${TMPDIR}/squashfs /bin/bash -c "/bin/bash /tmp/bootstrap-system.sh"
 
 # fix squashfs system files after chroot
@@ -67,17 +67,32 @@ rm -rf \
     ${TMPDIR}/squashfs/usr/src/ansible-gpdpocket \
     ${TMPDIR}/squashfs/tmp/bootstrap-system.sh
 
-# copy kernels in to place
+# copy kernel and initrd images in to place
 while read -r KERNEL_PATH; do
-  if [[ $(dirname ${KERNEL_PATH}) == *"/install/"* ]]; then
-    INITRD_PATH=''
-  else
-    INITRD_PATH=$(find $(dirname ${KERNEL_PATH}) -maxdepth 1 -type f -regex '.*\(img\|lz\|gz\).*$' -print -quit)
-  fi
+  INITRD_PATH=$(find $(dirname ${KERNEL_PATH}) -maxdepth 1 -type f -regex '.*\(img\|lz\|gz\).*$' -print -quit)
+  
+  # check if initrd is install image
   if [ ! -z ${INITRD_PATH} ]; then
-    cp -L ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap ${INITRD_PATH}
+    if [[ "${KERNEL_PATH}" == *"\/install\/"* ]]; then
+      mkdir -p ${TMPDIR}/install-initrd ${TMPDIR}/live-initrd
+      
+      cd ${TMPDIR}/install-initrd
+      zcat ${INITRD_PATH} | cpio -idmv
+      
+      cd ${TMPDIR}/live-initrd
+      cpio -idmv < ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap
+      
+      cp -arv ${TMPDIR}/live-initrd/lib/modules/*-bootstrap ${TMPDIR}/install-initrd/lib/modules/
+      
+      find ${TMPDIR}/live-initrd/ -depth -print | cpio -oaV | gzip -c > ${INITRD_PATH}
+      
+      rm -rf ${TMPDIR}/install-initrd ${TMPDIR}/live-initrd
+    else
+      cp ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap ${INITRD_PATH}
+    fi
   fi
-  cp -L ${TMPDIR}/squashfs/boot/vmlinuz-*-bootstrap ${KERNEL_PATH}
+  
+  cp ${TMPDIR}/squashfs/boot/vmlinuz-*-bootstrap ${KERNEL_PATH}
 done <<< "${KERNEL_PATHS}"
 
 # calculate filesizes
