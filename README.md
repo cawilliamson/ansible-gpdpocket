@@ -55,6 +55,10 @@ https://github.com/cawilliamson/ansible-gpdpocket/archive/master.zip
 
 ## Status
 
+###### Known Issues
+
+- When installing from a Debian-based distro you will likely be told that modules cannot be loaded and asked if you wish to continue anyway. Select 'Yes' and you will be able to continue the installation without any problems. This is due to the fact that we are patching in a different kernel to an existing initrd image.
+
 ###### Broken
 
 - Distorted audio ( kernel bug - https://bugzilla.kernel.org/show_bug.cgi?id=196351 )
