@@ -80,7 +80,7 @@ while read -r KERNEL_PATH; do
       zcat ${INITRD_PATH} | cpio -idmv
       
       cd ${TMPDIR}/live-initrd
-      zcat ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap | pio -idmv
+      zcat ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap | cpio -idmv
       
       cp -arv ${TMPDIR}/live-initrd/lib/modules/*-bootstrap ${TMPDIR}/install-initrd/lib/modules/
       
