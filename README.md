@@ -10,6 +10,13 @@ Trying to support all major distros with a bootstrap-iso script is tricky busine
 
 As soon as things settle down I'll get some decent documentation written.
 
+## Made possible by...
+
+- efluffy at https://github.com/efluffy/gpdfand - great work on actually getting the fans in this thing to work.
+- hansdegoede at http://hansdegoede.livejournal.com/17445.html - absolutely EVERYTHING related to the kernel was this guy.
+- linuxiumcomau at http://linuxiumcomau.blogspot.com/ - inspired my work on bootstrapping install isos.
+- stockmind at https://github.com/stockmind/gpd-pocket-ubuntu-respin - various code contributions and ideas.
+
 ## Donation
 If this project helped you - feel free to buy me a coffee (I could sure use one!)
 
