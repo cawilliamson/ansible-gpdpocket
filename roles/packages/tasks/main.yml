@@ -1,6 +1,6 @@
 ---
 - include: arch.yml
-  when: ansible_distribution == 'Archlinux' or ansible_distribution == 'Manjaro Linux'
+  when: ansible_distribution == 'Antergos' or ansible_distribution == 'Archlinux' or ansible_distribution == 'Manjaro Linux'
 
 - include: debian.yml
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Kali' or ansible_distribution == 'Linuxmint' or ansible_distribution == 'Ubuntu'
