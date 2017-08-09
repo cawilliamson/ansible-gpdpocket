@@ -20,7 +20,7 @@
       add_dracutmodules+=" dmsquash-live "
   notify:
   - update boot
-  when: chroot.stdout.find('chroot') != -1 and ansible_distribution == 'Ubuntu'
+  when: chroot.stdout.find('chroot') != -1
   tags:
   - boot
 
