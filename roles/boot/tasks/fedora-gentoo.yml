@@ -41,6 +41,7 @@
     line: "add_drivers+=\"{{ item }}\""
     create: yes
   with_items:
+  - i915
   - pwm-lpss
   - pwm-lpss-platform
   notify:

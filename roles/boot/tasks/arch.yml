@@ -13,7 +13,7 @@
   lineinfile:
     path: /etc/mkinitcpio.conf
     regexp: '^MODULES='
-    line: 'MODULES="pwm-lpss pwm-lpss-platform"'
+    line: 'MODULES="i915 pwm-lpss pwm-lpss-platform"'
   notify:
   - update boot
   tags:
@@ -35,7 +35,7 @@
   lineinfile:
     path: /etc/mkinitcpio.conf
     regexp: '^HOOKS='
-    line: 'HOOKS="base systemd block i915 btrfs autodetect modconf filesystems fsck"'
+    line: 'HOOKS="base systemd block btrfs autodetect modconf filesystems fsck"'
     create: yes
   when: chroot.stdout.find('chroot') == -1
   notify:
