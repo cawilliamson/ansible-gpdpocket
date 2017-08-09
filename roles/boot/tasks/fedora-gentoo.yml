@@ -11,7 +11,7 @@
 
 - name: add dmsquash-live to dracut config (iso creation = yes)
   copy:
-    path: /etc/dracut.conf.d/01-liveos.conf
+    dest: /etc/dracut.conf.d/01-liveos.conf
     owner: root
     group: root
     mode: 0644
