@@ -3,13 +3,14 @@
 # set bash options
 set -e -x
 
+# set variables
+TMPDIR=/var/tmp/bootstrap-iso
+
+# check if iso file exists
 if [ ! -f "${1}" ]; then
   echo "ERROR: The ISO file you specified (${1}) does not exist."
   exit 0
 fi
-
-# set variables
-TMPDIR=/var/tmp/bootstrap-iso
 
 # clean up from previous run
 umount -lf ${TMPDIR}/squashfs || true
@@ -22,7 +23,6 @@ elif [ -f /usr/bin/apt-get ]; then
   apt-get update
   apt-get -y install squashfs-tools xorriso
 elif [ -f /usr/bin/yum ]; then
-  apt-get update
   yum install -y squashfs-tools xorriso
 elif [ -f /usr/sbin/emerge ]; then
   emerge --sync
@@ -59,8 +59,8 @@ if [ -f ${TMPDIR}/squashfs/LiveOS/rootfs.img ]; then
 else
   mount --bind ${TMPDIR}/squashfs ${TMPDIR}/squashfs
 fi
-rm -f ${TMPDIR}/squashfs/etc/resolv.conf
-cp /etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf
+mv ${TMPDIR}/squashfs/etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf.bak
+cp -L /etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf
 mount --bind /dev ${TMPDIR}/squashfs/dev
 mount -t tmpfs -o nosuid,nodev,noexec shm ${TMPDIR}/squashfs/dev/shm
 chmod 1777 ${TMPDIR}/squashfs/dev/shm
@@ -71,34 +71,24 @@ cp bootstrap-system.sh ${TMPDIR}/squashfs/tmp/bootstrap-system.sh
 chroot ${TMPDIR}/squashfs /bin/bash -c "/bin/bash /tmp/bootstrap-system.sh"
 
 # fix squashfs system files after chroot
-rm -rf \
-    ${TMPDIR}/squashfs/etc/resolv.conf \
-    ${TMPDIR}/squashfs/usr/src/ansible-gpdpocket \
-    ${TMPDIR}/squashfs/tmp/bootstrap-system.sh
+mv ${TMPDIR}/squashfs/etc/resolv.conf.bak ${TMPDIR}/squashfs/etc/resolv.conf
+rm -rf ${TMPDIR}/squashfs/usr/src/ansible-gpdpocket ${TMPDIR}/squashfs/tmp/bootstrap-system.shs    
 
 # copy kernel and initrd images in to place
 while read -r KERNEL_PATH; do
   INITRD_PATH=$(find $(dirname ${KERNEL_PATH}) -maxdepth 1 -type f -regex '.*\(img\|lz\|gz\).*$' -print -quit)
-  
-  # check if initrd is install image
   if [ ! -z ${INITRD_PATH} ]; then
     if [[ "${KERNEL_PATH}" == *'/install/'* ]] || [[ "${KERNEL_PATH}" == *'/d-i/'* ]]; then
-      mkdir -p ${TMPDIR}/install-initrd ${TMPDIR}/live-initrd
-      
+      mkdir -p ${TMPDIR}/install-initrd
       cd ${TMPDIR}/install-initrd
       zcat ${INITRD_PATH} | cpio --extract --make-directories
-      
       cp -ar ${TMPDIR}/squashfs/lib/modules/*-bootstrap ${TMPDIR}/install-initrd/lib/modules/
-      
-      cd ${TMPDIR}/install-initrd
       find . | cpio --create --format='newc' | gzip -c > ${INITRD_PATH}
-      
-      rm -rf ${TMPDIR}/install-initrd ${TMPDIR}/live-initrd
+      rm -rf ${TMPDIR}/install-initrd
     else
       cp ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap ${INITRD_PATH}
     fi
   fi
-  
   cp ${TMPDIR}/squashfs/boot/vmlinuz-*-bootstrap ${KERNEL_PATH}
 done <<< "${KERNEL_PATHS}"
 
@@ -124,21 +114,11 @@ fi
 # re-assemble iso
 dd if="${1}" bs=512 count=1 of=${TMPDIR}/isolinux/isohdpfx.bin
 ISO_LABEL=$(blkid -o value -s LABEL "${1}")
-xorriso \
-    -as mkisofs \
-    -iso-level 3 \
-    -full-iso9660-filenames \
-    -volid "${ISO_LABEL}" \
-    -eltorito-boot isolinux/isolinux.bin \
-    -eltorito-catalog isolinux/boot.cat \
-    -no-emul-boot -boot-load-size 4 -boot-info-table \
-    -isohybrid-mbr ${TMPDIR}/isolinux/isohdpfx.bin \
-    -eltorito-alt-boot \
-    -e $(sed "s,${TMPDIR}/,," - <<< ${EFI_PATH}) \
-    -no-emul-boot \
-    -isohybrid-gpt-basdat \
-    -output ${HOME}/bootstrap.iso \
-    ${TMPDIR}
+xorriso -as mkisofs -iso-level 3 -full-iso9660-filenames -volid "${ISO_LABEL}" \
+    -eltorito-boot isolinux/isolinux.bin -eltorito-catalog isolinux/boot.cat \
+    -no-emul-boot -boot-load-size 4 -boot-info-table -isohybrid-mbr ${TMPDIR}/isolinux/isohdpfx.bin \
+    -eltorito-alt-boot -e $(sed "s,${TMPDIR}/,," - <<< ${EFI_PATH}) -no-emul-boot -isohybrid-gpt-basdat \
+    -output ${HOME}/bootstrap.iso ${TMPDIR}
 
 # clean up build environment
 rm -rf ${TMPDIR}
