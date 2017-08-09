@@ -59,7 +59,9 @@ if [ -f ${TMPDIR}/squashfs/LiveOS/rootfs.img ]; then
 else
   mount --bind ${TMPDIR}/squashfs ${TMPDIR}/squashfs
 fi
-mv ${TMPDIR}/squashfs/etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf.bak
+if [ -f ${TMPDIR}/squashfs/etc/resolv.conf ]; then
+  mv ${TMPDIR}/squashfs/etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf.bak
+fi
 cp -L /etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf
 mount --bind /dev ${TMPDIR}/squashfs/dev
 mount -t tmpfs -o nosuid,nodev,noexec shm ${TMPDIR}/squashfs/dev/shm
@@ -71,7 +73,11 @@ cp bootstrap-system.sh ${TMPDIR}/squashfs/tmp/bootstrap-system.sh
 chroot ${TMPDIR}/squashfs /bin/bash -c "/bin/bash /tmp/bootstrap-system.sh"
 
 # fix squashfs system files after chroot
-mv ${TMPDIR}/squashfs/etc/resolv.conf.bak ${TMPDIR}/squashfs/etc/resolv.conf
+if [ -f ${TMPDIR}/squashfs/etc/resolv.conf.bak ]; then
+  mv ${TMPDIR}/squashfs/etc/resolv.conf.bak ${TMPDIR}/squashfs/etc/resolv.conf
+else
+  rm -f ${TMPDIR}/squashfs/etc/resolv.conf
+fi
 rm -rf ${TMPDIR}/squashfs/usr/src/ansible-gpdpocket ${TMPDIR}/squashfs/tmp/bootstrap-system.shs    
 
 # copy kernel and initrd images in to place
