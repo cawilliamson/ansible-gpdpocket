@@ -28,6 +28,7 @@
   file:
     path: /etc/dracut.conf.d/01-liveos.conf
     state: absent
+  when: chroot.stdout.find('chroot') == -1
   notify:
   - update boot
   tags:
