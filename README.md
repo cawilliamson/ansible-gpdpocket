@@ -59,7 +59,7 @@ https://github.com/cawilliamson/ansible-gpdpocket/archive/master.zip
 
 - Distorted audio ( kernel bug - https://bugzilla.kernel.org/show_bug.cgi?id=196351 )
 - Hibernate Support (Enhancement: #25)
-- USB-C Data Connectivity
+- USB-C Data Connectivity (hansdegoede is working on this currently)
 - (DEBIAN) When installing you will be informed modules cannot be loaded. If you select "Yes" to continue anyway this will allow you to continue. (Enhancement: #22)
 - (FEDORA) When installing Fedora you will need to select the option **without** the media checking functionality. Performing a media check will result in a checksum failure. (Enhancement: #21)
 
