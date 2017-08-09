@@ -3,6 +3,11 @@
 # set bash options
 set -e -x
 
+if [ ! -f "${1}" ]; then
+  echo "ERROR: The ISO file you specified (${1}) does not exist."
+  exit 0
+fi
+
 # set variables
 TMPDIR=/var/tmp/bootstrap-iso
 
