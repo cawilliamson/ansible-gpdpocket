@@ -33,7 +33,6 @@
     line: "{{ item }}"
     create: yes
   with_items:
-  - i915
   - loop
   - overlay
   - pwm-lpss
