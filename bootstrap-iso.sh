@@ -78,7 +78,7 @@ if [ -f ${TMPDIR}/squashfs/etc/resolv.conf.bak ]; then
 else
   rm -f ${TMPDIR}/squashfs/etc/resolv.conf
 fi
-rm -rf ${TMPDIR}/squashfs/usr/src/ansible-gpdpocket ${TMPDIR}/squashfs/tmp/bootstrap-system.shs    
+rm -rf ${TMPDIR}/squashfs/usr/src/ansible-gpdpocket ${TMPDIR}/squashfs/tmp/bootstrap-system.sh    
 
 # copy kernel and initrd images in to place
 while read -r KERNEL_PATH; do
