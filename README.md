@@ -49,7 +49,7 @@ https://github.com/cawilliamson/ansible-gpdpocket/archive/master.zip
 
 ## Update system after install
 
-1.) Run `sudo gpd-update`
+1.) Run `sudo gpd-update` - be aware that this process can take multiple hours if there is a kernel update available since it will be compiled on the GPD Pocket.
 
 2.) Reboot if any changes were made to ensure they get applied properly.
 
@@ -58,8 +58,10 @@ https://github.com/cawilliamson/ansible-gpdpocket/archive/master.zip
 ###### Broken
 
 - Distorted audio ( kernel bug - https://bugzilla.kernel.org/show_bug.cgi?id=196351 )
+- Hibernate Support (Enhancement: #25)
 - USB-C Data Connectivity
-- When installing from a Debian-based distro you will likely be told that modules cannot be loaded and asked if you wish to continue anyway. Select 'Yes' and you will be able to continue the installation without any problems. This is due to the fact that we are patching in a different kernel to an existing initrd image.
+- (DEBIAN) When installing you will be informed modules cannot be loaded. If you select "Yes" to continue anyway this will allow you to continue. (Enhancement: #22)
+- (FEDORA) When installing Fedora you will need to select the option **without** the media checking functionality. Performing a media check will result in a checksum failure. (Enhancement: #21)
 
 ###### Working
 
