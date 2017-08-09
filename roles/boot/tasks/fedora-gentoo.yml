@@ -18,9 +18,10 @@
     content: |
       hostonly="no"
       add_dracutmodules+=" dmsquash-live "
+  when: chroot.stdout.find('chroot') != -1
   notify:
   - update boot
-  when: chroot.stdout.find('chroot') != -1
+  
   tags:
   - boot
 
