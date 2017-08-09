@@ -20,6 +20,7 @@
   - gstreamer1-vaapi
   - i2c-tools
   - ibus
+  - libselinux-python
   - libXrandr
   - openssl-libs
   - os-prober
