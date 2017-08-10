@@ -14,7 +14,7 @@ The goal of this project is to automatically apply and update all of the various
 
 1.) Setup a Linux environment (Virtualbox + Ubuntu LiveCD is a quick option.) An existing Linux install using any of the above listed distros will work also.
 
-2.) Download your ISO to this Linux machine - you can do this using: `wget http://url.here/file.iso`
+2.) Download your ISO to this Linux machine - you can do this using: `wget http://url.here/file.iso`. Netinstall images won't work, you need a full install ISO.
 
 3.) Run the following to build the ISO (replacing ISO_FILENAME with the actual name of the file.)
 
