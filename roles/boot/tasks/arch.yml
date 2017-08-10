@@ -47,7 +47,7 @@
     regexp: '^HOOKS='
     line: 'HOOKS="base udev memdisk archiso_shutdown archiso archiso_loop_mnt archiso_pxe_common archiso_pxe_nbd archiso_pxe_http archiso_pxe_nfs archiso_kms block modconf filesystems keyboard"'
     create: yes
-  when: ansible_facts.chroot == 'true'
+  when: chroot == 'true'
   notify:
   - update boot
   tags:
@@ -59,7 +59,7 @@
     regexp: '^HOOKS='
     line: 'HOOKS="base systemd block btrfs autodetect modconf filesystems fsck"'
     create: yes
-  when: ansible_facts.chroot == 'false'
+  when: chroot == 'false'
   notify:
   - update boot
   tags:

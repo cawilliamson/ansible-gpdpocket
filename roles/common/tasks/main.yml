@@ -1,5 +1,6 @@
 ---
 - include: cleanup.yml
+- include: facts.yml
 - include: gpd.yml
 - include: selinux.yml
 - include: update.yml

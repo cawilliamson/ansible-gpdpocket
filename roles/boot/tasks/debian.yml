@@ -23,7 +23,7 @@
 
 - name: install intel-microcode (iso creation = no)
   apt: name=intel-microcode
-  when: ansible_facts.chroot == 'false'
+  when: chroot == 'false'
   tags:
   - boot
 
@@ -31,7 +31,7 @@
   apt:
     name: intel-microcode
     state: absent
-  when: ansible_facts.chroot == 'true'
+  when: chroot == 'true'
   tags:
   - boot
 
@@ -40,7 +40,7 @@
   with_items:
   - casper
   - lupin-casper
-  when: ansible_facts.chroot == 'true' and ansible_distribution == 'Ubuntu'
+  when: chroot == 'true' and ansible_distribution == 'Ubuntu'
   tags:
   - boot
 
@@ -49,7 +49,7 @@
     path: /etc/modprobe.d/loop.conf
     line: "options loop max_loop=8"
     create: yes
-  when: ansible_facts.chroot == 'true'
+  when: chroot == 'true'
   tags:
   - boot
 
