@@ -39,7 +39,7 @@
     content: |
       hostonly="no"
       add_dracutmodules+=" dmsquash-live "
-  when: chroot == 'true'
+  when: chroot == true
   notify:
   - update boot
   tags:
@@ -49,7 +49,7 @@
   file:
     path: /etc/dracut.conf.d/01-liveos.conf
     state: absent
-  when: chroot == 'false'
+  when: chroot == false
   notify:
   - update boot
   tags:
