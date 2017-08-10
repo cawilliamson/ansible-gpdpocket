@@ -1,12 +1,12 @@
 ---
-- include: arch.yml
+- include: host/arch.yml
   when: ansible_distribution == 'Antergos' or ansible_distribution == 'Archlinux' or ansible_distribution == 'Manjaro Linux'
 
-- include: debian.yml
+- include: host/debian.yml
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Kali' or ansible_distribution == 'Linuxmint' or ansible_distribution == 'Ubuntu'
 
-- include: fedora.yml
+- include: host/fedora.yml
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Fedora' or ansible_distribution == 'RedHat'
   
-- include: gentoo.yml
+- include: host/gentoo.yml
   when: ansible_distribution == 'Gentoo'

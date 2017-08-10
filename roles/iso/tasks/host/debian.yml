@@ -1,0 +1,8 @@
+---
+- name: install essential packages (this may take a while)
+  apt: name="{{ item }}"
+  with_items:
+  - squashfs-tools
+  - xorriso
+  tags:
+  - iso

@@ -1,6 +1,6 @@
 ---
 - name: install essential packages (this may take a while)
-  package: name="{{ item }}"
+  apt: name="{{ item }}"
   with_items:
   - btrfs-progs
   - build-essential

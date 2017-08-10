@@ -21,7 +21,7 @@
   - xorg
 
 - name: install essential packages (this may take a while)
-  package: package="{{ item }}"
+  portage: package="{{ item }}"
   with_items:
   - media-libs/mesa
   - x11-apps/xrandr
