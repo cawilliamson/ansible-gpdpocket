@@ -1,8 +1,13 @@
 ---
+- name: install base-devel package (breaks manjaro)
+  pacman: name=base-devel
+  when: ansible_distribution == 'Antergos' or ansible_distribution == 'Archlinux'
+  tags:
+  - boot
+
 - name: install essential packages (this may take a while)
   package: name="{{ item }}"
   with_items:
-  - base-devel
   - bc
   - btrfs-progs
   - efibootmgr
@@ -13,7 +18,7 @@
   - openssl-1.0 
   - os-prober
   tags:
-  - packages
+  - boot
 
 - name: remove unused kernels
   pacman:
