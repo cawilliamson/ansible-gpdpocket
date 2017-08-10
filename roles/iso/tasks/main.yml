@@ -1,4 +1,5 @@
 ---
+# host
 - include: host/arch.yml
   when: ansible_distribution == 'Antergos' or ansible_distribution == 'Archlinux' or ansible_distribution == 'Manjaro Linux'
 
@@ -10,3 +11,43 @@
   
 - include: host/gentoo.yml
   when: ansible_distribution == 'Gentoo'
+
+- name: clean any leftover mounts from previous run
+  shell: umount -lf /var/tmp/bootstrap-iso/squashfs
+  failed_when: false
+  tags:
+  - iso
+
+- name: remove working directory from previous run
+  file:
+    path: /var/tmp/bootstrap-iso
+    state: absent
+  tags:
+  - iso
+
+- name: create working directory
+  file:
+    path: /var/tmp/bootstrap-iso
+    state: directory
+  tags:
+  - iso
+
+- name: extract iso to working directory
+  shell: xorriso -osirrox on -indev "{{ iso }}" -extract / /var/tmp/bootstrap-iso
+  tags:
+  - iso
+
+
+
+# guest
+- include: guest/arch.yml
+  when: ( iso | lower | search('antergos') ) or ( iso | lower | search('archlinux') ) or ( iso | lower | search('manjaro') )
+
+- include: guest/debian.yml
+  when: ( iso | lower | search('debian') ) or ( iso | lower | search('kali') ) or ( iso | lower | search('linuxmint') or ( iso | lower | search('ubuntu') )
+
+- include: guest/fedora.yml
+  when: ( iso | lower | search('centos') ) or ( iso | lower | search('fedora') ) or ( iso | lower | search('redhat') )
+  
+- include: guest/gentoo.yml
+  when: iso | lower | search('gentoo')
