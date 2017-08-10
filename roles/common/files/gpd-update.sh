@@ -5,7 +5,7 @@ set -e
 
 # wait for internet connection
 echo "waiting for internet connection..."
-while ! ping -c1 pool.ntp.org &>/dev/null; do
+while ! ping -c1 8.8.8.8 &>/dev/null; do
   sleep 1
 done
 
