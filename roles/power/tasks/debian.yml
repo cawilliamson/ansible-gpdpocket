@@ -1,0 +1,11 @@
+---
+- name: install essential packages (this may take a while)
+  package: name="{{ item }}"
+  with_items:
+  - lm-sensors
+  - thermald
+  - tlp
+  notify:
+  - enable thermal services
+  tags:
+  - power

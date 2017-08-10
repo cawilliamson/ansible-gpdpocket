@@ -1,0 +1,7 @@
+---
+- name: install python-selinux
+  yum: name=libselinux-python
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Fedora' or ansible_distribution == 'RedHat'
+  tags:
+  - common
+  - selinux

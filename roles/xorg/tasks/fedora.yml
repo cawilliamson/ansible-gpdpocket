@@ -1,0 +1,10 @@
+---
+- name: install essential packages (this may take a while)
+  package: name="{{ item }}"
+  with_items:
+  - ibus
+  - libXrandr
+  - xinput_calibrator
+  - xorg-x11-drv-intel
+  tags:
+  - xorg

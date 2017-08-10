@@ -1,4 +1,136 @@
 ---
-- include: config.yml
-- include: gnome.yml
-- include: rotate.yml
+- include: arch.yml
+  when: ansible_distribution == 'Antergos' or ansible_distribution == 'Archlinux' or ansible_distribution == 'Manjaro Linux'
+
+- include: debian.yml
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Kali' or ansible_distribution == 'Linuxmint' or ansible_distribution == 'Ubuntu'
+
+- include: fedora.yml
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Fedora' or ansible_distribution == 'RedHat'
+
+- include: gentoo.yml
+  when: ansible_distribution == 'Gentoo'
+
+- name: create xorg directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - /etc/X11/xorg.conf.d
+  - /etc/X11/Xsession.d
+  tags:
+  - xorg
+
+- name: copy xorg configs
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  register: xorg_configs
+  with_items:
+  - { src: 'files/config/20-intel.conf', dest: '/etc/X11/xorg.conf.d/' }
+  - { src: 'files/config/30-monitor.conf', dest: '/etc/X11/xorg.conf.d/' }
+  - { src: 'files/config/80-screen.conf', dest: '/etc/X11/xorg.conf.d/' }
+  tags:
+  - xorg
+
+- name: create dconf directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - /etc/dconf/db/local.d
+  - /etc/dconf/profile
+  tags:
+  - xorg
+
+- name: set gnome interface scaling
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+  - { src: 'files/gnome/01scale', dest: '/etc/dconf/db/local.d/' }
+  - { src: 'files/gnome/profile', dest: '/etc/dconf/profile/gdm' }
+  - { src: 'files/gnome/profile', dest: '/etc/dconf/profile/user' }
+  notify:
+  - update dconf
+  tags:
+  - xorg
+
+- name: check for gdm directory
+  stat: path=/etc/gdm/custom.conf
+  register: gdm
+  tags:
+  - xorg
+
+- name: check for gdm3-custom
+  stat: path=/etc/gdm3/custom.conf
+  register: gdm3custom
+  tags:
+  - xorg
+
+- name: check for gdm3-daemon
+  stat: path=/etc/gdm3/daemon.conf
+  register: gdm3daemon
+  tags:
+  - xorg
+
+- name: disable wayland on gdm
+  lineinfile:
+    path: /etc/gdm/custom.conf
+    insertafter: '^\[daemon\]$'
+    line: 'WaylandEnable=false'
+  when: gdm.stat.islnk is defined
+  tags:
+  - xorg
+
+- name: disable wayland on gdm3-custom
+  lineinfile:
+    path: /etc/gdm3/custom.conf
+    insertafter: '^\[daemon\]$'
+    line: 'WaylandEnable=false'
+  when: gdm3custom.stat.islnk is defined
+  tags:
+  - xorg
+
+- name: disable wayland on gdm3-daemon
+  lineinfile:
+    path: /etc/gdm3/daemon.conf
+    insertafter: '^\[daemon\]$'
+    line: 'WaylandEnable=false'
+  when: gdm3daemon.stat.islnk is defined
+  tags:
+  - xorg
+  
+- name: create gpd-rotate directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - /etc/X11/Xsession.d
+  - /etc/X11/xinit/xinitrc.d
+  tags:
+  - xorg
+
+- name: copy gpd-rotate files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  with_items:
+  - { src: 'files/rotate/01gpd-rotate', dest: '/etc/X11/Xsession.d/01gpd-rotate', mode: '0644' }
+  - { src: 'files/rotate/01gpd-rotate', dest: '/etc/X11/xinit/xinitrc.d/01gpd-rotate', mode: '0777' }
+  - { src: 'files/rotate/gpd-rotate.conf', dest: '/etc/gpd/rotate.conf', mode: '0644' }
+  - { src: 'files/rotate/gpd-rotate.py', dest: '/usr/local/sbin/gpd-rotate', mode: '0777' }
+  - { src: 'files/rotate/gpd-rotate.service', dest: '/etc/systemd/system/gpd-rotate.service', mode: '0644' }
+  notify:
+  - enable gpd-rotate
+  tags:
+  - xorg

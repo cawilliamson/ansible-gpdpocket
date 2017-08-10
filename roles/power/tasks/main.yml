@@ -1,3 +1,49 @@
 ---
-- include: fan.yml
-- include: tlp.yml
+- include: arch.yml
+  when: ansible_distribution == 'Antergos' or ansible_distribution == 'Archlinux' or ansible_distribution == 'Manjaro Linux'
+
+- include: debian.yml
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Kali' or ansible_distribution == 'Linuxmint' or ansible_distribution == 'Ubuntu'
+
+- include: fedora.yml
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Fedora' or ansible_distribution == 'RedHat'
+
+- include: gentoo.yml
+  when: ansible_distribution == 'Gentoo'
+
+- name: create systemd sleep directory
+  file:
+    path: /lib/systemd/system-sleep
+    state: directory
+  tags:
+  - power
+
+- name: copy gpd-fan files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  with_items:
+  - { src: 'files/gpd-fan.conf', dest: '/etc/gpd/fan.conf', mode: '0644' }
+  - { src: 'files/gpd-fan.py', dest: '/usr/local/sbin/gpd-fan', mode: '0777' }
+  - { src: 'files/gpd-fan.service', dest: '/etc/systemd/system/gpd-fan.service', mode: '0644' }
+  - { src: 'files/gpd-fan.sh', dest: '/lib/systemd/system-sleep/gpd-fan', mode: '0777' }
+  notify:
+  - enable gpd-fan
+  tags:
+  - power
+
+- name: set tlp options
+  lineinfile:
+    path: /etc/default/tlp
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}=\"{{ item.value }}\""
+  with_items:
+  - { key: 'DISK_DEVICES', value: 'mmcblk0' }
+  - { key: 'DISK_IOSCHED', value: 'sfq' }
+  notify:
+  - enable thermal services
+  tags:
+  - power

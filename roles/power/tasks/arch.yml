@@ -2,18 +2,10 @@
 - name: install essential packages (this may take a while)
   package: name="{{ item }}"
   with_items:
-  - gstreamer-vaapi
   - i2c-tools
-  - ibus
-  - inetutils
-  - mesa
-  - pulseaudio
   - thermald
   - tlp
-  - xf86-video-intel
-  - xorg-xinput
-  - xorg-xrandr
   notify:
   - enable thermal services
   tags:
-  - packages
+  - power

@@ -6,7 +6,7 @@
   - boot
 
 - name: install essential packages (this may take a while)
-  package: name="{{ item }}"
+  pacman: name="{{ item }}"
   with_items:
   - bc
   - btrfs-progs

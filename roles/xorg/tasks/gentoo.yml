@@ -1,0 +1,30 @@
+---
+- name: set USE flags for packages
+  lineinfile:
+    path: /etc/portage/package.use
+    regexp: "^{{ item.package }}"
+    line: "{{ item.package }} {{ item.flags }}"
+    create: yes
+  with_items:
+  - { package: 'media-libs/mesa', flags: 'vaapi' }
+  tags:
+  - xorg
+
+- name: set make.conf values
+  lineinfile:
+    path: /etc/portage/make.conf
+    regexp: "^{{ item.key }}"
+    line: "{{ item.key }}=\"{{ item.value }}\""
+  with_items:
+  - { key: 'VIDEO_CARDS', value: 'i965 intel' }
+  tags:
+  - xorg
+
+- name: install essential packages (this may take a while)
+  package: package="{{ item }}"
+  with_items:
+  - media-libs/mesa
+  - x11-apps/xrandr
+  - x11-apps/xinput
+  tags:
+  - xorg

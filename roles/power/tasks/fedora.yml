@@ -2,18 +2,10 @@
 - name: install essential packages (this may take a while)
   package: name="{{ item }}"
   with_items:
-  - git
-  - gstreamer1-vaapi
   - i2c-tools
-  - ibus
-  - libselinux-python
-  - libXrandr
-  - pulseaudio
   - thermald
   - tlp
-  - xinput_calibrator
-  - xorg-x11-drv-intel  
   notify:
   - enable thermal services
   tags:
-  - packages
+  - power

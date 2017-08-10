@@ -4,18 +4,10 @@
   with_items:
   - dconf-cli
   - dconf-editor
-  - git
-  - gstreamer1.0-vaapi
   - i965-va-driver
-  - lm-sensors
   - mesa-utils
-  - pulseaudio
-  - thermald
-  - tlp
   - va-driver-all
   - vainfo
   - x11-xserver-utils
-  notify:
-  - enable thermal services
   tags:
-  - packages
+  - xorg

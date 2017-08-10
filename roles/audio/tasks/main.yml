@@ -1,4 +1,16 @@
 ---
+- include: arch.yml
+  when: ansible_distribution == 'Antergos' or ansible_distribution == 'Archlinux' or ansible_distribution == 'Manjaro Linux'
+
+- include: debian.yml
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Kali' or ansible_distribution == 'Linuxmint' or ansible_distribution == 'Ubuntu'
+
+- include: fedora.yml
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Fedora' or ansible_distribution == 'RedHat'
+
+- include: gentoo.yml
+  when: ansible_distribution == 'Gentoo'
+
 - name: create chtrt5645 directory
   file:
     path: /usr/share/alsa/ucm/chtrt5645
