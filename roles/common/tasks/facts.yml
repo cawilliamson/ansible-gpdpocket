@@ -11,3 +11,5 @@
   
 - name: set chroot status as fact
   set_fact: chroot="{{ chroot_check.stdout | replace('\n', '') }}"
+  
+- debug: var=chroot
