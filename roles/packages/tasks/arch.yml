@@ -29,9 +29,13 @@
   tags:
   - packages
 
-- name: remove unused kernel
+- name: remove unused kernels
   pacman:
-    name: linux
+    name: "{{ item }}"
     state: absent
+  with_items:
+  - linux
+  - linux-lts
+  failed_when: false
   tags:
   - packages
