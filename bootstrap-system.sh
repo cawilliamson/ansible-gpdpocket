@@ -41,9 +41,9 @@ elif [ -f /usr/bin/apt-get ]; then
   elif [ -f /etc/apt/sources.list.d/base.list ]; then
     sed -i 's,main,main contrib non-free,g' /etc/apt/sources.list.d/base.list
   fi
-  mkdir -p /etc/apt/sources.list.d
   apt-get update
   apt-get -y install dirmngr
+  mkdir -p /etc/apt/sources.list.d
   echo 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main' > /etc/apt/sources.list.d/ansible.list
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
   apt-get update
