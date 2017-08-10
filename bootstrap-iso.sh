@@ -16,21 +16,21 @@ fi
 umount -lf ${TMPDIR}/squashfs || true
 rm -rf ${TMPDIR}
 
-# install dependencies -- squashfs-tools xorriso
+# install dependencies -- 
 if [ -f /usr/bin/pacman ]; then
-  pacman -Sy --needed --noconfirm ansible 
+  pacman -Sy --needed --noconfirm squashfs-tools xorriso # ansible git
 elif [ -f /usr/bin/apt-get ]; then
   DEBIAN_FRONTEND=noninteractive
   mkdir -p /etc/apt/sources.list.d
   echo 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main' > /etc/apt/sources.list.d/ansible.list
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
   apt-get update
-  apt-get -y install ansible git squashfs-tools xorriso
+  apt-get -y install squashfs-tools xorriso # ansible git
 elif [ -f /usr/bin/yum ]; then
-  yum install -y ansible git squashfs-tools xorriso
+  yum install -y squashfs-tools xorriso # ansible git
 elif [ -f /usr/sbin/emerge ]; then
   emerge --sync
-  USE="blksha1 curl lz4 lzma lzo webdav xz" emerge app-admin/ansible dev-vcs/git dev-libs/libisoburn sys-fs/squashfs-tools
+  USE="blksha1 curl lz4 lzma lzo webdav xz" emerge dev-libs/libisoburn sys-fs/squashfs-tools # app-admin/ansible dev-vcs/git
 fi
 
 # extract iso
