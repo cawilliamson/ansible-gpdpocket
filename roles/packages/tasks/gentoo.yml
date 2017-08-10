@@ -4,6 +4,7 @@
     path: /etc/portage/package.use
     regexp: "^{{ item.package }}"
     line: "{{ item.package }} {{ item.flags }}"
+    create: yes
   with_items:
   - { package: 'app-laptop/tlp', flags: 'tlp_suggests'}
   - { package: 'app-portage/layman', flags: 'git' }
@@ -11,7 +12,6 @@
   - { package: 'media-libs/mesa', flags: 'vaapi' }
   - { package: 'media-plugins/gst-plugins-meta', flags: 'aac alsa cdda flac mp3 mpeg ogg pulseaudio vaapi' }
   - { package: 'media-sound/pulseaudio', flags: 'alsa alsa-plugin bluetooth dbus systemd udev' }
-  - { package: 'sys-firmware/intel-microcode', flags: 'initramfs' }
   tags:
   - packages
 
@@ -29,16 +29,12 @@
   package: package="{{ item }}"
   with_items:
   - app-portage/layman
-  - dev-libs/libelf
   - dev-libs/openssl
   - dev-vcs/git
   - media-libs/mesa
   - media-plugins/gst-plugins-meta
   - media-sound/pulseaudio
   - sys-apps/lm_sensors
-  - sys-firmware/intel-microcode
-  - sys-kernel/dracut
-  - sys-libs/ncurses
   - sys-power/thermald
   - x11-apps/xrandr
   - x11-apps/xinput

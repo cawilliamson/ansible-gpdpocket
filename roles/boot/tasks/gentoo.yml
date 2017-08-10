@@ -1,4 +1,27 @@
 ---
+- name: set USE flags for packages
+  lineinfile:
+    path: /etc/portage/package.use
+    regexp: "^{{ item.package }}"
+    line: "{{ item.package }} {{ item.flags }}"
+    create: yes
+  with_items:
+  - { package: 'sys-firmware/intel-microcode', flags: 'initramfs' }
+  tags:
+  - boot
+
+- name: install essential packages (this may take a while)
+  portage: package="{{ item }}"
+  with_items:
+  - dev-libs/libelf
+  - dev-libs/openssl
+  - sys-firmware/intel-microcode
+  - sys-fs/btrfs-progs
+  - sys-kernel/dracut
+  - sys-libs/ncurses
+  tags:
+  - boot
+
 - name: add dmsquash-live to dracut config (iso creation = yes)
   copy:
     dest: /etc/dracut.conf.d/01-liveos.conf
@@ -11,7 +34,6 @@
   when: ansible_facts.chroot == 'true'
   notify:
   - update boot
-  
   tags:
   - boot
 

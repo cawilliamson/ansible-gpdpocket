@@ -1,4 +1,26 @@
 ---
+- name: install development packages (workaround until ansible 2.3.2 arrives)
+  shell: yum install -y '@C Development Tools and Libraries'
+  args:
+    warn: false
+  changed_when: False
+  tags:
+  - packages
+
+- name: install essential packages (this may take a while)
+  yum: name="{{ item }}"
+  with_items:
+  - bc
+  - btrfs-progs
+  - dracut
+  - efibootmgr
+  - elfutils-libelf-devel
+  - grub2
+  - openssl-libs
+  - os-prober
+  tags:
+  - packages
+
 - name: add dmsquash-live to dracut config (iso creation = yes)
   copy:
     dest: /etc/dracut.conf.d/01-liveos.conf
@@ -11,7 +33,6 @@
   when: ansible_facts.chroot == 'true'
   notify:
   - update boot
-  
   tags:
   - boot
 

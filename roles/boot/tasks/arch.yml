@@ -1,4 +1,31 @@
 ---
+- name: install essential packages (this may take a while)
+  package: name="{{ item }}"
+  with_items:
+  - base-devel
+  - bc
+  - btrfs-progs
+  - efibootmgr
+  - grub
+  - intel-ucode
+  - kmod
+  - libelf
+  - openssl-1.0 
+  - os-prober
+  tags:
+  - packages
+
+- name: remove unused kernels
+  pacman:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - linux
+  - linux-lts
+  failed_when: false
+  tags:
+  - boot
+
 - name: set initrd modules
   lineinfile:
     path: /etc/mkinitcpio.conf

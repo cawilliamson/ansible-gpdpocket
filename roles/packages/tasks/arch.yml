@@ -2,22 +2,11 @@
 - name: install essential packages (this may take a while)
   package: name="{{ item }}"
   with_items:
-  - base-devel
-  - btrfs-progs
-  - bc
-  - efibootmgr
-  - git
-  - grub
   - gstreamer-vaapi
   - i2c-tools
   - ibus
   - inetutils
-  - intel-ucode
-  - kmod
-  - libelf
   - mesa
-  - openssl-1.0
-  - os-prober
   - pulseaudio
   - thermald
   - tlp
@@ -26,16 +15,5 @@
   - xorg-xrandr
   notify:
   - enable thermal services
-  tags:
-  - packages
-
-- name: remove unused kernels
-  pacman:
-    name: "{{ item }}"
-    state: absent
-  with_items:
-  - linux
-  - linux-lts
-  failed_when: false
   tags:
   - packages

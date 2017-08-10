@@ -2,41 +2,20 @@
 - name: install essential packages (this may take a while)
   package: name="{{ item }}"
   with_items:
-  - build-essential
-  - debian-installer-launcher
+  - dconf-cli
+  - dconf-editor
   - git
   - gstreamer1.0-vaapi
   - i965-va-driver
-  - libelf-dev
-  - libncurses5-dev
-  - libssl-dev
-  - live-boot
   - lm-sensors
   - mesa-utils
   - pulseaudio
   - thermald
   - tlp
-  - unionfs-fuse
   - va-driver-all
   - vainfo
-  - dconf-editor
-  - dconf-cli
   - x11-xserver-utils
   notify:
   - enable thermal services
-  tags:
-  - packages
-
-- name: install intel-microcode (iso creation = no)
-  package: name=intel-microcode
-  when: ansible_facts.chroot == 'false'
-  tags:
-  - packages
-
-- name: remove intel-microcode (iso creation = yes)
-  package:
-    name: intel-microcode
-    state: absent
-  when: ansible_facts.chroot == 'true'
   tags:
   - packages

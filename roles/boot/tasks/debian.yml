@@ -1,4 +1,32 @@
 ---
+- name: install essential packages (this may take a while)
+  package: name="{{ item }}"
+  with_items:
+  - btrfs-progs
+  - build-essential
+  - debian-installer-launcher
+  - libelf-dev
+  - libncurses5-dev
+  - libssl-dev
+  - live-boot
+  - unionfs-fuse
+  tags:
+  - boot
+
+- name: install intel-microcode (iso creation = no)
+  apt: name=intel-microcode
+  when: ansible_facts.chroot == 'false'
+  tags:
+  - boot
+
+- name: remove intel-microcode (iso creation = yes)
+  apt:
+    name: intel-microcode
+    state: absent
+  when: ansible_facts.chroot == 'true'
+  tags:
+  - boot
+
 - name: install ubuntu casper packages (iso creation = yes)
   apt: name="{{ item }}"
   with_items:

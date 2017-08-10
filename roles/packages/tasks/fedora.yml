@@ -1,29 +1,13 @@
 ---
-- name: install development packages (workaround until ansible 2.3.2 arrives)
-  shell: dnf install -y '@C Development Tools and Libraries'
-  args:
-    warn: false
-  changed_when: False
-  tags:
-  - packages
-
 - name: install essential packages (this may take a while)
   package: name="{{ item }}"
   with_items:
-  - btrfs-progs
-  - bc
-  - dracut
-  - efibootmgr
-  - elfutils-libelf-devel
   - git
-  - grub2
   - gstreamer1-vaapi
   - i2c-tools
   - ibus
   - libselinux-python
   - libXrandr
-  - openssl-libs
-  - os-prober
   - pulseaudio
   - thermald
   - tlp
