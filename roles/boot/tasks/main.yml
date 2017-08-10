@@ -63,8 +63,11 @@
 - include: debian.yml
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Kali' or ansible_distribution == 'Linuxmint' or ansible_distribution == 'Ubuntu'
 
-- include: fedora-gentoo.yml
+- include: fedora.yml
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Fedora' or ansible_distribution == 'Gentoo' or ansible_distribution == 'RedHat'
+
+- include: gentoo.yml
+  when: ansible_distribution == 'Gentoo'
 
 - name: determine path for swap 
   shell: swapon -s | tail -n1 | cut -f1 | xargs
