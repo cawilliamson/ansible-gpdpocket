@@ -21,6 +21,14 @@
   tags:
   - packages
 
+- name: remove unused kernels
+  yum:
+    name: kernel
+    state: absent
+  failed_when: false
+  tags:
+  - boot
+
 - name: add dmsquash-live to dracut config (iso creation = yes)
   copy:
     dest: /etc/dracut.conf.d/01-liveos.conf

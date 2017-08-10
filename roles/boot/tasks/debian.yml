@@ -13,6 +13,14 @@
   tags:
   - boot
 
+- name: remove unused kernels
+  apt:
+    name: linux-image-amd64
+    state: absent
+  failed_when: false
+  tags:
+  - boot
+
 - name: install intel-microcode (iso creation = no)
   apt: name=intel-microcode
   when: ansible_facts.chroot == 'false'

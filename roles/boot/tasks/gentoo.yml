@@ -22,6 +22,14 @@
   tags:
   - boot
 
+- name: remove unused kernels
+  apt:
+    name: gentoo-sources
+    state: absent
+  failed_when: false
+  tags:
+  - boot
+
 - name: add dmsquash-live to dracut config (iso creation = yes)
   copy:
     dest: /etc/dracut.conf.d/01-liveos.conf
