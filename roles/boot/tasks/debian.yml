@@ -1,20 +1,10 @@
 ---
-- name: check if running in chroot (iso creation)
-  shell: |
-    if [ "$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)" ]; then
-      echo "chroot"
-    fi
-  register: chroot
-  changed_when: False
-  tags:
-  - boot
-
 - name: install ubuntu casper packages (iso creation = yes)
   apt: name="{{ item }}"
   with_items:
   - casper
   - lupin-casper
-  when: chroot.stdout.find('chroot') != -1 and ansible_distribution == 'Ubuntu'
+  when: ansible_facts.chroot == 'true' and ansible_distribution == 'Ubuntu'
   tags:
   - boot
 
@@ -23,7 +13,7 @@
     path: /etc/modprobe.d/loop.conf
     line: "options loop max_loop=8"
     create: yes
-  when: chroot.stdout.find('chroot') != -1
+  when: ansible_facts.chroot == 'true'
   tags:
   - boot
 

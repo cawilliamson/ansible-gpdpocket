@@ -1,14 +1,4 @@
 ---
-- name: check if running in chroot (iso creation)
-  shell: |
-    if [ "$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)" ]; then
-      echo "chroot"
-    fi
-  register: chroot
-  changed_when: False
-  tags:
-  - boot
-
 - name: add dmsquash-live to dracut config (iso creation = yes)
   copy:
     dest: /etc/dracut.conf.d/01-liveos.conf
@@ -18,7 +8,7 @@
     content: |
       hostonly="no"
       add_dracutmodules+=" dmsquash-live "
-  when: chroot.stdout.find('chroot') != -1
+  when: ansible_facts.chroot == 'true'
   notify:
   - update boot
   
@@ -29,7 +19,7 @@
   file:
     path: /etc/dracut.conf.d/01-liveos.conf
     state: absent
-  when: chroot.stdout.find('chroot') == -1
+  when: ansible_facts.chroot == 'false'
   notify:
   - update boot
   tags:

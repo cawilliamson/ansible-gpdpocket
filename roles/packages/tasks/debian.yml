@@ -27,19 +27,9 @@
   tags:
   - packages
 
-- name: check if running in chroot (iso creation)
-  shell: |
-    if [ "$(stat -c %d:%i /)" != "$(stat -c %d:%i /proc/1/root/.)" ]; then
-      echo "chroot"
-    fi
-  register: chroot
-  changed_when: False
-  tags:
-  - packages
-
 - name: install intel-microcode (iso creation = no)
   package: name=intel-microcode
-  when: chroot.stdout.find('chroot') == -1
+  when: ansible_facts.chroot == 'false'
   tags:
   - packages
 
@@ -47,8 +37,6 @@
   package:
     name: intel-microcode
     state: absent
-  when: chroot.stdout.find('chroot') != -1
+  when: ansible_facts.chroot == 'true'
   tags:
   - packages
- 
-
