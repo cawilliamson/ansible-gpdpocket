@@ -57,7 +57,7 @@ https://github.com/cawilliamson/ansible-gpdpocket/archive/master.zip
 
 ###### Known Issues
 
-- Distorted audio ( kernel bug - https://bugzilla.kernel.org/show_bug.cgi?id=196351 )
+- Distorted audio (kernel bug - https://bugzilla.kernel.org/show_bug.cgi?id=196351)
 - Hibernate Support (Enhancement: #25)
 - Running the unlocked BIOS prevents Linux from displaying battery stats (hansdegoede is working on this currently)
 - USB-C Data Connectivity (hansdegoede is working on this currently)
