@@ -2,7 +2,7 @@
 - name: install essential packages (this may take a while)
   pacman: name="{{ item }}"
   with_items:
+  - libisoburn
   - squashfs-tools
-  - xorriso
   tags:
   - iso
