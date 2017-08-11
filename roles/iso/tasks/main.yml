@@ -147,6 +147,13 @@
   tags:
   - iso
 
+- name: remove patched resolv.conf
+  file:
+    path: /var/tmp/bootstrap-iso/etc/resolv.conf
+    state: absent
+  tags:
+  - iso
+
 - name: check if resolv.conf backup exists
   stat:
     path: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
