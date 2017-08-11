@@ -2,10 +2,7 @@
 - name: install essential packages (this may take a while)
   pacman: name="{{ item }}"
   with_items:
-  - ibus
-  - mesa
-  - xf86-video-intel
-  - xorg-xinput
-  - xorg-xrandr
+  - libisoburn
+  - squashfs-tools
   tags:
-  - xorg
+  - iso

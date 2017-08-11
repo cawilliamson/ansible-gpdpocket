@@ -42,8 +42,16 @@
     line: "{{ item.key }}=\"{{ item.value }}\""
   with_items:
   - { key: 'DISK_DEVICES', value: 'mmcblk0' }
-  - { key: 'DISK_IOSCHED', value: 'sfq' }
+  - { key: 'DISK_IOSCHED', value: 'deadline' }
   notify:
   - enable thermal services
+  tags:
+  - power
+  
+- name: blacklist modules to prevent preemptive wake from suspend
+  lineinfile:
+    path: /etc/pm/config.d/config
+    line: SUSPEND_MODULES="brcmfmac"
+    create: yes
   tags:
   - power
