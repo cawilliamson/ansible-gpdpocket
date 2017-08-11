@@ -23,8 +23,8 @@
   - boot
 
 - name: remove unused kernels
-  apt:
-    name: gentoo-sources
+  portage:
+    name: sys-kernel/gentoo-sources
     state: absent
   failed_when: false
   tags:

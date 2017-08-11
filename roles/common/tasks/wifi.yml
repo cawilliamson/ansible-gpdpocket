@@ -12,12 +12,3 @@
   tags:
   - common
   - wifi
-
-- name: prevent suspend from breaking wifi
-  lineinfile:
-    path: /etc/pm/config.d/config
-    line: SUSPEND_MODULES="brcmfmac"
-    create: yes
-  tags:
-  - common
-  - wifi

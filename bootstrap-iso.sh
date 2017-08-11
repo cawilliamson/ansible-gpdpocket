@@ -18,29 +18,33 @@ rm -rf ${TMPDIR}
 
 # install dependencies -- 
 if [ -f /usr/bin/pacman ]; then
-  pacman -Sy --needed --noconfirm squashfs-tools xorriso # ansible git
+  pacman -Sy --needed --noconfirm ansible git
 elif [ -f /usr/bin/apt-get ]; then
   DEBIAN_FRONTEND=noninteractive
   mkdir -p /etc/apt/sources.list.d
   echo 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main' > /etc/apt/sources.list.d/ansible.list
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
   apt-get update
-  apt-get -y install squashfs-tools xorriso # ansible git
+  apt-get -y install ansible git
 elif [ -f /usr/bin/yum ]; then
-  yum install -y squashfs-tools xorriso # ansible git
+  yum install -y ansible git
 elif [ -f /usr/sbin/emerge ]; then
   emerge --sync
-  USE="blksha1 curl lz4 lzma lzo webdav xz" emerge dev-libs/libisoburn sys-fs/squashfs-tools # app-admin/ansible dev-vcs/git
+  USE="blksha1 curl" emerge app-admin/ansible dev-vcs/git
 fi
 
 # extract iso
 mkdir -p ${TMPDIR}
 xorriso -osirrox on -indev "${1}" -extract / ${TMPDIR}
 
-# find paths
+SQUASHFS_PATH=$(find ${TMPDIR} -type f -regex '.*\(squashfs\.img\|\.sfs\|\.squashfs\)$' -print -quit)
+
+# extract squashfs
+unsquashfs -d ${TMPDIR}/squashfs/ -f ${SQUASHFS_PATH}
+rm -f ${SQUASHFS_PATH}
+
 BOOT_CONFIGS=$(find ${TMPDIR} -type f -regex '.*\(grub/.+.cfg\|isolinux/.+.cfg\)')
 EFI_PATH=$(find ${TMPDIR} -type f -iname 'efi*.img' -print -quit)
-SQUASHFS_PATH=$(find ${TMPDIR} -type f -regex '.*\(squashfs\.img\|\.sfs\|\.squashfs\)$' -print -quit)
 KERNEL_PATHS=$(find ${TMPDIR} -type f -iname '*vmlinuz*')
 
 # patch kernel boot options
@@ -52,10 +56,6 @@ while read -r BOOT_CONFIG; do
   fi
   sed -i 's, splash,,g' ${BOOT_CONFIG}
 done <<< "${BOOT_CONFIGS}"
-
-# extract squashfs
-unsquashfs -d ${TMPDIR}/squashfs/ -f ${SQUASHFS_PATH}
-rm -f ${SQUASHFS_PATH}
 
 # prepare squashfs system files files for chroot
 if [ -f ${TMPDIR}/squashfs/LiveOS/rootfs.img ]; then
