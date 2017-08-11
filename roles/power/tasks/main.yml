@@ -51,7 +51,7 @@
 - name: blacklist modules to prevent preemptive wake from suspend
   lineinfile:
     path: /etc/pm/config.d/config
-    line: SUSPEND_MODULES="brcmfmac i2c_designware"
+    line: SUSPEND_MODULES="brcmfmac"
     create: yes
   tags:
   - power
