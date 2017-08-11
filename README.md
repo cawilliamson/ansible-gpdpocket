@@ -31,7 +31,7 @@ The goal of this project is to automatically apply and update all of the various
 
 ###### Bootstrap Installed System
 
-In order to install my Ansible playbooks please complete the following steps:
+In order to install my Ansible playbooks on an existing install (e.g. one which you've set up with the `nomodeset fbcon=rotate:1` kernel parameters) please complete the following steps:
 
 1.  Start by downloading the latest ZIP of my ansible playbooks from:  
     https://github.com/cawilliamson/ansible-gpdpocket/archive/master.zip
