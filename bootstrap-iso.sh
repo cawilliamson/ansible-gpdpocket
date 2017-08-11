@@ -37,10 +37,14 @@ fi
 mkdir -p ${TMPDIR}
 xorriso -osirrox on -indev "${1}" -extract / ${TMPDIR}
 
-# find paths
+SQUASHFS_PATH=$(find ${TMPDIR} -type f -regex '.*\(squashfs\.img\|\.sfs\|\.squashfs\)$' -print -quit)
+
+# extract squashfs
+unsquashfs -d ${TMPDIR}/squashfs/ -f ${SQUASHFS_PATH}
+rm -f ${SQUASHFS_PATH}
+
 BOOT_CONFIGS=$(find ${TMPDIR} -type f -regex '.*\(grub/.+.cfg\|isolinux/.+.cfg\)')
 EFI_PATH=$(find ${TMPDIR} -type f -iname 'efi*.img' -print -quit)
-SQUASHFS_PATH=$(find ${TMPDIR} -type f -regex '.*\(squashfs\.img\|\.sfs\|\.squashfs\)$' -print -quit)
 KERNEL_PATHS=$(find ${TMPDIR} -type f -iname '*vmlinuz*')
 
 # patch kernel boot options
@@ -52,10 +56,6 @@ while read -r BOOT_CONFIG; do
   fi
   sed -i 's, splash,,g' ${BOOT_CONFIG}
 done <<< "${BOOT_CONFIGS}"
-
-# extract squashfs
-unsquashfs -d ${TMPDIR}/squashfs/ -f ${SQUASHFS_PATH}
-rm -f ${SQUASHFS_PATH}
 
 # prepare squashfs system files files for chroot
 if [ -f ${TMPDIR}/squashfs/LiveOS/rootfs.img ]; then

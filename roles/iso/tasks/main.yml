@@ -32,12 +32,38 @@
   tags:
   - iso
 
+- name: check if iso file exists
+  stat:
+    path: "{{ iso }}"
+  register: iso_check
+  tags:
+  - iso
+  
+- name: fail if iso file does not exist
+  fail: msg="The ISO file you specified ({{ iso }}) does not exist."
+  when: iso_check.stat.islnk is not defined
+  tags:
+  - iso
+
 - name: extract iso to working directory
   shell: xorriso -osirrox on -indev "{{ iso }}" -extract / /var/tmp/bootstrap-iso
   tags:
   - iso
 
+- name: find squashfs image
+  find:
+    path: /var/tmp/bootstrap-iso
+    recurse: yes
+    use_regex: yes
+    patterns: '.*(squashfs\.img|\.sfs|\.squashfs)$'
+  register: squashfs
+  tags:
+  - iso
 
+- name: extract squashfs image
+  shell: "unsquashfs -d /var/tmp/bootstrap-iso/squashfs/ -f {{ squashfs.files.0.path }}"
+  tags:
+  - iso
 
 # guest
 - include: guest/arch.yml
