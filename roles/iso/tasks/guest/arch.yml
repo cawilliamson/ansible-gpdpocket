@@ -1,1 +1,9 @@
 ---
+- name: set arch specific facts
+  set_fact:
+    boot_configs: { '/var/tmp/bootstrap-iso/arch/boot/syslinux/archiso_sys.cfg' }
+    efi_path: '/var/tmp/bootstrap-iso/EFI/archiso/efiboot.img'
+    initrd_images: { '/var/tmp/bootstrap-iso/arch/boot/x86_64/archiso.img' }
+    kernel_paths: { '/var/tmp/bootstrap-iso/arch/boot/x86_64/vmlinuz' }
+  tags:
+  - iso
