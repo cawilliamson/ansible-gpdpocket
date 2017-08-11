@@ -106,7 +106,7 @@
   tags:
   - iso
 
-- name: copy new resolv.conf to guest
+- name: copy bootstrap resolv.conf to guest
   copy:
     src: files/resolv.conf
     dest: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf
@@ -147,25 +147,18 @@
   tags:
   - iso
 
-- name: remove patched resolv.conf
+- name: remove bootstrap resolv.conf from guest
   file:
     path: /var/tmp/bootstrap-iso/etc/resolv.conf
     state: absent
   tags:
   - iso
 
-- name: check if resolv.conf backup exists
-  stat:
-    path: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
-  register: resolvconfbak
-  tags:
-  - iso
-
-- name: restore guest resolv.conf backup
+- name: restore resolv.conf backup on guest
   copy:
     src: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
     dest: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf
-  when: resolvconfbak.stat.islnk is defined
+  failed_when: false
   tags:
   - iso
 
