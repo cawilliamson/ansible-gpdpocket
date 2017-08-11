@@ -76,13 +76,17 @@
   - iso
 
 - name: mount rootfs (when rootfs exists)
-  shell: "mount -t ext4 -o loop,rw {{ rootfs.files.0.path }} /var/tmp/bootstrap-iso/squashfs"
+  shell: mount -t ext4 -o loop,rw {{ rootfs.files.0.path }} /var/tmp/bootstrap-iso/squashfs
+  args:
+    warn: false
   when: rootfs.matched > 0
   tags:
   - iso
 
 - name: bind mount squashfs to allow chroot (when rootfs does not exist)
   shell: mount --bind /var/tmp/bootstrap-iso/squashfs /var/tmp/bootstrap-iso/squashfs
+  args:
+    warn: false
   when: rootfs.matched == 0
   tags:
   - iso
@@ -109,20 +113,14 @@
   tags:
   - iso
 
-- name: mount /dev to guest
-  shell: mount --bind /dev /var/tmp/bootstrap-iso/squashfs/dev
-  tags:
-  - iso
-
-- name: mount /dev/shm to guest
+- name: mount essential devices to guest
   shell: |
+    mount --bind /dev /var/tmp/bootstrap-iso/squashfs/dev
     mount -t tmpfs -o nosuid,nodev,noexec shm /var/tmp/bootstrap-iso/squashfs/dev/shm
     chmod 1777 /var/tmp/bootstrap-iso/squashfs/dev/shm
-  tags:
-  - iso
-
-- name: mount /proc to guest
-  shell: mount -t proc none ${TMPDIR}/squashfs/proc
+    mount -t proc none /var/tmp/bootstrap-iso/squashfs/proc
+  args:
+    warn: false
   tags:
   - iso
 
