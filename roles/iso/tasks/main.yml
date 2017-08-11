@@ -138,7 +138,7 @@
   - iso
 
 - name: print output (for issue resolution purposes)
-  debug: msg="{{ bootstrapsystem.stdout }}"
+  debug: msg="{{ bootstrapsystem.stdout_lines }}"
   tags:
   - iso
 
