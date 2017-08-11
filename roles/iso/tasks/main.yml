@@ -1,5 +1,4 @@
 ---
-# host
 - include: host/arch.yml
   when: ansible_distribution == 'Antergos' or ansible_distribution == 'Archlinux' or ansible_distribution == 'Manjaro Linux'
 
@@ -56,6 +55,7 @@
     recurse: yes
     use_regex: yes
     patterns: '.*(squashfs\.img|\.sfs|\.squashfs)$'
+    file_type: file
   register: squashfs
   tags:
   - iso
@@ -65,7 +65,113 @@
   tags:
   - iso
 
-# guest
+- name: find rootfs image
+  find:
+    path: /var/tmp/bootstrap-iso/squashfs
+    recurse: yes
+    patterns: 'rootfs.img'
+    file_type: file
+  register: rootfs
+  tags:
+  - iso
+
+- name: mount rootfs (when rootfs exists)
+  shell: "mount -t ext4 -o loop,rw {{ rootfs.files.0.path }} /var/tmp/bootstrap-iso/squashfs"
+  when: rootfs.matched > 0
+  tags:
+  - iso
+
+- name: bind mount squashfs to allow chroot (when rootfs does not exist)
+  shell: mount --bind /var/tmp/bootstrap-iso/squashfs /var/tmp/bootstrap-iso/squashfs
+  when: rootfs.matched == 0
+  tags:
+  - iso
+
+- name: check if resolv.conf exists
+  stat:
+    path: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf
+  register: resolvconf
+  tags:
+  - iso
+
+- name: backup guest resolv.conf
+  copy:
+    src: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf
+    dest: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
+  when: resolvconf.stat.islnk is defined
+  tags:
+  - iso
+
+- name: copy new resolv.conf to guest
+  copy:
+    src: files/resolv.conf
+    dest: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf
+  tags:
+  - iso
+
+- name: mount /dev to guest
+  shell: mount --bind /dev /var/tmp/bootstrap-iso/squashfs/dev
+  tags:
+  - iso
+
+- name: mount /dev/shm to guest
+  shell: |
+    mount -t tmpfs -o nosuid,nodev,noexec shm /var/tmp/bootstrap-iso/squashfs/dev/shm
+    chmod 1777 /var/tmp/bootstrap-iso/squashfs/dev/shm
+  tags:
+  - iso
+
+- name: mount /proc to guest
+  shell: mount -t proc none ${TMPDIR}/squashfs/proc
+  tags:
+  - iso
+
+- name: copy bootstrap-system script to guest
+  copy:
+    src: ../../bootstrap-system.sh
+    dest: /var/tmp/bootstrap-iso/squashfs/tmp/bootstrap-system.sh
+  tags:
+  - iso
+
+- name: bootstrap guest (this may take a while)
+  shell: chroot /var/tmp/bootstrap-iso/squashfs /bin/bash -c "/bin/bash /tmp/bootstrap-system.sh"
+  register: bootstrapsystem
+  tags:
+  - iso
+
+- name: print output (for issue resolution purposes)
+  debug: msg="{{ bootstrapsystem.stdout }}"
+  tags:
+  - iso
+
+- name: umount leftover partitions
+  shell: umount -lf /var/tmp/bootstrap-iso/squashfs
+  tags:
+  - iso
+
+- name: check if resolv.conf backup exists
+  stat:
+    path: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
+  register: resolvconfbak
+  tags:
+  - iso
+
+- name: restore guest resolv.conf backup
+  copy:
+    src: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
+    dest: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf
+  when: resolvconfbak.stat.islnk is defined
+  tags:
+  - iso
+
+- name: remove leftover files from guest
+  file:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - /var/tmp/bootstrap-iso/squashfs/usr/src/ansible-gpdpocket
+  - /var/tmp/bootstrap-iso/squashfs/tmp/bootstrap-system.sh
+
 - include: guest/arch.yml
   when: ( iso | lower | search('antergos') ) or ( iso | lower | search('archlinux') ) or ( iso | lower | search('manjaro') )
 
