@@ -2,7 +2,7 @@
 - name: install essential packages (this may take a while)
   apt: name="{{ item }}"
   with_items:
-  - btrfs-progs
+  - btrfs-tools
   - build-essential
   - debian-installer-launcher
   - libelf-dev
