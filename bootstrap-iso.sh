@@ -66,14 +66,14 @@ fi
 if [ -f ${TMPDIR}/squashfs/etc/resolv.conf ]; then
   mv ${TMPDIR}/squashfs/etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf.bak
 fi
-cp -fL /etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf
+cp -f /etc/resolv.conf ${TMPDIR}/squashfs/etc/resolv.conf
 mount --bind /dev ${TMPDIR}/squashfs/dev
 mount -t tmpfs -o nosuid,nodev,noexec shm ${TMPDIR}/squashfs/dev/shm
 chmod 1777 ${TMPDIR}/squashfs/dev/shm
 mount -t proc none ${TMPDIR}/squashfs/proc
 
 # run ansible playbook against system files
-cp -fL bootstrap-system.sh ${TMPDIR}/squashfs/tmp/bootstrap-system.sh
+cp -f bootstrap-system.sh ${TMPDIR}/squashfs/tmp/bootstrap-system.sh
 chroot ${TMPDIR}/squashfs /bin/bash -c "/bin/bash /tmp/bootstrap-system.sh"
 
 # fix squashfs system files after chroot
@@ -92,14 +92,14 @@ while read -r KERNEL_PATH; do
       mkdir -p ${TMPDIR}/install-initrd
       cd ${TMPDIR}/install-initrd
       zcat ${INITRD_PATH} | cpio --extract --make-directories
-      cp -afLr ${TMPDIR}/squashfs/lib/modules/*-bootstrap ${TMPDIR}/install-initrd/lib/modules/
+      cp -afr ${TMPDIR}/squashfs/lib/modules/*-bootstrap ${TMPDIR}/install-initrd/lib/modules/
       find . | cpio --create --format='newc' | gzip -c > ${INITRD_PATH}
       rm -rf ${TMPDIR}/install-initrd
     else
-      cp -fL ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap ${INITRD_PATH}
+      cp -f ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap ${INITRD_PATH}
     fi
   fi
-  cp -fL ${TMPDIR}/squashfs/boot/vmlinuz-*-bootstrap ${KERNEL_PATH}
+  cp -f ${TMPDIR}/squashfs/boot/vmlinuz-*-bootstrap ${KERNEL_PATH}
 done <<< "${KERNEL_PATHS}"
 
 # calculate filesizes
