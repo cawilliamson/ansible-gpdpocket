@@ -39,6 +39,7 @@
   - /lib/systemd/system-sleep/gpdfand
   - /root/ansible-gpdpocket
   - /usr/local/bin/gpdfand
+  - /usr/local/sbin/ansible-update
   - /usr/local/sbin/gpdfand
   - /usr/local/sbin/gpdrotate
   - /usr/share/alsa/ucm/chtrt5645.conf
