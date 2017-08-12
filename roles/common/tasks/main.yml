@@ -4,3 +4,4 @@
 - include: gpd.yml
 - include: selinux.yml
 - include: update.yml
+- include: wifi.yml
