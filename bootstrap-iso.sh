@@ -45,7 +45,7 @@ rm -f ${SQUASHFS_PATH}
 
 BOOT_CONFIGS=$(find ${TMPDIR} -type f -regex '.*\(grub/.+.cfg\|isolinux/.+.cfg\)')
 EFI_PATH=$(find ${TMPDIR} -type f -iname 'efi*.img' -print -quit)
-KERNEL_PATHS=$(find ${TMPDIR} -type f -iname '*vmlinuz*')
+KERNEL_PATHS=$(find ${TMPDIR} -type f -iname '*vmlinuz*' -not -path "${TMPDIR}/squashfs/*")
 
 # patch kernel boot options
 while read -r BOOT_CONFIG; do
