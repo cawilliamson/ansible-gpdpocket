@@ -30,7 +30,7 @@
     patterns: '*.img,*.lz,*.gz'
     file_type: file
   with_items: "{{ iso_kernels.files }}"
-  register: 
+  register: iso_initrds
   tags:
   - iso
 
