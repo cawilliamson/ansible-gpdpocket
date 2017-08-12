@@ -176,7 +176,7 @@
   - iso
 
 - name: add distro-specific checksums
-  shell: md5sum "{{ squashfs }}" > /var/tmp/bootstrap-iso/arch/x86_64/airootfs.md5
+  shell: md5sum "{{ squashfs }}" > /var/tmp/bootstrap-iso/arch/x86_64/*rootfs.md5
   tags:
   - iso
 
