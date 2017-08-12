@@ -17,11 +17,12 @@ done
 
 # update ansible code
 echo "downloading latest ansible code..."
-if [ -d /usr/src/ansible-gpdpocket ]; then
+if [ -d /usr/src/ansible-gpdpocket/.git ]; then
   cd /usr/src/ansible-gpdpocket
   git fetch --all
   git reset --hard origin/master
 else
+  rm -rf /usr/src/ansible-gpdpocket
   git clone https://github.com/cawilliamson/ansible-gpdpocket.git /usr/src/ansible-gpdpocket
   cd /usr/src/ansible-gpdpocket
   git reset --hard origin/master

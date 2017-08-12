@@ -10,4 +10,4 @@
   changed_when: False
   
 - name: set chroot status as fact
-  set_fact: chroot="{{ chroot_check.stdout | replace('\n', '') }}"
+  set_fact: chroot="{{ chroot_check.stdout_lines.0 }}"
