@@ -11,7 +11,7 @@ if [ "$(stat -c %d:%i /)" == "$(stat -c %d:%i /proc/1/root/.)" ]; then
   echo "enabling wifi..."
   
   mkdir -p /lib/firmware/brcm
-  cp -f roles/wifi/files/brcmfmac4356-pcie.* /lib/firmware/brcm/
+  cp -f roles/common/files/brcmfmac4356-pcie.* /lib/firmware/brcm/
   
   modprobe -r brcmfmac && modprobe brcmfmac
 
