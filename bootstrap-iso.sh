@@ -95,6 +95,7 @@ while read -r KERNEL_PATH; do
       cp -afr ${TMPDIR}/squashfs/lib/modules/*-bootstrap ${TMPDIR}/install-initrd/lib/modules/
       find . | cpio --create --format='newc' | gzip -c > ${INITRD_PATH}
       rm -rf ${TMPDIR}/install-initrd
+      cd -
     else
       cp -f ${TMPDIR}/squashfs/boot/initrd.img-*bootstrap ${INITRD_PATH}
     fi
