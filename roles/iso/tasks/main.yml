@@ -44,16 +44,16 @@
   tags:
   - iso
 
-- include: guest/arch.yml
+- include: guest/arch/facts.yml
   when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
 
-- include: guest/debian.yml
+- include: guest/debian/facts.yml
   when: iso | lower | search('debian') or iso | lower | search('kali') or iso | lower | search('mint') or iso | lower | search('ubuntu')
 
-- include: guest/fedora.yml
+- include: guest/fedora/facts.yml
   when: iso | lower | search('centos') or iso | lower | search('fedora') or iso | lower | search('redhat')
   
-- include: guest/gentoo.yml
+- include: guest/gentoo/facts.yml
   when: iso | lower | search('gentoo')
 
 - name: extract iso to working directory
@@ -218,10 +218,8 @@
   tags:
   - iso
 
-- name: add distro-specific checksums
-  shell: md5sum "{{ squashfs.files.0.path }}" > /var/tmp/bootstrap-iso/arch/x86_64/*rootfs.md5
-  tags:
-  - iso
+- include: guest/arch/checksum.yml
+  when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
 
 - name: determine iso label
   shell: blkid -o value -s LABEL "{{ iso }}"

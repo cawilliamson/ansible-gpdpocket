@@ -1,0 +1,5 @@
+---
+- name: add distro-specific checksums
+  shell: md5sum "{{ squashfs.files.0.path }}" > /var/tmp/bootstrap-iso/arch/x86_64/*rootfs.md5
+  tags:
+  - iso
