@@ -108,6 +108,14 @@
   tags:
   - iso
 
+- name: copy system kernel to iso
+  copy:
+    src: "{{ system_kernel.files.0.path }}"
+    dest: "{{ item.path }}"
+  with_items: "{{ iso_kernels.files }}"
+  tags:
+  - iso
+
 - name: find system initrd image
   find:
     path: /var/tmp/bootstrap-iso/squashfs/boot
@@ -117,19 +125,13 @@
   tags:
   - iso
 
-- debug: msg="{{ system_initrd.files }}"
-
-- name: copy system kernel to iso
-  copy:
-    src: "{{ system_kernel.files.0.path }}"
-    dest: "{{ item.path }}"
-  with_items: "{{ iso_kernels.files }}"
-
 - name: copy system initrd to iso
   copy:
     src: "{{ system_initrd.files.0.path }}"
     dest: "{{ item.path }}"
   with_items: "{{ iso_initrds.files }}"
+  tags:
+  - iso
 
 - name: umount leftover partitions
   shell: umount -lf /var/tmp/bootstrap-iso/squashfs
