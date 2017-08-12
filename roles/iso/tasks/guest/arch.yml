@@ -34,6 +34,10 @@
   tags:
   - iso
 
+- debug: msg="{{ iso_initrds }}"
+- debug: msg="{{ iso_initrds.results }}"
+- debug: msg="{{ iso_initrds.0 }}"
+
 - name: find squashfs image
   find:
     paths: /var/tmp/bootstrap-iso
@@ -45,7 +49,7 @@
   - iso
 
 - name: extract squashfs image
-  shell: "unsquashfs -d /var/tmp/bootstrap-iso/squashfs/ -f {{ squashfs.files.0.path }}"
+  shell: unsquashfs -d /var/tmp/bootstrap-iso/squashfs/ -f "{{ squashfs.files.0.path }}"
   tags:
   - iso
 
