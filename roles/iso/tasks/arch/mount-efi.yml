@@ -1,0 +1,12 @@
+---
+- name: create efi directory
+  file:
+    path: /var/tmp/bootstrap-iso/efi-tmp
+    state: directory
+  tags:
+  - iso
+
+- name: mount efi partition
+  shell: mount -t msdos -o loop,rw "{{ efi_image.files.0.path }}" /var/tmp/bootstrap-iso/efi-tmp
+  tags:
+  - iso

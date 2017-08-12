@@ -71,6 +71,9 @@
   tags:
   - iso
 
+- include: arch/mount-efi.yml
+  when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
+
 - name: find iso kernel images
   find:
     paths: /var/tmp/bootstrap-iso
@@ -209,9 +212,10 @@
     name: "{{ item }}"
     state: absent
   with_items:
+  - /var/tmp/bootstrap-iso/efi-tmp
   - /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
   - /var/tmp/bootstrap-iso/squashfs/usr/src/ansible-gpdpocket
-  - /var/tmp/bootstrap-iso/squashfs/tmp/bootstrap-system.sh 
+  - /var/tmp/bootstrap-iso/squashfs/tmp/bootstrap-system.sh
 
 - name: recompress squashfs image
   shell: mksquashfs /var/tmp/bootstrap-iso/squashfs "{{ squashfs.files.0.path }}"
