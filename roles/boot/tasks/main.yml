@@ -3,6 +3,7 @@
   unarchive:
     src: files/bootstrap-kernel.tar.bz2
     dest: /
+    extra_opts: ''
   when: bootstrap is defined
   notify:
   - update boot

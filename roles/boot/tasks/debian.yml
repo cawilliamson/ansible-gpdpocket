@@ -1,14 +1,14 @@
 ---
 - name: install btrfs package (Ubuntu 16.04 or less)
   apt: name=btrfs-tools
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version|float <= 16.04
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version | float <= 16.04
   tags:
   - boot
 
 - name: install btrfs package (Ubuntu 16.10 or above || Other Distribution)
   apt: name=btrfs-progs
   when: ansible_distribution != 'Ubuntu' or
-        (ansible_distribution == 'Ubuntu' and ansible_distribution_version|float >= 16.10)
+        (ansible_distribution == 'Ubuntu' and ansible_distribution_version | float >= 16.10)
   tags:
   - boot
 

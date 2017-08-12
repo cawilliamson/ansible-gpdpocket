@@ -2,12 +2,20 @@
 - name: determine which directory to use for firmware
   find:
     paths:
-    - /lib/firmware
-    - /usr/lib/firmware
+    - /lib
+    - /usr/lib
     recurse: yes
-    patterns: brcm
+    patterns: firmware
     file_type: directory
   register: brcm_firmware
+  tags:
+  - common
+  - wifi
+
+- name: ensure brcm directory exists
+  file:
+    path: "{{ brcm_firmware.files.0.path }}/brcm"
+    state: directory
   tags:
   - common
   - wifi

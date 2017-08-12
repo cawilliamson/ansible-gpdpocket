@@ -1,7 +1,10 @@
 ---
+# wifi first to ensure networking is established
+- include: wifi.yml
+
+# all othe roles...
 - include: cleanup.yml
 - include: facts.yml
 - include: gpd.yml
 - include: selinux.yml
 - include: update.yml
-- include: wifi.yml
