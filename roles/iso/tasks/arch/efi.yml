@@ -1,0 +1,31 @@
+---
+- name: create efi-tmp directory
+  file:
+    path: /var/tmp/bootstrap-iso/efi-tmp
+    state: directory
+  tags:
+  - iso
+
+- name: mount efi partition
+  shell: mount -t msdos -o loop,rw "{{ efi_image.files.0.path }}" /var/tmp/bootstrap-iso/efi-tmp
+  tags:
+  - iso
+
+- name: copy vmlinuz and initrd image to efi
+  shell: |
+    cp -f "{{ system_kernel.files.0.path }}" /var/tmp/bootstrap-iso/efi-tmp/efi/*/*vmlinuz*
+    cp -f "{{ system_initrd.files.0.path }}" /var/tmp/bootstrap-iso/efi-tmp/efi/*/*iso.img
+  tags:
+  - iso
+
+- name: umount efi partition
+  shell: umount /var/tmp/bootstrap-iso/efi-tmp
+  tags:
+  - iso
+
+- name: remove efi-tmp directory
+  file:
+    path: /var/tmp/bootstrap-iso/efi-tmp
+    state: absent
+  tags:
+  - iso

@@ -73,9 +73,6 @@
   tags:
   - iso
 
-- include: arch/mount-efi.yml
-  when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
-
 - name: find iso kernel images
   find:
     paths: /var/tmp/bootstrap-iso
@@ -175,7 +172,6 @@
   copy:
     src: "{{ system_kernel.files.0.path }}"
     dest: "{{ item.path }}"
-    unsafe_writes: yes
   with_items: "{{ iso_kernels.files }}"
   tags:
   - iso
@@ -193,18 +189,17 @@
   copy:
     src: "{{ system_initrd.files.0.path }}"
     dest: "{{ item.path }}"
-    unsafe_writes: yes
   with_items: "{{ iso_initrds.results | map(attribute='files') | list }}"
   tags:
   - iso
+
+- include: arch/efi.yml
+  when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
 
 - name: umount leftover partitions
   shell: umount -lf /var/tmp/bootstrap-iso/squashfs
   tags:
   - iso
-
-- include: arch/umount-efi.yml
-  when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
 
 - name: restore resolv.conf backup on guest
   copy:
