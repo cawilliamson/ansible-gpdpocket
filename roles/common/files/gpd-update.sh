@@ -34,4 +34,4 @@ mount /boot >/dev/null 2>&1 || true
 
 # run ansible scripts
 echo "starting ansible playbook..."
-ANSIBLE_NOCOWS=1 ansible-playbook site.yml
+ANSIBLE_NOCOWS=1 ansible-playbook system.yml
