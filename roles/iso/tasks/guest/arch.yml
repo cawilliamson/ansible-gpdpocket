@@ -29,7 +29,7 @@
     paths: "{{ item.path | dirname }}"
     patterns: '*.img'
     file_type: file
-  with_items: "{{ iso_kernels.results }}"
+  with_items: "{{ iso_kernels.files }}"
   register: iso_initrds
   tags:
   - iso
