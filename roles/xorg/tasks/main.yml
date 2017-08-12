@@ -31,8 +31,6 @@
   register: xorg_configs
   with_items:
   - { src: 'files/config/20-intel.conf', dest: '/etc/X11/xorg.conf.d/' }
-  - { src: 'files/config/30-monitor.conf', dest: '/etc/X11/xorg.conf.d/' }
-  - { src: 'files/config/80-screen.conf', dest: '/etc/X11/xorg.conf.d/' }
   tags:
   - xorg
 

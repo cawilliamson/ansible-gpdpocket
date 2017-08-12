@@ -20,7 +20,9 @@
   - /etc/systemd/system/gpdrotate.service
   - /etc/udev/rules.d/99-local-bluetooth.rules
   - /etc/X11/xorg.conf.d/30-monitor.conf
+  - /etc/X11/xorg.conf.d/80-screen.conf
   - /etc/X11/xorg.conf.d/89-screen.conf
+  - /etc/X11/xorg.conf.d/90-monitor.conf
   - /etc/X11/xorg.conf.d/90-screen.conf
   - /etc/X11/Xsession.d/01gpdrotate
   - /etc/X11/Xsession.d/01touchscreen
