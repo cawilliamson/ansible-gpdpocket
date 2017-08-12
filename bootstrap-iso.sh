@@ -16,7 +16,7 @@ fi
 umount -lf ${TMPDIR}/squashfs || true
 rm -rf ${TMPDIR}
 
-# install dependencies -- 
+# install dependencies
 if [ -f /usr/bin/pacman ]; then
   pacman -Sy --needed --noconfirm ansible git
 elif [ -f /usr/bin/apt-get ]; then
