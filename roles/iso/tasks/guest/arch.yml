@@ -123,13 +123,13 @@
   copy:
     src: "{{ system_kernel.files.0.path }}"
     dest: "{{ item.path }}"
-  with_items: iso_kernels.files
+  with_items: "{{ iso_kernels.files }}"
 
 - name: copy system initrd to iso
   copy:
     src: "{{ system_initrd.files.0.path }}"
     dest: "{{ item.path }}"
-  with_items: iso_initrds.files
+  with_items: "{{ iso_initrds.files }}"
 
 #- name: replace or patch install initrd images
 #  shell: |
