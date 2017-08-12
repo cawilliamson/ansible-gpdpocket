@@ -34,9 +34,6 @@
   tags:
   - iso
 
-- debug: msg="{{ item.path }}"
-  with_items: "{{ iso_initrds | map(attribute='results.files') | list }}"
-
 - name: find squashfs image
   find:
     paths: /var/tmp/bootstrap-iso
@@ -132,7 +129,7 @@
   copy:
     src: "{{ system_initrd.files.0.path }}"
     dest: "{{ item.path }}"
-  with_items: "{{ iso_initrds.results.files }}"
+  with_items: "{{ iso_initrds.results | map(attribute='files') | list }}"
   tags:
   - iso
 
