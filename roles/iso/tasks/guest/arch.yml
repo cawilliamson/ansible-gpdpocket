@@ -8,7 +8,7 @@
   find:
     paths: /var/tmp/bootstrap-iso
     recurse: yes
-    patterns: 'airootfs.sfs'
+    patterns: '*rootfs.sfs'
     file_type: file
   register: squashfs
   tags:
@@ -115,7 +115,7 @@
           zcat ${INITRD_PATH} | cpio --extract --make-directories
           cp -afLr /var/tmp/bootstrap-iso/squashfs/lib/modules/*-bootstrap /var/tmp/bootstrap-iso/install-initrd/lib/modules/
           find . | cpio --create --format='newc' | gzip -c > ${INITRD_PATH}
-          rm -rf /var/tmp/bootstrap-iso/install-initrd
+          rm -rf /var/tmp/bootstrap-iso/install-initrdsp
         else
           cp -fL /var/tmp/bootstrap-iso/squashfs/boot/initrd.img-*bootstrap ${INITRD_PATH}
         fi

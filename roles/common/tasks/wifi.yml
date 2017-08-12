@@ -1,8 +1,21 @@
 ---
+- name: determine which directory to use for firmware
+  find:
+    paths:
+    - /lib/firmware
+    - /usr/lib/firmware
+    recurse: yes
+    patterns: brcm
+    file_type: directory
+  register: brcm_firmware
+  tags:
+  - common
+  - wifi
+
 - name: copy wifi files
   copy:
     src: "{{ item }}"
-    dest: /lib/firmware/brcm/
+    dest: "{{ brcm_firmware.files.0.path }}"
     owner: root
     group: root
     mode: 0644
