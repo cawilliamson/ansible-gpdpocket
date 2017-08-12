@@ -117,6 +117,7 @@
   copy:
     src: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf
     dest: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
+  failed_when: false
   tags:
   - iso
 
