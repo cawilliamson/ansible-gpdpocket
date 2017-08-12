@@ -34,8 +34,6 @@
   tags:
   - iso
 
-- debug: msg="{{ iso_initrds }}"
-
 - name: find squashfs image
   find:
     paths: /var/tmp/bootstrap-iso
@@ -104,7 +102,6 @@
 - name: find system kernel image
   find:
     path: /var/tmp/bootstrap-iso/squashfs/boot
-    recurse: yes
     patterns: 'vmlinuz-*bootstrap'
     file_type: file
   register: system_kernel
@@ -114,12 +111,13 @@
 - name: find system initrd image
   find:
     path: /var/tmp/bootstrap-iso/squashfs/boot
-    recurse: yes
     patterns: 'initrd.img-*bootstrap'
     file_type: file
   register: system_initrd
   tags:
   - iso
+
+- debug: msg="{{ system_initrd.files }}"
 
 - name: copy system kernel to iso
   copy:
@@ -132,23 +130,6 @@
     src: "{{ system_initrd.files.0.path }}"
     dest: "{{ item.path }}"
   with_items: "{{ iso_initrds.files }}"
-
-#- name: replace or patch install initrd images
-#  shell: |
-#    INITRD_PATH=$(find $(dirname ${KERNEL_PATH}) -maxdepth 1 -type f -regex '.*\(img\|lz\|gz\).*$' -print -quit)
-#    if [ ! -z ${INITRD_PATH} ]; then
-#      if [[ "${KERNEL_PATH}" == *'/install/'* ]] || [[ "${KERNEL_PATH}" == *'/d-i/'* ]]; then
-#        mkdir -p /var/tmp/bootstrap-iso/install-initrd
-#        cd /var/tmp/bootstrap-iso/install-initrd
-#        zcat ${INITRD_PATH} | cpio --extract --make-directories
-#        cp -afLr /var/tmp/bootstrap-iso/squashfs/lib/modules/*-bootstrap /var/tmp/bootstrap-iso/install-initrd/lib/modules/
-#        find . | cpio --create --format='newc' | gzip -c > ${INITRD_PATH}
-#        rm -rf /var/tmp/bootstrap-iso/install-initrd
-#      fi
-#    fi
-#  with_items: {{ iso_kernels.files }}
-#  tags:
-#  - iso
 
 - name: umount leftover partitions
   shell: umount -lf /var/tmp/bootstrap-iso/squashfs
@@ -170,7 +151,7 @@
   with_items:
   - /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
   - /var/tmp/bootstrap-iso/squashfs/usr/src/ansible-gpdpocket
-  - /var/tmp/bootstrap-iso/squashfs/tmp/bootstrap-system.sh
+  - /var/tmp/bootstrap-iso/squashfs/tmp/bootstrap-system.sh 
 
 - name: recompress squashfs image
   shell: mksquashfs /var/tmp/bootstrap-iso/squashfs '{{ squashfs.files.0.path }}'
