@@ -26,10 +26,9 @@
 
 - name: find iso initrd images
   find:
-    paths: "{{ item.path | dirname }}"
+    paths: "{{ iso_kernels.files | dirname }}"
     patterns: '*.img,*.lz,*.gz'
     file_type: file
-  with_items: "{{ iso_kernels.files }}"
   register: iso_initrds
   tags:
   - iso
@@ -160,7 +159,7 @@
   - /var/tmp/bootstrap-iso/squashfs/tmp/bootstrap-system.sh 
 
 - name: recompress squashfs image
-  shell: mksquashfs /var/tmp/bootstrap-iso/squashfs '{{ squashfs.files.0.path }}'
+  shell: mksquashfs /var/tmp/bootstrap-iso/squashfs "{{ squashfs.files.0.path }}"
   tags:
   - iso
 
