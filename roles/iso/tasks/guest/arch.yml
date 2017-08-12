@@ -8,7 +8,7 @@
   find:
     path: /var/tmp/bootstrap-iso
     recurse: yes
-    patterns: 'efiboot.img'
+    patterns: 'efi*.img'
     file_type: file
   register: efi_image
   tags:
@@ -26,9 +26,10 @@
 
 - name: find iso initrd images
   find:
-    paths: "{{ iso_kernels.files | dirname }}"
-    patterns: '*.img,*.lz,*.gz'
+    paths: "{{ item.path | dirname }}"
+    patterns: '*.img'
     file_type: file
+  with_items: "{{ iso_kernels.results }}"
   register: iso_initrds
   tags:
   - iso
@@ -124,15 +125,11 @@
   tags:
   - iso
 
-- debug: msg="{{ iso_initrds.files }}"
-
-- debug: msg="{{ system_initrd.files.0.path }}"
-
 - name: copy system initrd to iso
   copy:
     src: "{{ system_initrd.files.0.path }}"
     dest: "{{ item.path }}"
-  with_items: "{{ iso_initrds.files }}"
+  with_items: "{{ iso_initrds.results.files }}"
   tags:
   - iso
 
