@@ -12,7 +12,9 @@
   when: ansible_distribution == 'Gentoo'
 
 - name: clean any leftover mounts from previous run
-  shell: umount -lf /var/tmp/bootstrap-iso/squashfs
+  shell: |
+    umount -f /var/tmp/bootstrap-iso/efi-tmp
+    umount -lf /var/tmp/bootstrap-iso/squashfs
   failed_when: false
   tags:
   - iso
