@@ -29,12 +29,12 @@
     paths: "{{ item.path | dirname }}"
     patterns: '*.img'
     file_type: file
-  with_items: "{{ iso_kernels.0.files }}"
+  with_items: "{{ iso_kernels }}"
   register: iso_initrds
   tags:
   - iso
 
-- debug: msg="{{ iso_initrds.files }}"
+- debug: msg="{{ iso_initrds.0.files }}"
 
 - name: find squashfs image
   find:
