@@ -34,7 +34,7 @@
   tags:
   - iso
 
-- debug: msg="{{ iso_initds }}"
+- debug: msg="{{ iso_initrds }}"
 
 - name: find squashfs image
   find:
