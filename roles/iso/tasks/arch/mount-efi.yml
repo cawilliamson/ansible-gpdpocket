@@ -1,5 +1,5 @@
 ---
-- name: create efi directory
+- name: create efi-tmp directory
   file:
     path: /var/tmp/bootstrap-iso/efi-tmp
     state: directory

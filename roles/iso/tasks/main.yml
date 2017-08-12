@@ -199,6 +199,9 @@
   tags:
   - iso
 
+- include: arch/umount-efi.yml
+  when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
+
 - name: restore resolv.conf backup on guest
   copy:
     src: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
@@ -212,7 +215,6 @@
     name: "{{ item }}"
     state: absent
   with_items:
-  - /var/tmp/bootstrap-iso/efi-tmp
   - /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
   - /var/tmp/bootstrap-iso/squashfs/usr/src/ansible-gpdpocket
   - /var/tmp/bootstrap-iso/squashfs/tmp/bootstrap-system.sh

@@ -1,0 +1,12 @@
+---
+- name: umount efi partition
+  shell: umount /var/tmp/bootstrap-iso/efi-tmp
+  tags:
+  - iso
+
+- name: remove efi-tmp directory
+  file:
+    path: /var/tmp/bootstrap-iso/efi-tmp
+    state: absent
+  tags:
+  - iso
