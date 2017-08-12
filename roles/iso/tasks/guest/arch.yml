@@ -35,7 +35,7 @@
   - iso
 
 - debug: msg="{{ item.path }}"
-  with_items: "{{ iso_initds | map(attribute='results.files') | list }}"
+  with_items: "{{ iso_initrds | map(attribute='results.files') | list }}"
 
 - name: find squashfs image
   find:
