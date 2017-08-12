@@ -1,14 +1,14 @@
 ---
-- include: host/arch.yml
+- include: arch/host.yml
   when: ansible_distribution == 'Antergos' or ansible_distribution == 'Archlinux' or ansible_distribution == 'Manjaro Linux'
 
-- include: host/debian.yml
+- include: debian/host.yml
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Kali' or ansible_distribution == 'Linuxmint' or ansible_distribution == 'Ubuntu'
 
-- include: host/fedora.yml
+- include: fedora/host.yml
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Fedora' or ansible_distribution == 'RedHat'
   
-- include: host/gentoo.yml
+- include: gentoo/host.yml
   when: ansible_distribution == 'Gentoo'
 
 - name: clean any leftover mounts from previous run
@@ -44,16 +44,16 @@
   tags:
   - iso
 
-- include: guest/arch/facts.yml
+- include: arch/facts.yml
   when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
 
-- include: guest/debian/facts.yml
+- include: debian/facts.yml
   when: iso | lower | search('debian') or iso | lower | search('kali') or iso | lower | search('mint') or iso | lower | search('ubuntu')
 
-- include: guest/fedora/facts.yml
+- include: fedora/facts.yml
   when: iso | lower | search('centos') or iso | lower | search('fedora') or iso | lower | search('redhat')
   
-- include: guest/gentoo/facts.yml
+- include: gentoo/facts.yml
   when: iso | lower | search('gentoo')
 
 - name: extract iso to working directory
@@ -218,7 +218,7 @@
   tags:
   - iso
 
-- include: guest/arch/checksum.yml
+- include: arch/checksum.yml
   when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
 
 - name: determine iso label
