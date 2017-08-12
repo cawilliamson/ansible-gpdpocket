@@ -175,6 +175,7 @@
   copy:
     src: "{{ system_kernel.files.0.path }}"
     dest: "{{ item.path }}"
+    unsafe_writes: yes
   with_items: "{{ iso_kernels.files }}"
   tags:
   - iso
@@ -192,6 +193,7 @@
   copy:
     src: "{{ system_initrd.files.0.path }}"
     dest: "{{ item.path }}"
+    unsafe_writes: yes
   with_items: "{{ iso_initrds.results | map(attribute='files') | list }}"
   tags:
   - iso
