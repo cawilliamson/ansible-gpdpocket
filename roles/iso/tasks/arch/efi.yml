@@ -8,6 +8,8 @@
 
 - name: mount efi partition
   shell: mount -t msdos -o loop,rw "{{ efi_image.files.0.path }}" /var/tmp/bootstrap-iso/efi-tmp
+  args:
+    warn: no
   tags:
   - iso
 
