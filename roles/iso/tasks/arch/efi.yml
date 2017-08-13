@@ -27,10 +27,9 @@
   - iso
 
 - name: copy all files from old-efi to new-efi
-  synchronize:
-    src: /var/tmp/bootstrap-iso/old-efi
+  copy:
+    src: /var/tmp/bootstrap-iso/old-efi/*
     dest: /var/tmp/bootstrap-iso/new-efi
-    archive: no
   tags:
   - iso
 
