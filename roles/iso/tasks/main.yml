@@ -47,6 +47,11 @@
   tags:
   - iso
 
+- name: extract iso to working directory
+  shell: xorriso -osirrox on -indev "{{ iso }}" -extract / /var/tmp/bootstrap-iso
+  tags:
+  - iso
+
 - include: arch/facts.yml
   when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
 
@@ -59,10 +64,8 @@
 - include: gentoo/facts.yml
   when: iso | lower | search('gentoo')
 
-- name: extract iso to working directory
-  shell: xorriso -osirrox on -indev "{{ iso }}" -extract / /var/tmp/bootstrap-iso
-  tags:
-  - iso
+- include: debian/boot-config.yml
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Kali' or ansible_distribution == 'Linuxmint' or ansible_distribution == 'Ubuntu'
 
 - name: find efi image
   find:

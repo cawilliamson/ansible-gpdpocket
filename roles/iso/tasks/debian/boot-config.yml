@@ -1,0 +1,30 @@
+---
+- name: find bootloader configs
+  find:
+    path: /var/tmp/bootstrap-iso
+    recurse: yes
+    patterns: 'grub/*.cfg,syslinux/*.cfg'
+    file_type: file
+  register: boot_configs
+  tags:
+  - iso
+
+- name: patch bootloader configs (debian)
+  replace:
+    path: "{{ item.path }}"
+    regexp: 'quiet'
+    replace: 'boot=live'
+  with_items: "{{ boot_configs.files }}"
+  when: iso | lower | search('debian')
+  tags:
+  - iso
+
+- name: patch bootloader configs (ubuntu)
+  replace:
+    path: "{{ item.path }}"
+    regexp: 'quiet'
+    replace: ''
+  with_items: "{{ boot_configs.files }}"
+  when: iso | lower | search('kali') or iso | lower | search('mint') or iso | lower | search('ubuntu')
+  tags:
+  - iso
