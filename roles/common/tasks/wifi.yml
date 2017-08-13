@@ -23,7 +23,7 @@
 - name: copy wifi files
   copy:
     src: "{{ item }}"
-    dest: "{{ brcm_firmware.files.0.path }}"
+    dest: "{{ brcm_firmware.files.0.path }}/brcm/"
     owner: root
     group: root
     mode: 0644

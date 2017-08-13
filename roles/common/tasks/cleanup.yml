@@ -34,10 +34,14 @@
   - /etc/X11/Xsession.d/98gpdrotate
   - /etc/X11/Xsession.d/98touchscreen
   - /etc/X11/Xsession.d/99touchscreen
+  - /lib/firmware/brcmfmac4356-pcie.bin
+  - /lib/firmware/brcmfmac4356-pcie.txt
   - /lib/modules/4.12.0-custom
   - /lib/modules/4.12.0-gpdpocket
   - /lib/systemd/system-sleep/gpdfand
   - /root/ansible-gpdpocket
+  - /usr/lib/firmware/brcmfmac4356-pcie.bin
+  - /usr/lib/firmware/brcmfmac4356-pcie.txt
   - /usr/local/bin/gpdfand
   - /usr/local/bin/ansible-update
   - /usr/local/sbin/gpdfand
