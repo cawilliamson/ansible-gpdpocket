@@ -10,7 +10,7 @@
   - iso
 
 - name: mount old efi partition
-  shell: mount -t fat -o loop,rw "{{ efi_image.files.0.path }}" /var/tmp/bootstrap-iso/old-efi
+  shell: mount -t vfat -o loop,rw "{{ efi_image.files.0.path }}" /var/tmp/bootstrap-iso/old-efi
   args:
     warn: no
   tags:
@@ -20,7 +20,7 @@
   shell: |
     dd if=/dev/zero bs=1M count=128 of="{{ efi_image.files.0.path }}.new"
     mkfs.fat -n 'ARCHISO_EFI' "{{ efi_image.files.0.path }}.new"
-    mount -t fat -o loop "{{ efi_image.files.0.path }}.new" /var/tmp/bootstrap-iso/new-efi
+    mount -t vfat -o loop "{{ efi_image.files.0.path }}.new" /var/tmp/bootstrap-iso/new-efi
   args:
     warn: no
   tags:
