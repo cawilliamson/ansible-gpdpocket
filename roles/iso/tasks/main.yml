@@ -13,7 +13,8 @@
 
 - name: clean any leftover mounts from previous run
   shell: |
-    umount -f /var/tmp/bootstrap-iso/efi-tmp
+    umount -f /var/tmp/bootstrap-iso/new-efi
+    umount -f /var/tmp/bootstrap-iso/old-efi
     umount -lf /var/tmp/bootstrap-iso/squashfs
   failed_when: false
   tags:
