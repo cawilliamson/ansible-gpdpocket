@@ -1,0 +1,15 @@
+---
+- name: copy system initrd to iso (install)
+  shell: |
+    if [[ "{{ item.path }}" == *'/install/'* ]] || [[ "{{ item.path }}" == *'/d-i/'* ]]; then
+      mkdir -p /var/tmp/bootstrap-iso/install-initrd
+      cd /var/tmp/bootstrap-iso/install-initrd
+      zcat "{{ system_initrd.files.0.path }}" | cpio --extract --make-directories
+      cp -afr /var/tmp/bootstrap-iso/squashfs/lib/modules/*-bootstrap /var/tmp/bootstrap-iso/install-initrd/lib/modules/
+      find . | cpio --create --format='newc' | gzip -c > "{{ item.path }}"
+      rm -rf /var/tmp/bootstrap-iso/install-initrd
+      cd -
+    fi
+  with_items: "{{ iso_initrds.results | map(attribute='files') | list }}"
+  tags:
+  - iso

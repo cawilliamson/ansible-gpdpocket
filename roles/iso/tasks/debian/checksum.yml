@@ -1,0 +1,5 @@
+---
+- name: add distro-specific checksum
+  shell: find /var/tmp/bootstrap-iso -type f -print0 | xargs -0 md5sum | grep -v "\./md5sum.txt" > /var/tmp/bootstrap-iso/md5sum.txt
+  tags:
+  - iso

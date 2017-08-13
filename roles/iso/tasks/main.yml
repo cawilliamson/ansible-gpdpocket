@@ -193,7 +193,7 @@
   tags:
   - iso
 
-- name: copy system initrd to iso
+- name: copy system initrd to iso (standard)
   shell: |
     if [[ "{{ item.path }}" != *'/install/'* ]] && [[ "{{ item.path }}" != *'/d-i/'* ]]; then
       cp -fv "{{ system_initrd.files.0.path }}" "{{ item.path }}"
@@ -201,6 +201,9 @@
   with_items: "{{ iso_initrds.results | map(attribute='files') | list }}"
   tags:
   - iso
+
+- include: debian/install-initrd.yml
+  when: iso | lower | search('debian') or iso | lower | search('kali') or iso | lower | search('mint') or iso | lower | search('ubuntu')
 
 - include: arch/efi.yml
   when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
@@ -234,6 +237,12 @@
 
 - include: arch/checksum.yml
   when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
+
+- include: debian/checksum.yml
+  when: iso | lower | search('debian') or iso | lower | search('kali') or iso | lower | search('mint') or iso | lower | search('ubuntu')
+
+- include: debian/filesize.yml
+  when: iso | lower | search('debian') or iso | lower | search('kali') or iso | lower | search('mint') or iso | lower | search('ubuntu')
 
 - name: determine iso label
   shell: blkid -o value -s LABEL "{{ iso }}"

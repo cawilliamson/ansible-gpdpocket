@@ -1,0 +1,10 @@
+---
+- name: update filesystem.size
+  shell: |
+    if [ -f /var/tmp/bootstrap-iso/casper/filesystem.size ]; then
+      printf $(du -sx --block-size=1 /var/tmp/bootstrap-iso/squashfs | cut -f1) > /var/tmp/bootstrap-iso/casper/filesystem.size
+    elif [ -f /var/tmp/bootstrap-iso/live/filesystem.size ]; then
+      printf $(du -sx --block-size=1 /var/tmp/bootstrap-iso/squashfs | cut -f1) > /var/tmp/bootstrap-iso/live/filesystem.size
+    fi
+  tags:
+  - iso
