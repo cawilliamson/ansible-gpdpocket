@@ -2,6 +2,7 @@
 - name: install essential packages (this may take a while)
   yum: name="{{ item }}"
   with_items:
+  - dosfstools
   - squashfs-tools 
   - xorriso
   tags:

@@ -1,33 +1,63 @@
 ---
-- name: create efi-tmp directory
+- name: create efi directories
   file:
-    path: /var/tmp/bootstrap-iso/efi-tmp
+    path: "{{ item }}"
     state: directory
+  with_items:
+  - /var/tmp/bootstrap-iso/new-efi
+  - /var/tmp/bootstrap-iso/old-efi
   tags:
   - iso
 
-- name: mount efi partition
-  shell: mount -t msdos -o loop,rw "{{ efi_image.files.0.path }}" /var/tmp/bootstrap-iso/efi-tmp
+- name: mount old efi partition
+  shell: mount -t msdos -o loop,rw "{{ efi_image.files.0.path }}" /var/tmp/bootstrap-iso/old-efi
   args:
     warn: no
   tags:
   - iso
 
-- name: copy vmlinuz and initrd image to efi
+- name: create and mount new efi partition
   shell: |
-    cp -f "{{ system_kernel.files.0.path }}" /var/tmp/bootstrap-iso/efi-tmp/efi/*/*vmlinuz*
-    cp -f "{{ system_initrd.files.0.path }}" /var/tmp/bootstrap-iso/efi-tmp/efi/*/*iso.img
+    dd if=/dev/zero bs=1M count=128 of="{{ efi_image.files.0.path }}.new"
+    mkfs.fat -n 'ARCHISO_EFI' "{{ efi_image.files.0.path }}.new"
+    mount -t msdos -o loop "{{ efi_image.files.0.path }}.new" /var/tmp/bootstrap-iso/new-efi
+  args:
+    warn: no
   tags:
   - iso
 
-- name: umount efi partition
-  shell: umount /var/tmp/bootstrap-iso/efi-tmp
+- name: copy all files from old-efi to new-efi
+  syncronize:
+    src: /var/tmp/bootstrap-iso/old-efi
+    dest: /var/tmp/bootstrap-iso/new-efi
   tags:
   - iso
 
-- name: remove efi-tmp directory
+- name: copy vmlinuz and initrd image to new-efi
+  shell: |
+    cp -f "{{ system_kernel.files.0.path }}" /var/tmp/bootstrap-iso/new-efi/efi/*/*vmlinuz*
+    cp -f "{{ system_initrd.files.0.path }}" /var/tmp/bootstrap-iso/new-efi/efi/*/*iso.img
+  tags:
+  - iso
+
+- name: umount efi partitions
+  shell: |
+    umount /var/tmp/bootstrap-iso/new-efi
+    umount /var/tmp/bootstrap-iso/old-efi
+  tags:
+  - iso
+
+- name: replace old-efi with new-efi
+  shell: mv "{{ efi_image.files.0.path }}.new" "{{ efi_image.files.0.path }}"
+  tags:
+  - iso
+
+- name: remove efi directories
   file:
-    path: /var/tmp/bootstrap-iso/efi-tmp
+    path: "{{ item }}"
     state: absent
+  with_items:
+  - /var/tmp/bootstrap-iso/new-efi
+  - /var/tmp/bootstrap-iso/old-efi
   tags:
   - iso

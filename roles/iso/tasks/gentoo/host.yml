@@ -14,6 +14,7 @@
   portage: package="{{ item }}"
   with_items:
   - dev-libs/libisoburn
+  - sys-fs/dosfstools
   - sys-fs/squashfs-tools
   tags:
   - iso
