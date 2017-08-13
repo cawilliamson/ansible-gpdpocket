@@ -9,3 +9,17 @@
   - xorg-xrandr
   tags:
   - xorg
+
+- name: remove lightdm-webkit2-greeter if installed
+  pacman:
+    name: lightdm-webkit2-greeter
+    state: absent
+  register: lightdmwebkit
+  tags:
+  - xorg
+
+- name: install lightdm-gtk-greeter as replacement
+  pacman: name=lightdm-gtk-greeter
+  when: lightdmwebkit.changed
+  tags:
+  - xorg
