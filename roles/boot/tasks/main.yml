@@ -27,7 +27,7 @@
 - name: install bootstrap kernel (/usr/lib)
   unarchive:
     src: files/bootstrap-kernel-lib.tar.bz2
-    dest: /usr
+    dest: /usr/
   when: bootstrap is defined and lib_check.stat.islnk is defined and lib_check.stat.islnk
   notify:
   - update boot
