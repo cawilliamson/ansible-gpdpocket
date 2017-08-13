@@ -65,7 +65,7 @@
   when: iso | lower | search('gentoo')
 
 - include: debian/boot-config.yml
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Kali' or ansible_distribution == 'Linuxmint' or ansible_distribution == 'Ubuntu'
+  when: iso | lower | search('debian') or iso | lower | search('kali') or iso | lower | search('mint') or iso | lower | search('ubuntu')
 
 - name: find efi image
   find:
