@@ -223,7 +223,7 @@
   - /var/tmp/bootstrap-iso/squashfs/tmp/bootstrap-system.sh
 
 - name: recompress squashfs image
-  shell: mksquashfs /var/tmp/bootstrap-iso/squashfs "{{ squashfs.files.0.path }}"
+  shell: mksquashfs -noappend /var/tmp/bootstrap-iso/squashfs "{{ squashfs.files.0.path }}"
   tags:
   - iso
 
