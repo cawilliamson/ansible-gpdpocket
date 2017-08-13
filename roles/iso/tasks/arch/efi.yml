@@ -28,8 +28,8 @@
 
 - name: copy all files from old-efi to new-efi
   copy:
-    src: /var/tmp/bootstrap-iso/old-efi/*
-    dest: /var/tmp/bootstrap-iso/new-efi
+    src: /var/tmp/bootstrap-iso/old-efi/
+    dest: /var/tmp/bootstrap-iso/new-efi/
   tags:
   - iso
 
