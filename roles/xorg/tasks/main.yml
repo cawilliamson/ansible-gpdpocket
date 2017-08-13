@@ -53,6 +53,7 @@
     mode: 0644
   with_items:
   - { src: 'files/gnome/01scale', dest: '/etc/dconf/db/local.d/' }
+  - { src: 'files/gnome/02subpixel', dest: '/etc/dconf/db/local.d/' }
   - { src: 'files/gnome/profile', dest: '/etc/dconf/profile/gdm' }
   - { src: 'files/gnome/profile', dest: '/etc/dconf/profile/user' }
   notify:
