@@ -194,9 +194,10 @@
   - iso
 
 - name: copy system initrd to iso
-  copy:
-    src: "{{ system_initrd.files.0.path }}"
-    dest: "{{ item.path }}"
+  shell: |
+    if [[ "{{ item.path }}" != *'/install/'* ]] && [[ "{{ item.path }}" != *'/d-i/'* ]]; then
+      cp -fv "{{ system_initrd.files.0.path }}" "{{ item.path }}"
+    fi
   with_items: "{{ iso_initrds.results | map(attribute='files') | list }}"
   tags:
   - iso
