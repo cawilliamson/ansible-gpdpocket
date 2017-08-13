@@ -71,6 +71,7 @@
     line: "{{ item }}"
     create: yes
   with_items:
+  - btusb
   - loop
   - overlay
   - pwm-lpss

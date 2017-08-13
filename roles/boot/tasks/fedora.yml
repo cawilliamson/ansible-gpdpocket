@@ -60,6 +60,7 @@
     line: "add_drivers+=\"{{ item }}\""
     create: yes
   with_items:
+  - btusb
   - pwm-lpss
   - pwm-lpss-platform
   notify:
