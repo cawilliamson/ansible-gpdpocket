@@ -28,10 +28,6 @@ else
   git reset --hard origin/master
 fi
 
-# ensure /boot is mounted
-echo "ensuring /boot is mounted..."
-mount /boot >/dev/null 2>&1 || true
-
 # run ansible scripts
 echo "starting ansible playbook..."
 ANSIBLE_NOCOWS=1 ansible-playbook system.yml
