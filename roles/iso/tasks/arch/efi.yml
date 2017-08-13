@@ -30,6 +30,7 @@
   synchronize:
     src: /var/tmp/bootstrap-iso/old-efi
     dest: /var/tmp/bootstrap-iso/new-efi
+    archive: no
   tags:
   - iso
 
