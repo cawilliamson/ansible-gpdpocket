@@ -26,15 +26,9 @@
   tags:
   - iso
 
-- name: copy all files from old-efi to new-efi
-  copy:
-    src: /var/tmp/bootstrap-iso/old-efi/
-    dest: /var/tmp/bootstrap-iso/new-efi/
-  tags:
-  - iso
-
-- name: copy vmlinuz and initrd image to new-efi
+- name: copy necessary content to new-efi
   shell: |
+    cp -rf /var/tmp/bootstrap-iso/old-efi/* /var/tmp/bootstrap-iso/new-efi/
     cp -f "{{ system_kernel.files.0.path }}" /var/tmp/bootstrap-iso/new-efi/efi/*/*vmlinuz*
     cp -f "{{ system_initrd.files.0.path }}" /var/tmp/bootstrap-iso/new-efi/efi/*/*iso.img
   tags:
