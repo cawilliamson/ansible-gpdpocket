@@ -242,4 +242,4 @@
         -eltorito-boot isolinux/isolinux.bin -eltorito-catalog isolinux/boot.cat \
         -no-emul-boot -boot-load-size 4 -boot-info-table -isohybrid-mbr roles/iso/files/isohdpfx.bin \
         -eltorito-alt-boot -e $(sed "s,/var/tmp/bootstrap-iso/,," - <<< "{{ efi_image.files.0.path }}") -no-emul-boot -isohybrid-gpt-basdat \
-        -output ${HOME}/bootstrap.iso /var/tmp/bootstrap-iso
+        -output /root/bootstrap.iso /var/tmp/bootstrap-iso
