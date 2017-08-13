@@ -3,19 +3,6 @@
 # set bash options
 set -e -x
 
-# set variables
-TMPDIR=/var/tmp/bootstrap-iso
-
-# check if iso file exists
-if [ ! -f "${1}" ]; then
-  echo "ERROR: The ISO file you specified (${1}) does not exist."
-  exit 0
-fi
-
-# clean up from previous run
-umount -lf ${TMPDIR}/squashfs || true
-rm -rf ${TMPDIR}
-
 # install dependencies
 if [ -f /usr/bin/pacman ]; then
   pacman -Sy --needed --noconfirm ansible git
@@ -34,7 +21,7 @@ elif [ -f /usr/sbin/emerge ]; then
 fi
 
 # run ansible scripts
-ANSIBLE_NOCOWS=1 ansible-playbook iso.yml -e "iso='${$1}'"
+ANSIBLE_NOCOWS=1 ansible-playbook iso.yml -e "iso='${1}'"
 
 # write information
 echo "Your ISO has been successfully created and is at ${HOME}/bootstrap.iso"
