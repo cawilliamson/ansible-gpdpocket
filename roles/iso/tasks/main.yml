@@ -109,6 +109,13 @@
   tags:
   - iso
 
+- name: remove original squashfs image
+  file:
+    path: "{{ squashfs.files.0.path }}"
+    state: absent
+  tags:
+  - iso
+
 - name: bind mount squashfs to allow chroot (when rootfs does not exist)
   shell: mount --bind /var/tmp/bootstrap-iso/squashfs /var/tmp/bootstrap-iso/squashfs
   args:
@@ -186,9 +193,6 @@
   tags:
   - iso
 
-- debug: msg="{{ system_initrd.files.0.path }} -> {{ item.path }}"
-  with_items: "{{ iso_initrds.results | map(attribute='files') | list }}"
-
 - name: copy system initrd to iso
   copy:
     src: "{{ system_initrd.files.0.path }}"
@@ -223,7 +227,7 @@
   - /var/tmp/bootstrap-iso/squashfs/tmp/bootstrap-system.sh
 
 - name: recompress squashfs image
-  shell: mksquashfs -noappend /var/tmp/bootstrap-iso/squashfs "{{ squashfs.files.0.path }}"
+  shell: mksquashfs /var/tmp/bootstrap-iso/squashfs "{{ squashfs.files.0.path }}"
   tags:
   - iso
 
