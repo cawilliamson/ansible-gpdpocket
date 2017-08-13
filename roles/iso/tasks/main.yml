@@ -67,6 +67,9 @@
 - include: debian/boot-config.yml
   when: iso | lower | search('debian') or iso | lower | search('kali') or iso | lower | search('mint') or iso | lower | search('ubuntu')
 
+- include: fedora/boot-config.yml
+  when: iso | lower | search('centos') or iso | lower | search('fedora') or iso | lower | search('redhat')
+
 - name: find efi image
   find:
     path: /var/tmp/bootstrap-iso

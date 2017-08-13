@@ -12,8 +12,8 @@
 - name: patch bootloader configs (debian)
   replace:
     path: "{{ item.path }}"
-    regexp: 'quiet'
-    replace: 'boot=live'
+    regexp: ' quiet'
+    replace: ' boot=live'
   with_items: "{{ boot_configs.files }}"
   when: iso | lower | search('debian')
   tags:
@@ -22,7 +22,7 @@
 - name: patch bootloader configs (ubuntu)
   replace:
     path: "{{ item.path }}"
-    regexp: 'quiet'
+    regexp: ' quiet'
     replace: ''
   with_items: "{{ boot_configs.files }}"
   when: iso | lower | search('kali') or iso | lower | search('mint') or iso | lower | search('ubuntu')

@@ -1,0 +1,19 @@
+---
+- name: find bootloader configs
+  find:
+    path: /var/tmp/bootstrap-iso
+    recurse: yes
+    patterns: '*/grub/*.cfg,*/syslinux/*.cfg'
+    file_type: file
+  register: boot_configs
+  tags:
+  - iso
+
+- name: patch bootloader configs
+  replace:
+    path: "{{ item.path }}"
+    regexp: ' quiet'
+    replace: ' selinux=0'
+  with_items: "{{ boot_configs.files }}"
+  tags:
+  - iso
