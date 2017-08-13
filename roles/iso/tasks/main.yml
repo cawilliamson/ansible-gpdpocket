@@ -186,6 +186,10 @@
   tags:
   - iso
 
+- debug: msg="{{ system_initrd.files.0.path }}"
+- debug: msg="{{ item.path }}"
+  with_items: "{{ iso_initrds.results | map(attribute='files') | list }}"
+
 - name: copy system initrd to iso
   copy:
     src: "{{ system_initrd.files.0.path }}"

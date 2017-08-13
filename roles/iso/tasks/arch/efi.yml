@@ -34,8 +34,6 @@
   tags:
   - iso
 
-- debug: msg="{{ DOESNT_EXIST_DEBUG }}"
-
 - name: umount efi partitions
   shell: |
     umount /var/tmp/bootstrap-iso/new-efi
