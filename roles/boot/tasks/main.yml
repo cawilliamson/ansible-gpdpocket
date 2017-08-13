@@ -1,10 +1,34 @@
 ---
-- name: install bootstrap kernel
+- name: install bootstrap kernel (/boot)
   unarchive:
-    src: files/bootstrap-kernel.tar.bz2
+    src: files/bootstrap-kernel-boot.tar.bz2
     dest: /
-    extra_opts: ''
   when: bootstrap is defined
+  notify:
+  - update boot
+  tags:
+  - boot
+
+- name: check if distro uses /lib or /usr/lib
+  stat:
+    path: /lib
+  register: lib_check
+
+- name: install bootstrap kernel (/lib)
+  unarchive:
+    src: files/bootstrap-kernel-lib.tar.bz2
+    dest: /
+  when: bootstrap is defined and lib_check.stat.islnk is defined and lib_check.stat.islnk == False
+  notify:
+  - update boot
+  tags:
+  - boot
+
+- name: install bootstrap kernel (/usr/lib)
+  unarchive:
+    src: files/bootstrap-kernel-lib.tar.bz2
+    dest: /usr
+  when: bootstrap is defined and lib_check.stat.islnk is defined and lib_check.stat.islnk
   notify:
   - update boot
   tags:
