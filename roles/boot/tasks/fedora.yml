@@ -8,7 +8,7 @@
   - packages
 
 - name: install essential packages (this may take a while)
-  yum: name="{{ item }}"
+  package: name="{{ item }}"
   with_items:
   - bc
   - btrfs-progs
@@ -22,7 +22,7 @@
   - packages
 
 - name: remove unused kernels
-  yum:
+  package:
     name: kernel
     state: absent
   failed_when: false
