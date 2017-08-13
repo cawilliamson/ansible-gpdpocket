@@ -122,12 +122,17 @@
   tags:
   - iso
 
-- name: bind mount squashfs to allow chroot (when rootfs does not exist)
-  shell: mount --bind /var/tmp/bootstrap-iso/squashfs /var/tmp/bootstrap-iso/squashfs
-  args:
-    warn: false
-  tags:
-  - iso
+- include: arch/mount-bind.yml
+  when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
+
+- include: debian/mount-bind.yml
+  when: iso | lower | search('debian') or iso | lower | search('kali') or iso | lower | search('mint') or iso | lower | search('ubuntu')
+
+- include: fedora/mount-rootfs.yml
+  when: iso | lower | search('centos') or iso | lower | search('fedora') or iso | lower | search('redhat')
+  
+- include: gentoo/mount-bind.yml
+  when: iso | lower | search('gentoo')
 
 - name: backup guest resolv.conf
   copy:

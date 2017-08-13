@@ -1,0 +1,7 @@
+---
+- name: bind mount squashfs to allow chroot (when rootfs does not exist)
+  shell: mount --bind /var/tmp/bootstrap-iso/squashfs /var/tmp/bootstrap-iso/squashfs
+  args:
+    warn: false
+  tags:
+  - iso
