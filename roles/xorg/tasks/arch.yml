@@ -23,3 +23,12 @@
   when: lightdmwebkit.changed
   tags:
   - xorg
+
+- name: set lightdm-gtk-greeter as default lightdm greeter
+  replace:
+    path: /etc/lightdm/lightdm.conf
+    regexp: lightdm-webkit2-greeter
+    replace: lightdm-gtk-greeter
+  when: lightdmwebkit.changed
+  tags:
+  - xorg
