@@ -263,8 +263,9 @@
 
 - name: re-assemble iso
   shell: |
+    RELATIVE_EFI_PATH = 
     xorriso -as mkisofs -iso-level 3 -full-iso9660-filenames -volid "{{ iso_label.stdout_lines.0 }}" \
         -eltorito-boot isolinux/isolinux.bin -eltorito-catalog isolinux/boot.cat \
         -no-emul-boot -boot-load-size 4 -boot-info-table -isohybrid-mbr roles/iso/files/isohdpfx.bin \
-        -eltorito-alt-boot -e $(sed "s,/var/tmp/bootstrap-iso/,," <<< "{{ efi_image.files.0.path }}") -no-emul-boot -isohybrid-gpt-basdat \
+        -eltorito-alt-boot -e $(echo "{{ efi_image.files.0.path }}" | sed 's,/var/tmp/bootstrap-iso/,,') -no-emul-boot -isohybrid-gpt-basdat \
         -output /root/bootstrap.iso /var/tmp/bootstrap-iso
