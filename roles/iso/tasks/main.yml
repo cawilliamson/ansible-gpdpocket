@@ -269,3 +269,10 @@
         -no-emul-boot -boot-load-size 4 -boot-info-table -isohybrid-mbr roles/iso/files/isohdpfx.bin \
         -eltorito-alt-boot -e $(echo "{{ efi_image.files.0.path }}" | sed 's,/var/tmp/bootstrap-iso/,,') -no-emul-boot -isohybrid-gpt-basdat \
         -output /root/bootstrap.iso /var/tmp/bootstrap-iso
+
+- name: remove working directory
+  file:
+    path: /var/tmp/bootstrap-iso
+    state: absent
+  tags:
+  - iso
