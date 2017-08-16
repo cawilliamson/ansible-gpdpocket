@@ -24,4 +24,4 @@ fi
 ANSIBLE_NOCOWS=1 ansible-playbook iso.yml -e "iso='${1}'"
 
 # write information
-echo "Your ISO has been successfully created and is at ${HOME}/bootstrap.iso"
+echo "Your ISO has been successfully created and is at /root/bootstrap.iso"
