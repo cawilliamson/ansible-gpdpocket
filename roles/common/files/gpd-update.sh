@@ -30,4 +30,4 @@ fi
 
 # run ansible scripts
 echo "starting ansible playbook..."
-ANSIBLE_NOCOWS=1 ansible-playbook system.yml
+ANSIBLE_NOCOWS=1 ansible-playbook system.yml -v
