@@ -17,6 +17,7 @@
   with_items:
   - build-essential
   - debian-installer-launcher
+  - initramfs-tools
   - libelf-dev
   - libncurses5-dev
   - libssl-dev
