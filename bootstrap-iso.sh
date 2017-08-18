@@ -27,7 +27,7 @@ if [ -d .git ]; then
 fi
 
 # run ansible scripts
-ANSIBLE_NOCOWS=1 ansible-playbook iso.yml -e "iso='${1}'"
+ANSIBLE_NOCOWS=1 ansible-playbook iso.yml -e "iso='${1}'" -v
 
 # write information
 echo "Your ISO has been successfully created and is at /root/bootstrap.iso"
