@@ -4,6 +4,6 @@
     efi_pattern: 'efi*.img'
     initrd_pattern: '*.img'
     kernel_pattern: '*vmlinuz*'
-    squashfs_pattern: '*.sfs'
+    squashfs_pattern: '*rootfs.sfs'
   tags:
   - iso
