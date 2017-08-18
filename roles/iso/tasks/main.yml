@@ -246,13 +246,6 @@
   tags:
   - iso
 
-- name: remove squashfs working directory
-  file:
-    path: /var/tmp/bootstrap-iso/squashfs
-    state: absent
-  tags:
-  - iso
-
 - include: arch/checksum.yml
   when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
 
@@ -261,6 +254,13 @@
 
 - include: debian/filesize.yml
   when: iso | lower | search('debian') or iso | lower | search('kali') or iso | lower | search('mint') or iso | lower | search('ubuntu')
+
+- name: remove squashfs working directory
+  file:
+    path: /var/tmp/bootstrap-iso/squashfs
+    state: absent
+  tags:
+  - iso
 
 - name: determine iso label
   shell: blkid -o value -s LABEL "{{ iso }}"
