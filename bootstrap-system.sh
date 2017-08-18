@@ -61,4 +61,4 @@ git clone --depth 1 https://github.com/cawilliamson/ansible-gpdpocket.git /usr/s
 cd /usr/src/ansible-gpdpocket
 
 # run ansible scripts
-ANSIBLE_NOCOWS=1 ansible-playbook site.yml -e "bootstrap=true" -v
+ANSIBLE_NOCOWS=1 ansible-playbook system.yml -e "bootstrap=true" -v
