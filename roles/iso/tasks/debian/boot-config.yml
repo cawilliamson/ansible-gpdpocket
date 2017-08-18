@@ -23,7 +23,7 @@
   replace:
     path: "{{ item.path }}"
     regexp: ' quiet'
-    replace: ''
+    replace: ' boot=casper'
   with_items: "{{ boot_configs.files }}"
   when: iso | lower | search('mint') or iso | lower | search('ubuntu')
   tags:
