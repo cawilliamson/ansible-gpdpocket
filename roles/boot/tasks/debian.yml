@@ -17,7 +17,6 @@
   with_items:
   - build-essential
   - debian-installer-launcher
-  - initramfs-tools
   - libelf-dev
   - libncurses5-dev
   - libssl-dev
@@ -65,6 +64,18 @@
   when: chroot == true
   tags:
   - boot
+
+- name: remove live-tools (iso creation = no)
+  apt:
+    name: live-tools
+    state: absent
+  when: chroot == false
+  tags:
+  - boot
+
+- name: install initramfs-tools (iso creation = no)
+  apt: name=initramfs-tools
+  when: chroot == false
 
 - name: add modules to initramfs
   lineinfile:
