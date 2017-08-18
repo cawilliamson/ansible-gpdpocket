@@ -123,7 +123,10 @@
   - iso
 
 - include: arch/mount-bind.yml
-  when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
+  when: iso | lower | search('antergos') or iso | lower | search('arch')
+  
+- include: arch/mount-rootfs.yml
+  when: iso | lower | search('manjaro')
 
 - include: debian/mount-bind.yml
   when: iso | lower | search('debian') or iso | lower | search('kali') or iso | lower | search('mint') or iso | lower | search('ubuntu')
