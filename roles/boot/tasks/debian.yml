@@ -33,11 +33,11 @@
   tags:
   - boot
 
-- name: install intel-microcode (iso creation = no)
-  apt: name=intel-microcode
-  when: chroot == false
-  tags:
-  - boot
+#- name: install intel-microcode (iso creation = no)
+#  apt: name=intel-microcode
+#  when: chroot == false
+#  tags:
+#  - boot
 
 - name: remove intel-microcode (iso creation = yes)
   apt:
