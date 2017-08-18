@@ -20,8 +20,17 @@ elif [ -f /usr/sbin/emerge ]; then
   USE="blksha1 curl" emerge app-admin/ansible dev-vcs/git
 fi
 
+# update ansible code
+rm -rf /usr/src/ansible-gpdpocket
+git clone --depth 1 https://github.com/cawilliamson/ansible-gpdpocket.git /usr/src/ansible-gpdpocket
+cd /usr/src/ansible-gpdpocket
+
 # run ansible scripts
 ANSIBLE_NOCOWS=1 ansible-playbook iso.yml -e "iso='${1}'"
 
 # write information
 echo "Your ISO has been successfully created and is at /root/bootstrap.iso"
+
+# update ansible code
+cd -
+rm -rf /usr/src/ansible-gpdpocket
