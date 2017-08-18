@@ -9,7 +9,10 @@
       find . | cpio --create --format='newc' | gzip -c > "{{ item.path }}"
       rm -rf /var/tmp/bootstrap-iso/install-initrd
       cd -
+      echo "changed"
     fi
+  register: install_initrd
+  changed_when: "changed" in install_initrd.stdout
   with_items: "{{ iso_initrds.results | map(attribute='files') | list }}"
   tags:
   - iso
