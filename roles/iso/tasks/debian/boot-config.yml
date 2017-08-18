@@ -3,7 +3,7 @@
   find:
     path: /var/tmp/bootstrap-iso
     recurse: yes
-    patterns: '*/grub/*.cfg,*/syslinux/*.cfg'
+    patterns: '*.cfg'
     file_type: file
   register: boot_configs
   tags:
@@ -15,7 +15,7 @@
     regexp: ' quiet'
     replace: ' boot=live'
   with_items: "{{ boot_configs.files }}"
-  when: iso | lower | search('debian')
+  when: iso | lower | search('debian') or iso | lower | search('kali')
   tags:
   - iso
 
@@ -25,6 +25,6 @@
     regexp: ' quiet'
     replace: ''
   with_items: "{{ boot_configs.files }}"
-  when: iso | lower | search('kali') or iso | lower | search('mint') or iso | lower | search('ubuntu')
+  when: iso | lower | search('mint') or iso | lower | search('ubuntu')
   tags:
   - iso

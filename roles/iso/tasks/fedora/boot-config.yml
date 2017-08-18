@@ -3,7 +3,7 @@
   find:
     path: /var/tmp/bootstrap-iso
     recurse: yes
-    patterns: '*/grub/*.cfg,*/syslinux/*.cfg'
+    patterns: '*.cfg'
     file_type: file
   register: boot_configs
   tags:
