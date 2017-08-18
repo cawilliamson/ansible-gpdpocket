@@ -16,7 +16,10 @@ args = parser.parse_args()
 local_env = os.environ.copy()
 
 # wait for xorg to start
-sleep(5)
+if 'bootstrap' in subprocess.check_output('uname -a', shell=True):
+    sleep(10)
+else:
+    sleep(5)
 
 # determine DISPLAY environment variable
 if int(subprocess.check_output('pgrep Xorg -c', shell=True)) == 1:
