@@ -169,12 +169,6 @@
 
 - name: bootstrap guest (this may take a while)
   shell: chroot /var/tmp/bootstrap-iso/squashfs /bin/bash -c "/bin/bash /tmp/bootstrap-system.sh"
-  register: bootstrapsystem
-  tags:
-  - iso
-
-- name: print output (for issue resolution purposes)
-  debug: msg="{{ bootstrapsystem.stdout_lines }}"
   tags:
   - iso
 
