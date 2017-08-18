@@ -211,7 +211,7 @@
   when: iso | lower | search('debian') or iso | lower | search('kali') or iso | lower | search('mint') or iso | lower | search('ubuntu')
 
 - include: arch/efi.yml
-  when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
+  when: iso | lower | search('antergos') or iso | lower | search('arch')
 
 - name: umount leftover partitions
   shell: umount -lf /var/tmp/bootstrap-iso/squashfs
