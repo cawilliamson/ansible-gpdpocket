@@ -21,14 +21,13 @@ elif [ -f /usr/sbin/emerge ]; then
 fi
 
 # update ansible code
-rm -rf /usr/src/ansible-gpdpocket
-git clone --depth 1 https://github.com/cawilliamson/ansible-gpdpocket.git /usr/src/ansible-gpdpocket
+if [ -d .git ]; then
+  git reset --hard
+  git pull
+fi
 
 # run ansible scripts
-ANSIBLE_NOCOWS=1 ansible-playbook /usr/src/ansible-gpdpocket/iso.yml -e "iso='$(readlink -f \"${1}\")'"
+ANSIBLE_NOCOWS=1 ansible-playbook /usr/src/ansible-gpdpocket/iso.yml -e "iso='${1}'"
 
 # write information
 echo "Your ISO has been successfully created and is at /root/bootstrap.iso"
-
-# update ansible code
-rm -rf /usr/src/ansible-gpdpocket
