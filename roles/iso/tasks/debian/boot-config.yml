@@ -28,3 +28,12 @@
   when: iso | lower | search('mint') or iso | lower | search('ubuntu')
   tags:
   - iso
+
+- name: disable splash screen
+  replace:
+    path: "{{ item.path }}"
+    regexp: ' splash'
+    replace: ''
+  with_items: "{{ boot_configs.files }}"
+  tags:
+  - iso
