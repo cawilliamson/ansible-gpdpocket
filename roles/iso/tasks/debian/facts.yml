@@ -2,7 +2,7 @@
 - name: set facts for distro
   set_fact:
     efi_pattern: 'efi*.img'
-    initrd_pattern: '*.img,*.lz'
+    initrd_pattern: '*.gz,*.img,*.lz'
     kernel_pattern: '*vmlinuz*'
     squashfs_pattern: '*.squashfs'
   tags:
