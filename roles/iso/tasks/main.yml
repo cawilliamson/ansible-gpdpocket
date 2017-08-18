@@ -246,6 +246,13 @@
   tags:
   - iso
 
+- name: remove squashfs working directory
+  file:
+    path: /var/tmp/bootstrap-iso/squashfs
+    state: absent
+  tags:
+  - iso
+
 - include: arch/checksum.yml
   when: iso | lower | search('antergos') or iso | lower | search('arch') or iso | lower | search('manjaro')
 
