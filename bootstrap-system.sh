@@ -59,8 +59,6 @@ fi
 rm -rf /usr/src/ansible-gpdpocket
 git clone --depth 1 https://github.com/cawilliamson/ansible-gpdpocket.git /usr/src/ansible-gpdpocket
 cd /usr/src/ansible-gpdpocket
-git fetch --all
-git reset --hard origin/master
 
 # run ansible scripts
 ANSIBLE_NOCOWS=1 ansible-playbook site.yml -e "bootstrap=true"
