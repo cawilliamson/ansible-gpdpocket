@@ -142,11 +142,10 @@
 
 - name: backup guest resolv.conf
   shell: |
-    mv /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
+    mv -f /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
   args:
     executable: /bin/bash
-  register: result
-  failed_when: result.rc != 0
+  failed_when: False
   tags:
   - iso
 
@@ -235,11 +234,10 @@
 
 - name: restore resolv.conf backup on guest
   shell:
-    mv /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf
+    mv -f /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf
   args:
     executable: /bin/bash
-  register: result
-  failed_when: result.rc != 0
+  failed_when: False
   tags:
   - iso
 

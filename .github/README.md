@@ -54,7 +54,7 @@ In order to install my Ansible playbooks on an existing install (e.g. one which 
 
 ## Known Issues
 
-###### Generic
+###### All
 
 - Distorted audio (kernel bug – https://bugzilla.kernel.org/show_bug.cgi?id=196351 )
 - Suspend Issues (Enhancement: [#25](https://github.com/cawilliamson/ansible-gpdpocket/issues/25))
