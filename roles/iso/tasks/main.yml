@@ -141,10 +141,12 @@
   when: iso | lower | search('gentoo')
 
 - name: backup guest resolv.conf
-  copy:
-    src: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf
-    dest: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
-  failed_when: false
+  shell: |
+    mv /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
+  args:
+    executable: /bin/bash
+  register: result
+  failed_when: result.rc != 0
   tags:
   - iso
 
@@ -232,10 +234,12 @@
   - iso
 
 - name: restore resolv.conf backup on guest
-  copy:
-    src: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak
-    dest: /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf
-  failed_when: false
+  shell:
+    mv /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf.bak /var/tmp/bootstrap-iso/squashfs/etc/resolv.conf
+  args:
+    executable: /bin/bash
+  register: result
+  failed_when: result.rc != 0
   tags:
   - iso
 
