@@ -77,6 +77,6 @@ In order to install my Ansible playbooks on an existing install (e.g. one which 
 - stockmind at https://github.com/stockmind/gpd-pocket-ubuntu-respin – various code contributions and ideas.
 
 ## Donate
-If this project helped you – feel free to buy me a coffee (I could sure use one!)
+If this project helped you – feel free to buy me a beer (I could sure use a few!)
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=JGZUV7JA5A44E)
