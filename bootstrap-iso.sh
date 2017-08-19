@@ -21,7 +21,7 @@ elif [ -f /usr/sbin/emerge ]; then
 fi
 
 # update ansible code
-if [ -d .git ]; then
+if [ -d .git -a "x" == "x$GPD_BOOTSTRAP_NO_GIT_PULL" ]; then
   git reset --hard
   git pull
 fi
