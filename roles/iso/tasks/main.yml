@@ -320,7 +320,7 @@
         -boot-load-size 4 \
         -boot-info-table --grub2-boot-info \
         -eltorito-alt-boot \
-        -append_partition 2 0xef $(echo "{{ efi_image.files.0.path }}" | sed 's,/var/tmp/bootstrap-iso/,,') \
+        -append_partition 2 0xef "{{ efi_image.files.0.path }}" \
         -e --interval:appended_partition:2:all:: \
         -no-emul-boot \
         -output /root/bootstrap.iso \
