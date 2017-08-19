@@ -13,11 +13,13 @@
       mkinitcpio -c /etc/mkinitcpio.conf -g /boot/initrd.img-${KERNEL_VERSION} -k ${KERNEL_VERSION} || true
     else
       echo "I can't build a new initramfs - this is bad!"
-      exit 0
+      exit 1
     fi
     
     # Update grub config
     if [ -f /usr/bin/grub-mkconfig ]; then
       grub-mkconfig -o /boot/grub/grub.cfg
     fi
+  register: updateboot
+  failed_when: updateboot.rc != 0
   listen: update boot

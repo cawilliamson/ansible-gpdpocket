@@ -52,16 +52,26 @@ In order to install my Ansible playbooks on an existing install (e.g. one which 
 
 2. Reboot if any changes were made to ensure they get applied properly.
 
-## Status
+## Known Issues
 
-###### Known Issues
+###### Generic
 
 - Distorted audio (kernel bug – https://bugzilla.kernel.org/show_bug.cgi?id=196351 )
 - Suspend Issues (Enhancement: [#25](https://github.com/cawilliamson/ansible-gpdpocket/issues/25))
 - USB-C Data Connectivity (hansdegoede is working on this currently)
-- (DEBIAN) When installing you will be informed modules cannot be loaded. If you select "Yes" to continue anyway this will allow you to continue. (Enhancement: [#22](https://github.com/cawilliamson/ansible-gpdpocket/issues/22))
-- (FEDORA) When installing Fedora you will need to select the option **without** the media checking functionality. Performing a media check will result in a checksum failure. (Enhancement: [#21](https://github.com/cawilliamson/ansible-gpdpocket/issues/21))
-- (FEDORA) Currently the Fedora installer is broken - please do not attempt to use this until I have removed this note. (Bug: [#66](https://github.com/cawilliamson/ansible-gpdpocket/issues/66))
+
+###### Debian
+
+- When installing you will be informed modules cannot be loaded. If you select "Yes" to continue anyway this will allow you to continue. (Enhancement: [#22](https://github.com/cawilliamson/ansible-gpdpocket/issues/22))
+
+###### Fedora
+
+- Currently the Fedora installer is broken - please do not attempt to use this until I have removed this note. (Bug: [#66](https://github.com/cawilliamson/ansible-gpdpocket/issues/66))
+- When installing Fedora you will need to select the option **without** the media checking functionality. Performing a media check will result in a checksum failure. (Enhancement: [#21](https://github.com/cawilliamson/ansible-gpdpocket/issues/21))
+
+###### Manjaro
+
+- Manjaro doesn't ISO bootstrap properly at this time (Enhancement: [#41](https://github.com/cawilliamson/ansible-gpdpocket/issues/41))
 
 ###### Working
 
