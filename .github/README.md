@@ -69,7 +69,7 @@ In order to install my Ansible playbooks on an existing install (e.g. one which 
 - Currently the Fedora installer is broken - please do not attempt to use this until I have removed this note. (Bug: [#66](https://github.com/cawilliamson/ansible-gpdpocket/issues/66))
 - When installing Fedora you will need to select the option **without** the media checking functionality. Performing a media check will result in a checksum failure. (Enhancement: [#21](https://github.com/cawilliamson/ansible-gpdpocket/issues/21))
 
-###### Working
+## Working
 
 - Accelerated Video
 - Audio
