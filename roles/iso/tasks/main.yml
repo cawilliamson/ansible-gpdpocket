@@ -203,6 +203,8 @@
     if [[ "{{ item.path }}" != *'/install/'* ]] && [[ "{{ item.path }}" != *'/d-i/'* ]]; then
       cp -fv "{{ system_initrd.files.0.path }}" "{{ item.path }}"
     fi
+  args:
+    executable: /bin/bash
   with_items: "{{ iso_initrds.results | map(attribute='files') | list }}"
   tags:
   - iso
