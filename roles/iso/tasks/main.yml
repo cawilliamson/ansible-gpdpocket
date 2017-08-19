@@ -285,11 +285,47 @@
 
 - name: re-assemble iso
   shell: |
-    xorriso -as mkisofs -iso-level 3 -full-iso9660-filenames -volid "{{ iso_label.stdout_lines.0 }}" \
-        -eltorito-boot isolinux/isolinux.bin -eltorito-catalog isolinux/boot.cat \
-        -no-emul-boot -boot-load-size 4 -boot-info-table -isohybrid-mbr roles/iso/files/isohdpfx.bin \
-        -eltorito-alt-boot -e $(echo "{{ efi_image.files.0.path }}" | sed 's,/var/tmp/bootstrap-iso/,,') -no-emul-boot -isohybrid-gpt-basdat \
-        -output /root/bootstrap.iso /var/tmp/bootstrap-iso
+    if [ -d /var/tmp/bootstrap-iso/isolinux ]; then
+      xorriso \
+        -as mkisofs \
+        -iso-level 3 \
+        -full-iso9660-filenames \
+        -volid "{{ iso_label.stdout_lines.0 }}" \
+        -eltorito-boot isolinux/isolinux.bin \
+        -eltorito-catalog isolinux/boot.cat \
+        -no-emul-boot \
+        -boot-load-size 4 \
+        -boot-info-table \
+        -isohybrid-mbr roles/iso/files/isohdpfx.bin \
+        -eltorito-alt-boot \
+        -e $(echo "{{ efi_image.files.0.path }}" | sed 's,/var/tmp/bootstrap-iso/,,') \
+        -no-emul-boot \
+        -isohybrid-gpt-basdat \
+        -output /root/bootstrap.iso \
+        /var/tmp/bootstrap-iso
+    else
+      xorisso \
+        -as mkisofs \
+        -iso-level 3 \
+        -r \
+        -graft-points \
+        -no-pad \
+        --sort-weight 0 \
+        --sort-weight 1 \
+        -full-iso9660-filenames \
+        -volid "{{ iso_label.stdout_lines.0 }}" \
+        -eltorito-boot boot/grub/i386-pc/eltorito.img \
+        -eltorito-catalog boot.catalog \
+        -no-emul-boot \
+        -boot-load-size 4 \
+        -boot-info-table --grub2-boot-info \
+        -eltorito-alt-boot \
+        -append_partition 2 0xef $(echo "{{ efi_image.files.0.path }}" | sed 's,/var/tmp/bootstrap-iso/,,') \
+        -e --interval:appended_partition:2:all:: \
+        -no-emul-boot \
+        -output /root/bootstrap.iso \
+        /var/tmp/bootstrap-iso
+    fi
   args:
     executable: /bin/bash
   tags:
