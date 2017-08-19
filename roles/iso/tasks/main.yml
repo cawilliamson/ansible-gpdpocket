@@ -310,8 +310,8 @@
         -r \
         -graft-points \
         -no-pad \
-        --sort-weight 0 \
-        --sort-weight 1 \
+        --sort-weight 0 / \
+        --sort-weight 1 /boot \
         -full-iso9660-filenames \
         -volid "{{ iso_label.stdout_lines.0 }}" \
         -eltorito-boot boot/grub/i386-pc/eltorito.img \
