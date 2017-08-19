@@ -304,7 +304,7 @@
         -output /root/bootstrap.iso \
         /var/tmp/bootstrap-iso
     else
-      xorisso \
+      xorriso \
         -as mkisofs \
         -iso-level 3 \
         -r \
