@@ -11,6 +11,8 @@
       cd -
       echo "changed"
     fi
+  args:
+    executable: /bin/bash
   register: install_initrd
   changed_when: install_initrd.stdout | search('changed')
   with_items: "{{ iso_initrds.results | map(attribute='files') | list }}"
