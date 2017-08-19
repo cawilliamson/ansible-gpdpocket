@@ -83,6 +83,7 @@
 - name: install new kernel
   shell: cp -f /usr/src/linux-jwrdegoede/arch/x86/boot/bzImage /boot/vmlinuz-$(ls -t /lib/modules/ |head -n 1)
   args:
+    executable: /bin/bash
     warn: false
   notify:
   - update boot

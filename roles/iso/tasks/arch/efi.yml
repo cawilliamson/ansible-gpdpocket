@@ -12,6 +12,7 @@
 - name: mount old efi partition
   shell: mount -t vfat -o loop "{{ efi_image.files.0.path }}" /var/tmp/bootstrap-iso/old-efi
   args:
+    executable: /bin/bash
     warn: no
   tags:
   - iso
@@ -22,6 +23,7 @@
     mkfs.vfat -n 'ARCHISO_EFI' "{{ efi_image.files.0.path }}.new"
     mount -t vfat -o loop "{{ efi_image.files.0.path }}.new" /var/tmp/bootstrap-iso/new-efi
   args:
+    executable: /bin/bash
     warn: no
   tags:
   - iso
@@ -31,6 +33,8 @@
     cp -frv /var/tmp/bootstrap-iso/old-efi/* /var/tmp/bootstrap-iso/new-efi/
     cp -fv "{{ system_kernel.files.0.path }}" /var/tmp/bootstrap-iso/new-efi/efi/*/*vmlinuz*
     cp -fv "{{ system_initrd.files.0.path }}" /var/tmp/bootstrap-iso/new-efi/efi/*/*iso.img
+  args:
+    executable: /bin/bash
   tags:
   - iso
 
@@ -38,11 +42,15 @@
   shell: |
     umount /var/tmp/bootstrap-iso/new-efi
     umount /var/tmp/bootstrap-iso/old-efi
+  args:
+    executable: /bin/bash
   tags:
   - iso
 
 - name: replace old-efi with new-efi
   shell: mv "{{ efi_image.files.0.path }}.new" "{{ efi_image.files.0.path }}"
+  args:
+    executable: /bin/bash
   tags:
   - iso
 

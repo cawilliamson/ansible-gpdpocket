@@ -1,12 +1,16 @@
 ---
 - name: add distro-specific checksums (antergos)
   shell: md5sum "{{ squashfs.files.0.path }}" > /var/tmp/bootstrap-iso/arch/*root-*.md5
+  args:
+    executable: /bin/bash
   when: iso | lower | search('antergos')
   tags:
   - iso
 
 - name: add distro-specific checksums (arch)
   shell: md5sum "{{ squashfs.files.0.path }}" > /var/tmp/bootstrap-iso/arch/x86_64/*rootfs.md5
+  args:
+    executable: /bin/bash
   when: iso | lower | search('arch')
   tags:
   - iso

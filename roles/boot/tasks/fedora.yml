@@ -2,6 +2,7 @@
 - name: install development packages (workaround until ansible 2.3.2 arrives)
   shell: yum install -y '@C Development Tools and Libraries'
   args:
+    executable: /bin/bash
     warn: false
   changed_when: False
   tags:

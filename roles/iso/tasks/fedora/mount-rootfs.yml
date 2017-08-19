@@ -2,6 +2,7 @@
 - name: mount rootfs
   shell: mount -t ext4 -o loop /var/tmp/bootstrap-iso/squashfs/LiveOS/rootfs.img /var/tmp/bootstrap-iso/squashfs
   args:
+    executable: /bin/bash
     warn: no
   tags:
   - iso

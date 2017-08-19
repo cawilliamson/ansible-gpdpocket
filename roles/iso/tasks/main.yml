@@ -16,6 +16,8 @@
     umount -f /var/tmp/bootstrap-iso/new-efi
     umount -f /var/tmp/bootstrap-iso/old-efi
     umount -lf /var/tmp/bootstrap-iso/squashfs
+  args:
+    executable: /bin/bash
   failed_when: false
   tags:
   - iso
@@ -49,6 +51,8 @@
 
 - name: extract iso to working directory
   shell: xorriso -osirrox on -indev "{{ iso }}" -extract / /var/tmp/bootstrap-iso
+  args:
+    executable: /bin/bash
   tags:
   - iso
 
@@ -112,6 +116,8 @@
 
 - name: extract squashfs image
   shell: unsquashfs -d /var/tmp/bootstrap-iso/squashfs/ -f "{{ squashfs.files.0.path }}"
+  args:
+    executable: /bin/bash
   tags:
   - iso
 
@@ -156,6 +162,7 @@
     chmod 1777 /var/tmp/bootstrap-iso/squashfs/dev/shm
     mount -t proc none /var/tmp/bootstrap-iso/squashfs/proc
   args:
+    executable: /bin/bash
     warn: false
   tags:
   - iso
@@ -169,6 +176,8 @@
 
 - name: bootstrap guest (this may take a while)
   shell: chroot /var/tmp/bootstrap-iso/squashfs /bin/bash -c "/bin/bash /tmp/bootstrap-system.sh"
+  args:
+    executable: /bin/bash
   tags:
   - iso
 
@@ -217,6 +226,8 @@
 
 - name: umount leftover partitions
   shell: umount -lf /var/tmp/bootstrap-iso/squashfs
+  args:
+    executable: /bin/bash
   tags:
   - iso
 
@@ -239,6 +250,8 @@
 
 - name: recompress squashfs image
   shell: mksquashfs /var/tmp/bootstrap-iso/squashfs/ "{{ squashfs.files.0.path }}"
+  args:
+    executable: /bin/bash
   tags:
   - iso
 
@@ -260,6 +273,8 @@
 
 - name: determine iso label
   shell: blkid -o value -s LABEL "{{ iso }}"
+  args:
+    executable: /bin/bash
   register: iso_label
   tags:
   - iso
@@ -271,6 +286,10 @@
         -no-emul-boot -boot-load-size 4 -boot-info-table -isohybrid-mbr roles/iso/files/isohdpfx.bin \
         -eltorito-alt-boot -e $(echo "{{ efi_image.files.0.path }}" | sed 's,/var/tmp/bootstrap-iso/,,') -no-emul-boot -isohybrid-gpt-basdat \
         -output /root/bootstrap.iso /var/tmp/bootstrap-iso
+  args:
+    executable: /bin/bash
+  tags:
+  - iso
 
 - name: remove working directory
   file:
