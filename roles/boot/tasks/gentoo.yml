@@ -16,7 +16,6 @@
   - dev-libs/libelf
   - dev-libs/openssl
   - sys-firmware/intel-microcode
-  - sys-fs/btrfs-progs
   - sys-kernel/dracut
   - sys-libs/ncurses
   tags:

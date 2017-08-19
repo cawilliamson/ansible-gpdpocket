@@ -9,7 +9,6 @@
   pacman: name="{{ item }}"
   with_items:
   - bc
-  - btrfs-progs
   - efibootmgr
   - grub
   - intel-ucode

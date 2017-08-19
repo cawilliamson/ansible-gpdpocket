@@ -12,7 +12,6 @@
   package: name="{{ item }}"
   with_items:
   - bc
-  - btrfs-progs
   - dracut
   - efibootmgr
   - elfutils-libelf-devel

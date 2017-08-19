@@ -1,14 +1,29 @@
 ---
-- name: install btrfs package (Ubuntu 16.04 or less)
-  apt: name=btrfs-tools
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version | float <= 16.04
+- name: setup boot environment for iso (iso creation = yes)
+  apt:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items:
+  - { name: 'debian-installer-launcher', state: 'present' }
+  - { name: 'initramfs-tools', state: 'absent' }
+  - { name: 'live-boot', state: 'present' }
+  - { name: 'live-tools', state: 'present' }
+  - { name: 'intel-microcode', state: 'absent' }
+  when: chroot == true
   tags:
   - boot
 
-- name: install btrfs package (Ubuntu 16.10 or above || Other Distribution)
-  apt: name=btrfs-progs
-  when: ansible_distribution != 'Ubuntu' or
-        (ansible_distribution == 'Ubuntu' and ansible_distribution_version | float >= 16.10)
+- name: setup boot environment for system (iso creation = no)
+  apt:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items:
+  - { name: 'debian-installer-launcher', state: 'absent' }
+  - { name: 'live-boot', state: 'absent' }
+  - { name: 'live-tools', state: 'absent' }
+  - { name: 'initramfs-tools', state: 'present' }
+  - { name: 'intel-microcode', state: 'present' }
+  when: chroot == false
   tags:
   - boot
 
@@ -16,34 +31,10 @@
   apt: name="{{ item }}"
   with_items:
   - build-essential
-  - debian-installer-launcher
   - libelf-dev
   - libncurses5-dev
   - libssl-dev
-  - live-boot
   - unionfs-fuse
-  tags:
-  - boot
-
-- name: remove unused kernels
-  apt:
-    name: linux-image-amd64
-    state: absent
-  failed_when: false
-  tags:
-  - boot
-
-#- name: install intel-microcode (iso creation = no)
-#  apt: name=intel-microcode
-#  when: chroot == false
-#  tags:
-#  - boot
-
-- name: remove intel-microcode (iso creation = yes)
-  apt:
-    name: intel-microcode
-    state: absent
-  when: chroot == true
   tags:
   - boot
 
@@ -56,26 +47,21 @@
   tags:
   - boot
 
-- name: create loop module config (iso creation = yes)
+- name: remove unused kernels
+  apt:
+    name: linux-image-amd64
+    state: absent
+  failed_when: false
+  tags:
+  - boot
+
+- name: create loop module config
   lineinfile:
     path: /etc/modprobe.d/loop.conf
     line: "options loop max_loop=8"
     create: yes
-  when: chroot == true
   tags:
   - boot
-
-- name: remove live-tools (iso creation = no)
-  apt:
-    name: live-tools
-    state: absent
-  when: chroot == false
-  tags:
-  - boot
-
-- name: install initramfs-tools (iso creation = no)
-  apt: name=initramfs-tools
-  when: chroot == false
 
 - name: add modules to initramfs
   lineinfile:
