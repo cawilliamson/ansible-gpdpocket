@@ -47,6 +47,17 @@
   tags:
   - boot
 
+- name: remove ubuntu casper packages (iso creation = no)
+  apt:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+  - casper
+  - lupin-casper
+  when: chroot == false and ansible_distribution == 'Ubuntu'
+  tags:
+  - boot
+
 - name: remove unused kernels
   apt:
     name: linux-image-amd64
