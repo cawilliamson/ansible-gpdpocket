@@ -136,7 +136,7 @@
 
 - include: fedora/mount-rootfs.yml
   when: iso | lower | search('centos') or iso | lower | search('fedora') or iso | lower | search('redhat')
-  
+
 - include: gentoo/mount-bind.yml
   when: iso | lower | search('gentoo')
 
@@ -168,15 +168,23 @@
   tags:
   - iso
 
-- name: copy bootstrap-system script to guest
-  copy:
-    src: ../../bootstrap-system.sh
-    dest: /var/tmp/bootstrap-iso/squashfs/tmp/bootstrap-system.sh
+- name: create playbook directory on guest
+  file:
+    path: /var/tmp/bootstrap-iso/squashfs/usr/src/ansible-gpdpocket
+    state: directory
+    recurse: yes
+
+- name: sync playbook directory to guest
+  synchronize:
+    src: ../../../
+    dest: /var/tmp/bootstrap-iso/squashfs/usr/src/ansible-gpdpocket
+    recursive: yes
+  delegate_to: localhost
   tags:
   - iso
 
 - name: bootstrap guest (this may take a while)
-  shell: chroot /var/tmp/bootstrap-iso/squashfs /bin/bash -c "/bin/bash /tmp/bootstrap-system.sh"
+  shell: chroot /var/tmp/bootstrap-iso/squashfs /bin/bash -c "/bin/bash /usr/src/ansible-gpdpocket/bootstrap-system.sh --nogit"
   args:
     executable: /bin/bash
   tags:

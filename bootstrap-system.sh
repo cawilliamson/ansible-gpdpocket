@@ -56,8 +56,12 @@ elif [ -f /usr/sbin/emerge ]; then
 fi
 
 # update ansible code
-rm -rf /usr/src/ansible-gpdpocket
-git clone --depth 1 https://github.com/cawilliamson/ansible-gpdpocket.git /usr/src/ansible-gpdpocket
+if $(echo $@ | grep -q "\--nogit"); then
+  echo "skip pulling source from git"
+else
+  rm -rf /usr/src/ansible-gpdpocket
+  git clone --depth 1 https://github.com/cawilliamson/ansible-gpdpocket.git /usr/src/ansible-gpdpocket
+fi
 cd /usr/src/ansible-gpdpocket
 
 # run ansible scripts
