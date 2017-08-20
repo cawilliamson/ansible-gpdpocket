@@ -36,7 +36,7 @@ elif [ -f /usr/sbin/emerge ]; then
 fi
 
 # update ansible code
-if $(echo $@ | grep -q "\--nogit"); then
+if grep -wq -- --nogit <<< "$@"; then
   echo "skip pulling source from git"
 else
   rm -rf /usr/src/ansible-gpdpocket
