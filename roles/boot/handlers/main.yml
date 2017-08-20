@@ -1,5 +1,5 @@
 ---
-- name: update boot
+- name: update initrd
   shell: |
     # determine new kernel version
     KERNEL_VERSION=$(ls -t /lib/modules/ |grep 'bootstrap\|jwrdegoede' |head -n 1)
@@ -15,16 +15,21 @@
       echo "I can't build a new initramfs - this is bad!"
       exit 1
     fi
-    
+  register: updateinitrd
+  failed_when: updateinitrd.rc != 0
+  listen: update boot
+
+- name: update grub
+  shell: |
     # Update grub config
-    if [ -f /usr/bin/grub-mkconfig ]; then
+    if which grub-mkconfig; then
       grub-mkconfig -o /boot/grub/grub.cfg
-    elif [ -f /usr/bin/grub2-mkconfig ]; then
-      grub-mkconfig -o /boot/grub/grub.cfg
+    elif which grub2-mkconfig; then
+      grub2-mkconfig -o /boot/grub/grub.cfg
     else
       echo "I can't update grub config - this is bad!"
       exit 1
     fi
-  register: updateboot
-  failed_when: updateboot.rc != 0
+  register: updategrub
+  failed_when: updategrub.rc != 0
   listen: update boot

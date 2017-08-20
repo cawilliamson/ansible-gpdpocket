@@ -6,26 +6,6 @@ set -e -x
 # set paths
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-# enable wifi (when not in chroot)
-if [ "$(stat -c %d:%i /)" == "$(stat -c %d:%i /proc/1/root/.)" ]; then
-  echo "enabling wifi..."
-  
-  mkdir -p /lib/firmware/brcm
-  cp -f roles/common/files/brcmfmac4356-pcie.* /lib/firmware/brcm/
-  
-  modprobe -r brcmfmac && modprobe brcmfmac
-
-  echo "If you do not see the WiFi option in your desktop environment - you may need to use a USB ethernet adapter. This is due to an incompatibility on the Linux kernel your distribution is using. This will be resolved once the bootstrap script has run successfully for the first time but that will require an Internet connection to be present."
-  echo
-  echo "Please connect to a WiFi network (using internal chipset) or wired network (via USB adapter), then press return to continue:"
-  read
-fi
-
-# wait for internet connection
-while ! ping -c1 8.8.8.8 &>/dev/null; do
-  sleep 1
-done
-
 # install essential packages
 if [ -f /usr/bin/pacman ]; then
   pacman-key --init
