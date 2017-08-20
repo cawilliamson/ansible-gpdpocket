@@ -8,7 +8,7 @@
     insertafter: "{{ item.insertafter }}"
   with_items:
   - { line: '[multilib]', regexp: '^\[multilib\]', insertafter: '^#\[multilib\]' }
-  - { line: 'Include = /etc/pacman.d/mirrorlist', regexp: '^Include = /etc/pacman.d/mirrorlist', insertafter: '^\[multilib\]' }
+  - { line: 'Include = /etc/pacman.d/mirrorlist', regexp: 'Include = /etc/pacman.d/mirrorlist', insertafter: '^\[multilib\]' }
   tags:
   - boot
 
