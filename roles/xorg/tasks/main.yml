@@ -105,7 +105,32 @@
   when: gdm3daemon.stat.islnk is defined
   tags:
   - xorg
-  
+
+- name: check for xfce4 installed
+  stat: path=/usr/bin/startxfce4
+  register: xfce
+  tags:
+  - xorg
+
+- name: create directory for xfce4 config skeleton
+  file:
+    path: /etc/skel/.config/xfce4
+    state: directory
+    recurse: yes
+  when: xfce.stat.exists
+  tags:
+  - xorg
+
+- name: install xfce4 config skeleton
+  synchronize:
+    src: xfce4/
+    dest: /etc/skel/.config/xfce4/
+    recursive: yes
+  delegate_to: localhost
+  when: xfce.stat.exists
+  tags:
+  - xorg
+
 - name: create gpd-rotate directories
   file:
     path: "{{ item }}"

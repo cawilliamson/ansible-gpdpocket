@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="thunar" version="1.0">
+  <property name="misc-volume-management" type="empty"/>
+  <property name="shortcuts-icon-size" type="empty"/>
+  <property name="last-view" type="string" value="ThunarIconView"/>
+</channel>
