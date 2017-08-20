@@ -5,7 +5,7 @@
     state: "{{ item.state }}"
   with_items:
   - { name: 'debian-installer-launcher', state: 'present' }
-  - { name: 'initramfs-tools', state: 'absent' }
+  - { name: 'initramfs-tools', state: 'present' }
   - { name: 'live-boot', state: 'present' }
   - { name: 'live-tools', state: 'present' }
   - { name: 'intel-microcode', state: 'absent' }
