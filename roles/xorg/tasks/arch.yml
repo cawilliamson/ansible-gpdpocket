@@ -3,6 +3,7 @@
   pacman: name="{{ item }}"
   with_items:
   - ibus
+  - libva-intel-driver
   - mesa
   - xf86-video-intel
   - xorg-xinput
