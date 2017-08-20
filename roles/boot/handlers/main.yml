@@ -19,6 +19,11 @@
     # Update grub config
     if [ -f /usr/bin/grub-mkconfig ]; then
       grub-mkconfig -o /boot/grub/grub.cfg
+    elif [ -f /usr/bin/grub2-mkconfig ]; then
+      grub-mkconfig -o /boot/grub/grub.cfg
+    else
+      echo "I can't update grub config - this is bad!"
+      exit 1
     fi
   register: updateboot
   failed_when: updateboot.rc != 0
