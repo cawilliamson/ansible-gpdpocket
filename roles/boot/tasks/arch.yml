@@ -13,7 +13,12 @@
   - boot
 
 - name: update pacman cache
-  pacman: update_cache=yes
+  pacman:
+    name: multilib-devel
+    force: yes
+    update_cache: yes
+  tags:
+  - boot
 
 - name: install essential packages (this may take a while)
   pacman: name="{{ item }}"
@@ -24,7 +29,6 @@
   - intel-ucode
   - kmod
   - libelf
-  - multilib-devel
   - openssl-1.0 
   - os-prober
   tags:
