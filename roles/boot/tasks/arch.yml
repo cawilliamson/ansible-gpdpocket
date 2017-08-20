@@ -1,7 +1,14 @@
 ---
-- name: install base-devel package (breaks manjaro)
-  pacman: name=base-devel
-  when: ansible_distribution == 'Antergos' or ansible_distribution == 'Archlinux'
+- name: enable multilib repository
+  lineinfile:
+    dest: /etc/pacman.conf
+    state: present
+    line: "{{ item.line }}"
+    regexp: "{{ item.regexp }}"
+    insertafter: "{{ item.insertafter }}"
+  with_items:
+  - { line: '[multilib]', regexp: '^\[multilib\]', insertafter: '^#\[multilib\]' }
+  - { line: 'Include = /etc/pacman.d/mirrorlist', regexp: '^Include = /etc/pacman.d/mirrorlist', insertafter: '^\[multilib\]' }
   tags:
   - boot
 
@@ -14,6 +21,7 @@
   - intel-ucode
   - kmod
   - libelf
+  - multilib-devel
   - openssl-1.0 
   - os-prober
   tags:
