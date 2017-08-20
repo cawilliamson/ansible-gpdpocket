@@ -1,28 +1,4 @@
 ---
-- name: enable multilib repository
-  lineinfile:
-    dest: /etc/pacman.conf
-    state: present
-    line: "{{ item.line }}"
-    regexp: "{{ item.regexp }}"
-    insertafter: "{{ item.insertafter }}"
-  with_items:
-  - { line: '[multilib]', regexp: '^\[multilib\]', insertafter: '^#\[multilib\]' }
-  - { line: 'Include = /etc/pacman.d/mirrorlist', regexp: 'Include = /etc/pacman.d/mirrorlist', insertafter: '^\[multilib\]' }
-  tags:
-  - boot
-
-- name: install multilib-devel
-  pacman:
-    name: "{{ item.name }}"
-    state: "{{ item.state }}"
-    update_cache: yes
-  with_items:
-  - { name: 'base-devel', state: 'absent' }
-  - { name: 'multilib-devel', state: 'present' }
-  tags:
-  - boot
-
 - name: install essential packages (this may take a while)
   pacman: name="{{ item }}"
   with_items:
