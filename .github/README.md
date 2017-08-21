@@ -69,6 +69,10 @@ In order to install my Ansible playbooks on an existing install (e.g. one which 
 - Currently the Fedora installer is broken - please do not attempt to use this until I have removed this note. (Bug: [#66](https://github.com/cawilliamson/ansible-gpdpocket/issues/66))
 - When installing Fedora you will need to select the option **without** the media checking functionality. Performing a media check will result in a checksum failure. (Enhancement: [#21](https://github.com/cawilliamson/ansible-gpdpocket/issues/21))
 
+###### Solus
+
+- i2c-tools is not presently on Solus, so the power task can't presently be run.
+
 ## Contributors
 
 - efluffy at https://github.com/efluffy/gpdfand – great work on actually getting the fans in this thing to work.
