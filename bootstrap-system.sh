@@ -33,6 +33,8 @@ elif [ -f /usr/bin/yum ]; then
 elif [ -f /usr/sbin/emerge ]; then
   emerge --sync
   USE="blksha1 curl webdav" emerge app-admin/ansible dev-vcs/git
+elif [ -f /usr/bin/eopkg ]; then
+  eopkg install ansible git
 fi
 
 # update ansible code
