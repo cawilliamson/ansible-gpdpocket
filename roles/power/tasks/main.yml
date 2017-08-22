@@ -27,9 +27,9 @@
     mode: "{{ item.mode }}"
   with_items:
   - { src: 'files/gpd-fan.conf', dest: '/etc/gpd/fan.conf', mode: '0644' }
-  - { src: 'files/gpd-fan.py', dest: '/usr/local/sbin/gpd-fan', mode: '0777' }
+  - { src: 'files/gpd-fan.py', dest: '/usr/local/sbin/gpd-fan', mode: '0755' }
   - { src: 'files/gpd-fan.service', dest: '/etc/systemd/system/gpd-fan.service', mode: '0644' }
-  - { src: 'files/gpd-fan.sh', dest: '/lib/systemd/system-sleep/gpd-fan', mode: '0777' }
+  - { src: 'files/gpd-fan.sh', dest: '/lib/systemd/system-sleep/gpd-fan', mode: '0755' }
   notify:
   - enable gpd-fan
   tags:
@@ -47,7 +47,7 @@
   - enable thermal services
   tags:
   - power
-  
+
 - name: blacklist modules to prevent preemptive wake from suspend
   lineinfile:
     path: /etc/pm/config.d/config
