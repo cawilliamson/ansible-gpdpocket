@@ -10,6 +10,9 @@
 
 - include: gentoo.yml
   when: ansible_distribution == 'Gentoo'
+  
+- include: solus.yml
+  when: ansible_distribution == 'Solus'
 
 - name: create chtrt5645 directory
   file:

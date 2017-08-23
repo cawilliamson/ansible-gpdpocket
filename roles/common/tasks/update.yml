@@ -5,7 +5,7 @@
     dest: /usr/local/bin/gpd-update
     owner: root
     group: root
-    mode: 0777
+    mode: 0755
   tags:
   - common
   - update

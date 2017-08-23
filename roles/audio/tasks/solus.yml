@@ -1,0 +1,8 @@
+---
+- name: install essential packages (this may take a while)
+  package: name="{{ item }}"
+  with_items:
+  - gstreamer-vaapi
+  - pulseaudio
+  tags:
+  - audio
