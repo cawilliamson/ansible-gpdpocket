@@ -14,7 +14,7 @@ The goal of this project is to automatically apply and update all of the various
 
 1.  Setup a Linux environment (Virtualbox + Ubuntu LiveCD is a quick option.) An existing Linux install using any of the above listed distros will work also. Please **make sure** /var has at least 20GB available and /root has at least 10GB available.
 
-2.  Download your ISO to this Linux machine – you can do this using: `wget http://url.here/file.iso`. Netinstall images won't work, you need a full install ISO.
+2.  Download your ISO to this Linux machine – you can do this using: `wget http://url.here/file.iso`. Netinstall images won't work, you need a full install ISO. Also - please be aware that the ansible script determines the distro by using the filename - this means that if you are using, for example, Ubuntu - your filename should contain this string.
 
 3.  Run the following to build the ISO (replacing ISO_FILENAME with the actual name of the file.)
 
