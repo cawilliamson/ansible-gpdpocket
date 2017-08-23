@@ -3,6 +3,13 @@
 # set bash options
 set -e -x
 
+# check if iso is supported
+shopt -s nocasematch
+if ! [[ "${1}" =~ (antergos|arch|centos|debian|fedora|kali|manjaro|mint|redhat|solus|gentoo|ubuntu) ]]; then
+  echo "The ISO you provided is NOT supported. This could be due to it being incorrectly named - it must contain the name of the distribution which it contains."
+  exit 1
+fi
+
 # install dependencies
 if [ -f /usr/bin/pacman ]; then
   pacman -Sy --needed --noconfirm ansible git
