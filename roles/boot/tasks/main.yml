@@ -111,13 +111,6 @@
 - include: gentoo.yml
   when: ansible_distribution == 'Gentoo'
 
-- name: determine path for swap 
-  shell: swapon -s | tail -n1 | cut -f1 | xargs
-  register: swap
-  changed_when: False
-  tags:
-  - boot
-
 - name: set grub boot options
   lineinfile:
     path: /etc/default/grub
@@ -125,7 +118,7 @@
     line: "{{ item.key }}={{ item.value }}"
     create: yes
   with_items:
-  - { key: 'GRUB_CMDLINE_LINUX_DEFAULT', value: '"resume={{ swap.stdout }}"' }
+  - { key: 'GRUB_CMDLINE_LINUX_DEFAULT', value: '' }
   - { key: 'GRUB_DEFAULT', value: 'saved' }
   - { key: 'GRUB_TIMEOUT', value: '2' }
   notify:
