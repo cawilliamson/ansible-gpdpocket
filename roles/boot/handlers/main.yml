@@ -30,6 +30,7 @@
       echo "I can't update grub config - this is bad!"
       exit 1
     fi
+  when: chroot == false
   register: updategrub
   failed_when: updategrub.rc != 0
   listen: update boot
