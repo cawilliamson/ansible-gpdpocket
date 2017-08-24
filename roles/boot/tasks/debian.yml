@@ -6,6 +6,7 @@
   with_items:
   - { name: 'debian-installer-launcher', state: 'present' }
   - { name: 'live-boot', state: 'present' }
+  - { name: 'live-boot-initramfs-tools', state: 'present' }
   - { name: 'live-tools', state: 'present' }
   - { name: 'intel-microcode', state: 'absent' }
   when: chroot == true
@@ -19,6 +20,7 @@
   with_items:
   - { name: 'debian-installer-launcher', state: 'absent' }
   - { name: 'live-boot', state: 'absent' }
+  - { name: 'live-boot-initramfs-tools', state: 'absent' }
   - { name: 'live-tools', state: 'absent' }
   - { name: 'intel-microcode', state: 'present' }
   when: chroot == false
