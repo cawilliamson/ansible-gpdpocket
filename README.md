@@ -7,14 +7,14 @@ The goal of this project is to automatically apply and update all of the various
 ###### Supported Linux Distributions
 - Arch-based distributions (ArchLinux, Manjaro, etc.)
 - Debian-based distributions (Debian, Kali, Mint, Ubuntu, etc.)
-- Fedora-based distributions (experimental – could really use some feedback!)
+- Fedora-based distributions (broken at this time - working to resolve this)
 - Gentoo-based distributions (Funtoo, Gentoo, etc.)
 
 ###### Bootstrap ISO
 
 1.  Setup a Linux environment (Virtualbox + Ubuntu LiveCD is a quick option.) An existing Linux install using any of the above listed distros will work also. Please **make sure** /var has at least 20GB available and /root has at least 10GB available.
 
-2.  Download your ISO to this Linux machine – you can do this using: `wget http://url.here/file.iso`. Netinstall images won't work, you need a full install ISO. Also - please be aware that the ansible script determines the distro by using the filename - this means that if you are using, for example, Ubuntu - your filename should contain this string.
+2.  Download your ISO to this Linux machine – you can do this using: `wget http://url.here/file.iso`. Please be aware that the ansible script determines the distro by using the filename - this means that if you are using, for example, Ubuntu - your filename should contain this string.
 
 3.  Run the following to build the ISO (replacing ISO_FILENAME with the actual name of the file.)
 
@@ -57,11 +57,12 @@ In order to install my Ansible playbooks on an existing install (e.g. one which 
 ###### All
 
 - Distorted audio (kernel bug – https://bugzilla.kernel.org/show_bug.cgi?id=196351 )
-- Suspend Issues (Enhancement: [#25](https://github.com/cawilliamson/ansible-gpdpocket/issues/25))
+- Suspend Issues (Enhancement: [#34](https://github.com/cawilliamson/ansible-gpdpocket/issues/34))
 - USB-C Data Connectivity (hansdegoede is working on this currently)
 
 ###### Debian
 
+- Neither netimage nor LiveDVD images can be used to run bootstrap-iso against due to differences in the on-disk file structure (and the fact that netimage installers have no files to patch!)
 - When installing you will be informed modules cannot be loaded. If you select "Yes" to continue anyway this will allow you to continue. (Enhancement: [#22](https://github.com/cawilliamson/ansible-gpdpocket/issues/22))
 
 ###### Fedora

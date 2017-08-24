@@ -36,7 +36,6 @@
   changed_when: fix_update_initramfs.stdout | search('changed')
   tags:
   - boot
-  
 
 - name: install essential packages (this may take a while)
   apt: name="{{ item }}"
