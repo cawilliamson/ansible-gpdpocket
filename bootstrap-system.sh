@@ -27,14 +27,14 @@ elif [ -f /usr/bin/apt-get ]; then
   echo 'deb http://ppa.launchpad.net/ansible/ansible/ubuntu trusty main' > /etc/apt/sources.list.d/ansible.list
   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
   apt-get update
-  apt-get -y install ansible git
+  apt-get -y install ansible git rsync
 elif [ -f /usr/bin/yum ]; then
-  yum -y install ansible git
+  yum -y install ansible git rsync
 elif [ -f /usr/sbin/emerge ]; then
   emerge --sync
-  USE="blksha1 curl webdav" emerge app-admin/ansible dev-vcs/git
+  USE="blksha1 curl webdav" emerge app-admin/ansible dev-vcs/git net-misc/rsync
 elif [ -f /usr/bin/eopkg ]; then
-  eopkg install ansible git
+  eopkg install ansible git rsync
 fi
 
 # update ansible code
