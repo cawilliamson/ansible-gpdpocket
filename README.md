@@ -20,12 +20,12 @@ The goal of this project is to automatically apply and update all of the various
 
         git clone https://github.com/cawilliamson/ansible-gpdpocket.git
         cd ansible-gpdpocket
-        bash bootstrap-iso.sh ISO_FILENAME
+        sudo bash bootstrap-iso.sh ISO_FILENAME
 
 4.  Write the file to USB by running the following (replacing USB_DEVICE with the actual device path for your USB drive):
 
         fdisk -l /dev/sd* # find the disk ID of your USB drive and use in command below.
-        dd bs=1m if=~/bootstrap.iso of=USB_DEVICE
+        dd bs=1M if=~/bootstrap.iso of=USB_DEVICE
 
 5.  Boot your GPD Pocket using the USB drive and you should have a completely working installer for your distribution of choice.
 
