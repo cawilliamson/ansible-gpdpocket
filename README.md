@@ -1,14 +1,19 @@
-## Goal
+## Status
 
-The goal of this project is to automatically apply and update all of the various changes needed to make Linux work properly on the GPD Pocket.
+I'm placing this project on hold for a few days whilst I decide what to do with it.
 
 ## Install / Update
 
 ###### Supported Linux Distributions
-- Arch-based distributions (ArchLinux, Manjaro, etc.)
-- Debian-based distributions (Debian, Kali, Mint, Ubuntu, etc.)
-- Fedora-based distributions (broken at this time - working to resolve this)
-- Gentoo-based distributions (Funtoo, Gentoo, etc.)
+
+### Working
+- ArchLinux
+- Debian
+- Gentoo
+- Ubuntu
+
+### Broken
+- Fedora
 
 ###### Bootstrap ISO
 
@@ -82,6 +87,7 @@ In order to install my Ansible playbooks on an existing install (e.g. one which 
 - stockmind at https://github.com/stockmind/gpd-pocket-ubuntu-respin – various code contributions and ideas.
 
 ## Donate
+
 If this project helped you – feel free to buy me a beer (I could sure use a few!)
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=JGZUV7JA5A44E)
