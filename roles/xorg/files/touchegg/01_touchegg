@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# starts touchegg application
+PREFIX="$HOME/.config/touchegg/.run"
+mkdir -p "$PREFIX"
+PIDFILE="$PREFIX/touchegg.$USER$DISPLAY.pid"
+LOCK="$PREFIX/touchegg.$USER$DISPLAY.lock"
+
+start_touchegg() {
+	(
+		flock -n 9 || exit 1
+		touchegg 2>/dev/null >/dev/null &
+		PID=$!
+		echo "$!" >"$PIDFILE"
+		wait $PID
+	) 9>"$LOCK"
+}
+
+start_touchegg &

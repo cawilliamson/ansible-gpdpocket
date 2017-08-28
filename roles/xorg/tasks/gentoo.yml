@@ -28,3 +28,10 @@
   - x11-apps/xinput
   tags:
   - xorg
+
+- name: install touchegg (this may take a while)
+  apt: name="{{ item }}"
+  with_items:
+  - touchegg
+  tags:
+  - xorg

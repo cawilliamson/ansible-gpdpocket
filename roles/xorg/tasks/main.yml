@@ -161,3 +161,28 @@
   - enable gpd-rotate
   tags:
   - xorg
+
+- name: create multi-touch configuration directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - /etc/X11/Xsession.d
+  - /etc/X11/xinit/xinitrc.d
+  - /usr/share/touchegg
+  tags:
+  - xorg
+
+- name: copy multi-touch configuration
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  with_items:
+  - { src: 'files/touchegg/touchegg.conf', dest: '/usr/share/touchegg', mode: '0644' }
+  - { src: 'files/touchegg/01_touchegg', dest: '/etc/X11/Xsession.d', mode: '0755' }
+  - { src: 'files/touchegg/01_touchegg', dest: '/etc/X11/xinit/xinitrc.d', mode: '0755' }
+  tags:
+  - xorg
