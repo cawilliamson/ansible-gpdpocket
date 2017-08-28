@@ -1,5 +1,10 @@
 ---
-- name: set USE flags for packages
+- name: check if package.use is a directory
+  stat:
+    path: /etc/portage/package.use
+  register: package_use
+
+- name: set USE flags for packages (/etc/package.use)
   lineinfile:
     path: /etc/portage/package.use
     regexp: "^{{ item.package }}"
@@ -9,6 +14,25 @@
   - { package: 'sys-fs/squashfs-tools', flags: 'lz4 lzma lzo xz' }
   tags:
   - iso
+  when: package_use.stat.isdir == false
+
+- name: touch /etc/portage/package.use/ansible-pocket
+  file:
+    path: /etc/portage/package.use/ansible-gpdpocket
+    state: touch
+  when: package_use.stat.isdir == true
+
+- name: set USE flags for packages (/etc/package.use/ansible-gpdpocket)
+  lineinfile:
+    path: /etc/portage/package.use/ansible-gpdpocket
+    regexp: "^{{ item.package }}"
+    line: "{{ item.package }} {{ item.flags }}"
+    create: yes
+  with_items:
+  - { package: 'sys-fs/squashfs-tools', flags: 'lz4 lzma lzo xz' }
+  tags:
+  - iso
+  when: package_use.stat.isdir == true
 
 - name: install essential packages (this may take a while)
   portage: package="{{ item }}"
